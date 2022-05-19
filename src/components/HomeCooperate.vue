@@ -24,7 +24,35 @@
       </div>
     </div>
   </div>
-  <footer>dd</footer>
+  <footer>
+    <div class="furniture-slogan">
+      <h1>TMCi</h1>
+      <p>For Trending, Modern and Comfortable life</p>
+    </div>
+    <div class="furniture-about">
+      <h5>Company</h5>
+      <p>About Us</p>
+    </div>
+    <div class="furniture-stores">
+      <h5>Stores</h5>
+      <ul>
+        <li style="font-weight: 600">Ha Noi:</li>
+        <li>12 Cau Giay, Cau Giay District, Quan Hoa Ward</li>
+      </ul>
+      <ul>
+        <li style="font-weight: 600">TP.HCM:</li>
+        <li>44 Vo Thi Sau, District 3, Ward 1</li>
+      </ul>
+    </div>
+    <div class="furniture-contact">
+      <h5>Contact Us</h5>
+      <p>
+        <span style="font-weight: 600">Email: </span>
+        furniTMCoffical@hotmail.com
+      </p>
+      <p><span style="font-weight: 600">Phone:</span> +12679453</p>
+    </div>
+  </footer>
 </template>
 
 <script>
@@ -34,10 +62,13 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
+
 .home-cooperate {
   margin-top: 150px;
   background: #f4eeff;
   padding: 60px;
+  font-family: "Poppins", sans-serif;
 }
 .title {
   margin: auto;
@@ -61,5 +92,30 @@ export default {
 }
 img {
   width: 40%;
+}
+footer {
+  display: flex;
+  padding: 50px;
+  gap: 120px;
+  flex-wrap: wrap;
+  background: #ffc5e6;
+}
+.furniture-slogan h1 {
+  color: #b767ff;
+  font-size: 60px;
+}
+.furniture-slogan p {
+  font-weight: 500;
+}
+h5 {
+  font-weight: 600;
+}
+.furniture-about,
+.furniture-stores {
+  text-align: center;
+}
+.furniture-stores ul li {
+  list-style: none;
+  text-align: left;
 }
 </style>

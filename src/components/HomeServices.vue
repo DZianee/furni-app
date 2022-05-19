@@ -68,8 +68,11 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
+
 .container {
   margin-top: 150px;
+  font-family: "Poppins", sans-serif;
 }
 .service-title h1 {
   text-align: center;

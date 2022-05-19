@@ -40,9 +40,11 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
+
 .container {
   /* border: solid; */
-  margin-top: 130px;
+  margin-top: 150px;
 }
 .overview {
   text-align: center;
@@ -50,6 +52,7 @@ export default {
 .overview h1 {
   font-size: 60px;
   letter-spacing: 0.7px;
+  font-family: "Poppins", sans-serif;
 }
 .overview .overview-content {
   font-size: 20px;

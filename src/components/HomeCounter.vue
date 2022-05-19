@@ -69,10 +69,13 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
+
 .home-counter {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin-top: 100px;
+  font-family: "Poppins", sans-serif;
 }
 .counter {
   text-align: center;
@@ -81,7 +84,7 @@ export default {
   font-size: 170px;
 }
 .counter.total h3 {
-  font-size: 60px;
+  font-size: 50px;
 }
 .counter.total div {
   transform: translateY(10px);
@@ -99,7 +102,7 @@ export default {
   font-size: 90px;
 }
 .content .counter div h3 {
-  font-size: 35px;
+  font-size: 30px;
   padding-top: 25px;
   margin-left: 30px;
 }

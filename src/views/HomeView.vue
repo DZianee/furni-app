@@ -8,9 +8,9 @@
         src="https://player.vimeo.com/progressive_redirect/playback/665395712/rendition/720p?loc=external&oauth2_token_id=1027659655&signature=34a448e7345858b0bf09fb6654247161c7fe367ef61bad94332f8072d5b0cca7"
         type="video/mp4"
       />
-
       Your browser doesn't support HTML5 video tag.
     </video>
+    <div></div>
     <HomeCounter />
     <HomeProductOverview />
     <HomeServices />

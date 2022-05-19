@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="home-header-layout header">
     <!-- <img
       class="header-logo-image"
       src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/YG_Entertainment_Logo.svg/800px-YG_Entertainment_Logo.svg.png"
@@ -59,29 +59,40 @@ export default {
       // console.log(value);
     },
   },
-  // mounted() {
-  //   const x = document.querySelector(".header");
-  //   window.onscroll = () => {
-  //     let top = window.scrollY;
-  //     if (top > 120) {
-  //       x.classList.add("active");
-  //     } else {
-  //       x.classList.remove("active");
-  //     }
-  //   };
-  // },
+  mounted() {
+    const x = document.querySelector(".header");
+    const y = document.querySelectorAll(".item");
+    window.onscroll = () => {
+      let top = window.scrollY;
+      if (top > 120) {
+        x.classList.add("active");
+        y.forEach((item) => item.classList.add("active"));
+      } else {
+        x.classList.remove("active");
+        y.forEach((item) => item.classList.remove("active"));
+      }
+    };
+  },
 };
 </script>
 
 <style scoped>
 .header {
   display: flex;
-  position: sticky;
-  top: 0;
+  position: fixed;
   width: 100%;
+  transition: all 0.5s;
   z-index: 100;
-  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+}
+.header.active {
+  display: flex;
+  position: fixed;
+  width: 100%;
   background: white;
+  z-index: 100;
+  transition: all 0.7s;
+  letter-spacing: 0.7px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
 }
 .logo-slogan {
   padding: 0 40px;
@@ -92,7 +103,6 @@ export default {
 }
 .logo-slogan P {
   font-weight: 500;
-  letter-spacing: 0.7px;
 }
 .header-logo-image {
   border: solid;
@@ -120,9 +130,9 @@ ul {
   font-weight: bold;
   letter-spacing: 0.7px;
   font-size: 20px;
-  color: black;
+  color: white;
 }
-/* .item.active {
+.item.active {
   list-style-type: none;
   padding: 0 15px;
   margin: auto 30px;
@@ -131,7 +141,7 @@ ul {
   letter-spacing: 0.7px;
   font-size: 20px;
   color: black;
-} */
+}
 .header-user {
   width: fit-content;
   margin-right: 20px;
