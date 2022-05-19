@@ -55,8 +55,11 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400&family=Space+Grotesk&display=swap");
+
 .container {
   margin-top: 50px;
+  font-family: "Poppins", sans-serif;
 }
 .company-overview h1 {
   text-align: center;
@@ -68,7 +71,7 @@ export default {
 }
 .overview-content {
   padding: 15px 60px;
-  font-size: 20px;
+  font-size: 18px;
   letter-spacing: 0.7px;
   line-height: 35px;
 }

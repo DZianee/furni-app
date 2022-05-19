@@ -92,16 +92,21 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400&family=Space+Grotesk&display=swap");
+
 .services-view {
   margin-top: 50px;
   /* border: solid; */
+  font-family: "Poppins", sans-serif;
 }
 .services-overview h1 {
   text-align: center;
-  font-weight: 600;
 }
 .services-overview p {
   padding: 15px 25px;
+  font-size: 18px;
+  letter-spacing: 0.7px;
+  line-height: 35px;
 }
 .services-container {
   margin: 70px;
@@ -141,6 +146,9 @@ export default {
 }
 .service-des {
   margin: 15px;
+  font-size: 18px;
+  letter-spacing: 0.7px;
+  line-height: 35px;
 }
 img {
   width: 48%;
