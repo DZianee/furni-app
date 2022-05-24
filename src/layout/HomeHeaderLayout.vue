@@ -24,6 +24,10 @@
           src="../assets/img/hinh-nen-vit-avatar-anh-vit-cute-ngoc-nghech-1.jpg"
         />
       </div>
+      <div class="cart-icon">
+        <i class="bx bx-cart bx-md"></i>
+        <div class="num-item-cart">(12)</div>
+      </div>
     </div>
 
     <!-- <div class="header-user">
@@ -56,7 +60,7 @@
     </div>
     <div class="furniture-about">
       <h5>Company</h5>
-      <p>About Us</p>
+      <p @click="Route('companyView')">About Us</p>
     </div>
     <div class="furniture-stores">
       <h5>Stores</h5>
@@ -141,14 +145,14 @@ export default {
   position: absolute;
   width: fit-content;
   display: flex;
-  right: 0;
   bottom: 15px;
+  right: 10px;
 }
-ul {
+.header-content ul {
   display: flex;
   align-items: center;
   margin: 15px 0;
-  margin-right: 100px;
+  margin-right: 10px;
   height: fit-content;
 }
 .item {
@@ -156,9 +160,9 @@ ul {
   padding: 0 15px;
   margin: auto 30px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 600;
   letter-spacing: 0.7px;
-  font-size: 20px;
+  font-size: 18px;
   color: white;
 }
 .item.active {
@@ -166,10 +170,14 @@ ul {
   padding: 0 15px;
   margin: auto 30px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 600;
   letter-spacing: 0.7px;
-  font-size: 20px;
+  font-size: 18px;
   color: black;
+}
+.item:hover,
+.item.item.active:hover {
+  cursor: pointer;
 }
 .header-user {
   width: fit-content;
@@ -179,6 +187,19 @@ ul {
   max-width: 40px;
   border-radius: 30px;
   transform: translateY(10%);
+}
+.cart-icon {
+  position: relative;
+}
+.cart-icon i {
+  transform: translateY(12%);
+  margin-right: 20px;
+  color: #851de0;
+}
+.cart-icon .num-item-cart {
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
 }
 footer {
   display: flex;
@@ -200,6 +221,9 @@ h5 {
 .furniture-about,
 .furniture-stores {
   text-align: center;
+}
+.furniture-about p:hover {
+  cursor: pointer;
 }
 .furniture-stores ul li {
   list-style: none;

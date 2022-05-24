@@ -104,7 +104,7 @@ export default {
 }
 .services-overview p {
   padding: 15px 25px;
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0.7px;
   line-height: 35px;
 }
@@ -146,7 +146,7 @@ export default {
 }
 .service-des {
   margin: 15px;
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0.7px;
   line-height: 35px;
 }

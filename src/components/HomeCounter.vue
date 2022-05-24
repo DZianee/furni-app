@@ -84,7 +84,7 @@ export default {
   font-size: 170px;
 }
 .counter.total h3 {
-  font-size: 50px;
+  font-size: 40px;
 }
 .counter.total div {
   transform: translateY(10px);
@@ -102,7 +102,7 @@ export default {
   font-size: 90px;
 }
 .content .counter div h3 {
-  font-size: 30px;
+  font-size: 28px;
   padding-top: 25px;
   margin-left: 30px;
 }

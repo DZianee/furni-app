@@ -1,7 +1,8 @@
 <template>
   <div class="about-view container">
     <div class="company-overview">
-      <h1>About <span>TMCi</span></h1>
+      <h2>About <span>TMCi</span></h2>
+      <hr />
       <div class="overview-content">
         <p>
           Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -32,7 +33,7 @@
       </div>
     </div>
     <div class="stores">
-      <h1>Stores in VietNam</h1>
+      <h2>Stores in VietNam</h2>
       <hr />
       <div class="stores-address">
         <ul>
@@ -60,8 +61,9 @@ export default {
 .container {
   margin-top: 50px;
   font-family: "Poppins", sans-serif;
+  margin-bottom: 50px;
 }
-.company-overview h1 {
+.company-overview h2 {
   text-align: center;
   font-size: 50px;
   letter-spacing: 0.7px;
@@ -71,7 +73,7 @@ export default {
 }
 .overview-content {
   padding: 15px 60px;
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0.7px;
   line-height: 35px;
 }
@@ -91,7 +93,7 @@ li {
   list-style-type: none;
   padding: 10px 0;
   letter-spacing: 0.7px;
-  font-size: 18px;
+  font-size: 16px;
 }
 .company-owner {
   margin-top: 40px;
