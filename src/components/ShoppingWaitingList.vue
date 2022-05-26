@@ -5,7 +5,7 @@
       <div class="sidebar-header">
         <i class="bx bx-x bx-md" @click="close()" />
         <br />
-        <h4 class="header-list">Your current cart</h4>
+        <h5 class="header-list">Your current cart</h5>
       </div>
       <hr />
       <div class="item-current-container">
@@ -63,7 +63,7 @@ export default {
   left: 0;
   right: 0;
   z-index: 200;
-  transition: all 0.3s ease;
+  transition: all 0.5s;
 }
 .backdrop {
   background: rgba(0, 0, 0, 0.3);
@@ -73,7 +73,7 @@ export default {
   left: 0;
   right: 0;
   z-index: 200;
-  transition: all 0.3s ease-in;
+  transition: all 0.5s;
 }
 .waiting-list_sidebar {
   width: 270px;
@@ -81,7 +81,7 @@ export default {
   background: #fff0f0;
   top: -1px;
   padding: 10px;
-  transition: all 0.3s ease-in;
+  transition: all 0.5s;
 }
 .sidebar-header {
   /* display: flex; */
@@ -109,6 +109,9 @@ export default {
 }
 .item_current img {
   width: 30%;
+}
+.item_current .item-name {
+  font-size: 15px;
 }
 .total-item {
   padding: 20px;

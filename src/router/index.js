@@ -5,6 +5,7 @@ import ServicesView from "../views/ServicesView.vue";
 import ProductDetailsView from "../views/ProductDetailsView.vue";
 import ShoppingListView from "../views/ShoppingListView.vue";
 import SuccessOrderView from "../views/SuccessOrderView.vue";
+import ManagementView from "../views/ManagementView.vue";
 
 const routes = [
   {
@@ -46,6 +47,12 @@ const routes = [
     path: "/success-order-view",
     name: "successOrderView",
     component: SuccessOrderView,
+  },
+  {
+    path: "/management-view",
+    name: "managementView",
+    component: ManagementView,
+    meta: { layout: "sidebar-manage" },
   },
 ];
 

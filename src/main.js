@@ -7,6 +7,7 @@ import "bootstrap";
 import axios from "./plugins/axios";
 import DefaultLayout from "./layout/DefaultLayout.vue";
 import HomeHeaderLayout from "./layout/HomeHeaderLayout.vue";
+import SidebarManage from "./layout/SidebarManage.vue";
 
 const app = createApp(App);
 app.config.globalProperties.$axios = axios;
@@ -16,4 +17,5 @@ createApp(App)
   .use(router)
   .component("default-layout", DefaultLayout)
   .component("home-header-layout", HomeHeaderLayout)
+  .component("sidebar-manage-layout", SidebarManage)
   .mount("#app");
