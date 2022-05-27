@@ -5,7 +5,11 @@ import ServicesView from "../views/ServicesView.vue";
 import ProductDetailsView from "../views/ProductDetailsView.vue";
 import ShoppingListView from "../views/ShoppingListView.vue";
 import SuccessOrderView from "../views/SuccessOrderView.vue";
-import ManagementView from "../views/ManagementView.vue";
+import DashboardView from "../views/DashboardView.vue";
+import DeliveryView from "../views/DeliveryView.vue";
+import StorageView from "../views/StorageView.vue";
+import ManageView from "../views/ManageView.vue";
+import ProductCategoryView from "../views/ProductCategory.vue";
 
 const routes = [
   {
@@ -49,9 +53,33 @@ const routes = [
     component: SuccessOrderView,
   },
   {
-    path: "/management-view",
-    name: "managementView",
-    component: ManagementView,
+    path: "/dashboard-view",
+    name: "dashboardView",
+    component: DashboardView,
+    meta: { layout: "sidebar-manage" },
+  },
+  {
+    path: "/manage-view",
+    name: "manageView",
+    component: ManageView,
+    meta: { layout: "sidebar-manage" },
+  },
+  {
+    path: "/storage-view",
+    name: "storageView",
+    component: StorageView,
+    meta: { layout: "sidebar-manage" },
+  },
+  {
+    path: "/delivery-view",
+    name: "deliveryView",
+    component: DeliveryView,
+    meta: { layout: "sidebar-manage" },
+  },
+  {
+    path: "/product-category-view",
+    name: "productCategoryView",
+    component: ProductCategoryView,
     meta: { layout: "sidebar-manage" },
   },
 ];

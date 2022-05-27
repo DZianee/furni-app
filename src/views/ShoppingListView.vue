@@ -57,6 +57,7 @@ export default {
   margin-left: 4%;
   width: 90%;
   padding: 10px;
+  margin-bottom: 30px;
 }
 .btn:hover {
   color: white;

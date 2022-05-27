@@ -15,7 +15,7 @@
         <li class="item" @click="Route('furnitureView')">Furniture</li>
         <li class="item" @click="Route('servicesView')">Services</li>
         <li class="item" @click="Route('companyView')">Company</li>
-        <li class="item" @click="Route('managementView')">Management</li>
+        <li class="item" @click="Route('dashboardView')">Management</li>
       </ul>
       <div class="header-user">
         <img

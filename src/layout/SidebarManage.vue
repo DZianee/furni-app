@@ -19,21 +19,26 @@
         <span>Dashboard</span>
         <span class="tooltiptext">Dashboard</span>
       </li>
-      <li class="nav-item" @click="Route('dashboardView')">
+      <li class="nav-item" @click="Route('storageView')">
         <i class="bx bx-box bx-sm bx-fw" />
         <span>Storage</span>
         <span class="tooltiptext">Storage</span>
       </li>
-      <li class="nav-item" @click="Route('dashboardView')">
+      <li class="nav-item" @click="Route('deliveryView')">
         <i class="bx bx-spreadsheet bx-sm bx-fw" />
         <span>Order's delivery</span>
         <span class="tooltiptext">Order's delivery</span>
       </li>
       <!-- <li class="nav-item" @click="ManageRoute"> -->
-      <li class="nav-item">
+      <li class="nav-item" @click="Route('manageView')">
         <i class="bx bx-briefcase bx-sm bx-fw" />
         <span>Manage</span>
         <span class="tooltiptext">Manage</span>
+      </li>
+      <li class="nav-item" @click="Route('home')">
+        <i class="bx bx-home bx-sm bx-fw" />
+        <span>Back to Store</span>
+        <span class="tooltiptext">Home</span>
       </li>
     </ul>
     <div class="nav-item log-out" @click="logout">
@@ -48,16 +53,22 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    Route(value) {
+      this.$router.push({ name: value });
+    },
+  },
+};
 </script>
 
 <style scoped>
 .nav {
-  /* z-index: 1; */
-  width: 220px;
+  z-index: 1;
+  width: 250px;
   height: 100%;
   position: fixed;
-  background: white;
+  background: #f4eefb;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
   padding: 15px;
   display: block;
@@ -73,7 +84,7 @@ export default {};
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.3px;
-  color: #608294;
+  color: #536f7e;
 }
 .user-shortcut {
   display: flex;
@@ -89,7 +100,7 @@ export default {};
   align-items: center;
 }
 .user-info {
-  width: 130px;
+  width: 150px;
   padding: 10px 0;
 }
 .user-info .user-name {
@@ -117,14 +128,14 @@ export default {};
   margin: 5px 6px;
   line-height: 49px;
   border-radius: 10px;
-  color: #829aa6;
+  color: #7a919d;
   transition: ease 0.6s;
   list-style: none;
   font-size: 14px;
   letter-spacing: 0.3px;
 }
 .nav-item:hover {
-  background-color: #e8def9;
+  background-color: #fefbf3;
   cursor: pointer;
   color: #263238;
   font-weight: 500;

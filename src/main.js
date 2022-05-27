@@ -8,6 +8,7 @@ import axios from "./plugins/axios";
 import DefaultLayout from "./layout/DefaultLayout.vue";
 import HomeHeaderLayout from "./layout/HomeHeaderLayout.vue";
 import SidebarManage from "./layout/SidebarManage.vue";
+import Modal from "./components/Modal.vue";
 
 const app = createApp(App);
 app.config.globalProperties.$axios = axios;
@@ -18,4 +19,5 @@ createApp(App)
   .component("default-layout", DefaultLayout)
   .component("home-header-layout", HomeHeaderLayout)
   .component("sidebar-manage-layout", SidebarManage)
+  .component("confirm-modal", Modal)
   .mount("#app");
