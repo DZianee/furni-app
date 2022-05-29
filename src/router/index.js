@@ -10,6 +10,7 @@ import DeliveryView from "../views/DeliveryView.vue";
 import StorageView from "../views/StorageView.vue";
 import ManageView from "../views/ManageView.vue";
 import ProductCategoryView from "../views/ProductCategory.vue";
+import ProductManDetailsView from "../views/ProductManDetailsView.vue";
 
 const routes = [
   {
@@ -80,6 +81,12 @@ const routes = [
     path: "/product-category-view",
     name: "productCategoryView",
     component: ProductCategoryView,
+    meta: { layout: "sidebar-manage" },
+  },
+  {
+    path: "/product-manage-details-view",
+    name: "productManDetailsView",
+    component: ProductManDetailsView,
     meta: { layout: "sidebar-manage" },
   },
 ];

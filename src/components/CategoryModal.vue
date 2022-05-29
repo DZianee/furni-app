@@ -33,9 +33,9 @@
             <button
               type="button"
               class="btn"
-              style="background: #ac39ea; color: white"
+              style="background: #aa40e3; color: white"
             >
-              Submit
+              Create
             </button>
           </div>
         </div>

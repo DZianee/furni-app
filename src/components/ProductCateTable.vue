@@ -41,58 +41,96 @@
             <th>Code</th>
             <th>Name</th>
             <th>Type</th>
-            <th>Price (per one)</th>
-            <th>Import quantity</th>
+            <th style="text-align: center">Price (per one)</th>
+            <th style="text-align: center">Import quantity</th>
             <th>Image</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style="font-weight: 600">CAS1I989</td>
-            <td>Testing product name at current</td>
-            <td>Chair</td>
-            <td>229.000 VND</td>
-            <td>20</td>
-            <td>View image</td>
-            <td>remove</td>
-          </tr>
-          <tr>
-            <td>CAS1I989</td>
-            <td>Testing product name at current</td>
-            <td>Chair</td>
-            <td>229.000 VND</td>
-            <td>20</td>
-            <td>View image</td>
-            <td>remove</td>
-          </tr>
-          <tr>
-            <td>CAS1I989</td>
-            <td>Testing product name at current</td>
-            <td>Chair</td>
-            <td>229.000 VND</td>
-            <td>20</td>
-            <td>View image</td>
-            <td>remove</td>
-          </tr>
-          <tr>
-            <td>CAS1I989</td>
-            <td>Testing product name at current</td>
-            <td>Chair</td>
-            <td>229.000 VND</td>
-            <td>20</td>
-            <td>View image</td>
-            <td>remove</td>
+            <td class="item-code" @click="Route('productManDetailsView')">
+              CAS1I989
+            </td>
+            <td class="item-name">Testing product name at current</td>
+            <td class="item-type">Chair</td>
+            <td class="item-price">229.000 VND</td>
+            <td class="item-quantity">20</td>
+            <td
+              class="item-img"
+              data-bs-target="#imgModal"
+              data-bs-toggle="modal"
+            >
+              View image
+            </td>
+            <td class="item_remove-bin">
+              <i
+                class="bx bx-trash"
+                data-bs-target="#modal"
+                data-bs-toggle="modal"
+                @click="openRemoveModal"
+              ></i>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <component
+      :is="'confirm-modal'"
+      :title="modalTitle"
+      :confirmText="confirmText"
+      :btnProperty="btnProperty"
+      @submit="submitModal"
+    >
+      <div class="modal-content">
+        <p>Are you sure you want to remove this row ?</p>
+      </div>
+    </component>
+    <div
+      class="modal fade img-modal"
+      id="imgModal"
+      tabindex="-1"
+      aria-labelledby="imgModal"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <img
+            src="https://images.pexels.com/photos/4857784/pexels-photo-4857784.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
+            alt="iitem-img"
+          />
+        </div>
+      </div>
+    </div>
+    <ProductCateModal />
   </div>
 </template>
 
 <script>
+import ProductCateModal from "./ProductCreateModal.vue";
 export default {
   name: "ProductCateTable",
+  components: { ProductCateModal },
+  data() {
+    return {
+      modalTitle: "",
+      btnProperty: {
+        color: "",
+        backColor: "",
+      },
+      confirmText: "",
+    };
+  },
+  methods: {
+    openRemoveModal() {
+      this.modalTitle = "Remove Confirmation";
+      this.confirmText = "Remove";
+      this.btnProperty.color = "white";
+      this.btnProperty.backColor = "#fd5d5d";
+    },
+    Route(value) {
+      this.$router.push({ name: value });
+    },
+  },
 };
 </script>
 
@@ -110,7 +148,7 @@ export default {
   background: #aa40e3;
   color: white;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 15px;
   padding: 5px;
   width: 15%;
   border: none;
@@ -152,8 +190,51 @@ export default {
 .table-responsive {
   margin: 20px;
   padding: 10px;
+  height: 400px;
 }
-thead {
-  background: #e4cdff;
+thead th {
+  padding: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  background: #e0c2ff;
+}
+tbody td {
+  padding: 20px 0;
+  font-size: 15px;
+  color: rgb(108, 106, 106);
+}
+.item-code {
+  font-weight: 600;
+  color: black;
+}
+.item-code:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.item-name {
+  font-weight: 500;
+}
+.item-price,
+.item-quantity,
+.item_remove-bin {
+  text-align: center;
+}
+.item-img:hover {
+  text-decoration: underline;
+  color: rgb(107, 107, 255);
+  cursor: pointer;
+  font-weight: 500;
+}
+.item_remove-bin i:hover {
+  color: red;
+  cursor: pointer;
+}
+/* - - -  remove btn - - - */
+.modal-content p {
+  text-align: center;
+  padding: 10px;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
 }
 </style>

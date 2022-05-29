@@ -1,7 +1,7 @@
 <template>
   <div class="product-in-category container">
     <div class="title">
-      <h3>Chairs & Armchairs in Stock</h3>
+      <h4>Chairs & Armchairs in Stock</h4>
     </div>
     <CateProductOverview />
     <hr />
