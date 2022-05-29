@@ -1,5 +1,15 @@
 <template>
   <div class="product-manage-details-view container">
+    <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item" @click="Route('productCategoryView')">
+          Product Category
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          Product details info
+        </li>
+      </ol>
+    </nav>
     <div class="title">
       <h3 style="text-align: center">Details information of Product</h3>
     </div>
@@ -87,18 +97,7 @@
         </div>
       </div>
     </div>
-
-    <!-- <QuillEditor :heightEditor="100" />
-    <div class="container">
-      One
-      <input type="checkbox" checked="checked" />
-      <span class="checkmark"></span>
-    </div>
-    <div class="container">
-      Two
-      <input type="checkbox" />
-      <span class="checkmark"></span>
-    </div> -->
+    <div class="btn submit-btn">Submit changes</div>
   </div>
 </template>
 
@@ -127,6 +126,11 @@ export default {
       ],
     };
   },
+  methods: {
+    Route(value) {
+      this.$router.push({ name: value });
+    },
+  },
 };
 </script>
 
@@ -138,11 +142,25 @@ export default {
   width: calc(100% - 336px);
   top: 20px;
 }
+.breadcrumb-item:hover {
+  text-decoration: underline;
+  font-weight: 500;
+  cursor: pointer;
+}
+.breadcrumb-item.active {
+  color: rgb(174, 67, 255);
+  font-weight: 500;
+}
 .details-container {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   column-gap: 50px;
   margin-top: 40px;
+  padding: 20px;
+  border-radius: 30px;
+  border: solid lightblue;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
 }
 .details-color-img {
   margin-top: 50px;
@@ -238,5 +256,13 @@ input {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+/* -- btn --- */
+.btn {
+  background: #aa40e3;
+  color: white;
+  float: right;
+  margin: 30px 40px 60px 0;
 }
 </style>

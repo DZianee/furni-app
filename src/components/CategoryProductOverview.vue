@@ -28,14 +28,36 @@
           style="background: linear-gradient(to top, #be79df, #f5fbf1)"
         >
           <p>Chair's item:</p>
-          <p class="num-of-chair">12</p>
+          <p class="num-of-chair">
+            <vue3-autocounter
+              ref="counter"
+              :startAmount="0"
+              :endAmount="12"
+              prefix=""
+              suffix=""
+              separator=""
+              decimalSeparator="."
+              :autoinit="true"
+            />
+          </p>
         </div>
         <div
           class="card armchairs"
           style="background: linear-gradient(to top, #26baee, #f5fbf1)"
         >
           <p>Armchair's item:</p>
-          <p class="num-of-armchair">12</p>
+          <p class="num-of-armchair">
+            <vue3-autocounter
+              ref="counter"
+              :startAmount="0"
+              :endAmount="12"
+              prefix=""
+              suffix=""
+              separator=""
+              decimalSeparator="."
+              :autoinit="true"
+            />
+          </p>
         </div>
       </div>
     </div>
@@ -43,8 +65,13 @@
 </template>
 
 <script>
+import Vue3autocounter from "vue3-autocounter";
+
 export default {
   name: "CateProductOverview",
+  components: {
+    "vue3-autocounter": Vue3autocounter,
+  },
 };
 </script>
 
