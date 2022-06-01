@@ -168,7 +168,7 @@ export default {
 }
 .search-bar input {
   font-size: 15px;
-  background: #f1eeee;
+  background: #f9f5f4;
 }
 /* - - - Filter-Sort - - - */
 
@@ -180,7 +180,7 @@ export default {
 }
 .filter-sort select {
   font-weight: 500;
-  background: #f1eeee;
+  background: #f9f5f4;
   font-size: 15px;
   border-radius: 5px;
   border: solid 1px rgb(199, 195, 195);

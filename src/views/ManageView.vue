@@ -1,5 +1,5 @@
 <template>
-  <div class="manage-view container">this is manage</div>
+  <div class="manage-view container"></div>
 </template>
 
 <script>

@@ -1,0 +1,84 @@
+<template>
+  <div class="customer-info-modal">
+    <div
+      class="modal fade cus-modal"
+      id="cusModal"
+      tabindex="-1"
+      aria-labelledby="cusModal"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Customer Information</h5>
+          </div>
+          <div class="modal-body">
+            <div class="customer-email">
+              <label for="cusEmail">Email:</label>
+              <input type="text" value="hcm@hcm,con.cm" readonly />
+            </div>
+            <div class="customer-fullname">
+              <label for="cusFullname">Fullname:</label>
+              <input type="text" value="I dont knoe alos" readonly />
+            </div>
+            <div class="customer-phone">
+              <label for="cusPhone">Phone (Mobile):</label>
+              <input type="text" value="48735754" readonly />
+            </div>
+            <div class="customer-address">
+              <label for="cusAddress">Address:</label>
+              <input
+                type="text"
+                value="232 dbhg dfff. fhddfhuff, hfgfyg"
+                readonly
+              />
+            </div>
+          </div>
+          <div class="btn btn-close-modal" data-bs-dismiss="modal">Close</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style scoped>
+.modal-header {
+  justify-content: center;
+  letter-spacing: 0.3px;
+}
+.modal-body {
+  padding: 10px;
+}
+.customer-email,
+.customer-phone,
+.customer-fullname,
+.customer-address {
+  padding: 15px 10px;
+  display: grid;
+  grid-template-columns: 0.6fr 1fr;
+}
+label {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(107, 104, 104);
+  letter-spacing: 0.3px;
+}
+input {
+  border: none;
+  font-size: 15px;
+}
+.btn-close-modal {
+  background-color: #c673f3;
+  color: white;
+  width: 90%;
+  margin: 25px auto;
+  font-weight: 500;
+}
+.btn-close-modal:hover {
+  background-color: #bb53f3;
+  color: white;
+}
+</style>
