@@ -70,6 +70,9 @@ export default {
 }
 .company-overview span {
   color: #b767ff;
+  font-family: "Dancing Script", cursive;
+  font-weight: 600;
+  font-size: 60px;
 }
 .overview-content {
   padding: 15px 60px;

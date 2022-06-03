@@ -1,15 +1,9 @@
 <template>
-  <div class="delivery-route-bar">
+  <div class="navbar-4-management">
     <nav>
       <ul>
-        <li @click="openOrderRoute('all')" class="bar active">All</li>
-        <li @click="openOrderRoute('new')" class="bar">New orders</li>
-        <li @click="openOrderRoute('delivering')" class="bar">
-          Delivering orders
-        </li>
-        <li @click="openOrderRoute('cancelled')" class="bar">
-          Cancelled orders
-        </li>
+        <li @click="openUserRoute('user')" class="bar active">Customers</li>
+        <li @click="openUserRoute('role')" class="bar">Role management</li>
       </ul>
     </nav>
   </div>
@@ -17,9 +11,11 @@
 
 <script>
 export default {
+  name: "NavForManagement",
   methods: {
-    openOrderRoute(value) {
-      this.$emit("open-orders-tab", value);
+    openUserRoute(value) {
+      this.$emit("open-users-tab", value);
+      this.$router.push({ name: "manageView", params: { id: value } });
     },
   },
   mounted() {
@@ -39,13 +35,13 @@ export default {
 </script>
 
 <style scoped>
-.delivery-route-bar {
+.navbar-4-management {
   letter-spacing: 0.3px;
 }
 ul {
   display: flex;
-  justify-content: space-between;
-  /* gap: 40px; */
+  gap: 70px;
+  justify-content: space-around;
   border-bottom: 1px solid lightgrey;
 }
 .bar {

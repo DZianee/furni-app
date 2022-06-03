@@ -20,13 +20,17 @@
       <div class="header-user">
         <img
           class="header-user-image"
+          data-bs-target="#loginForm"
+          data-bs-toggle="modal"
           alt="user avatar"
           src="../assets/img/hinh-nen-vit-avatar-anh-vit-cute-ngoc-nghech-1.jpg"
         />
-      </div>
-      <div class="cart-icon">
-        <i class="bx bx-cart bx-md"></i>
-        <div class="num-item-cart">(12)</div>
+        <div class="cart-icon">
+          <i class="bx bx-cart bx-md"></i>
+          <div class="num-item-cart" @click="Route('shoppingListView')">
+            (12)
+          </div>
+        </div>
       </div>
     </div>
 
@@ -50,6 +54,7 @@
       </ul>
     </div> -->
   </div>
+  <LoginForm />
   <div class="router-view">
     <slot />
   </div>
@@ -85,7 +90,11 @@
 </template>
 
 <script>
+import LoginForm from "../components/LoginForm.vue";
 export default {
+  components: {
+    LoginForm,
+  },
   methods: {
     Route(value) {
       this.$router.push({ name: value });
@@ -95,13 +104,16 @@ export default {
   mounted() {
     const x = document.querySelector(".header");
     const y = document.querySelectorAll(".item");
+    const z = document.querySelector(".cart-icon .num-item-cart");
     window.onscroll = () => {
       let top = window.scrollY;
       if (top > 120) {
         x.classList.add("active");
+        z.classList.add("active");
         y.forEach((item) => item.classList.add("active"));
       } else {
         x.classList.remove("active");
+        z.classList.add("active");
         y.forEach((item) => item.classList.remove("active"));
       }
     };
@@ -133,6 +145,8 @@ export default {
 .logo-slogan h1 {
   color: #b767ff;
   font-size: 60px;
+  font-family: "Dancing Script", cursive;
+  font-weight: 600;
 }
 .logo-slogan P {
   font-weight: 500;
@@ -182,6 +196,8 @@ export default {
 .header-user {
   width: fit-content;
   margin-right: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 .header-user-image {
   max-width: 40px;
@@ -194,12 +210,21 @@ export default {
 .cart-icon i {
   transform: translateY(12%);
   margin-right: 20px;
-  color: #851de0;
+  color: #b767ff;
 }
 .cart-icon .num-item-cart {
   position: absolute;
   right: 5px;
   bottom: 10px;
+  color: white;
+  cursor: pointer;
+}
+.cart-icon .num-item-cart.active {
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
+  color: black;
+  cursor: pointer;
 }
 footer {
   display: flex;
@@ -211,6 +236,8 @@ footer {
 .furniture-slogan h1 {
   color: #b767ff;
   font-size: 60px;
+  font-family: "Dancing Script", cursive;
+  font-weight: 600;
 }
 .furniture-slogan p {
   font-weight: 500;

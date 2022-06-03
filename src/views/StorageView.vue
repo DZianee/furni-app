@@ -1,6 +1,6 @@
 <template>
   <div class="storage-view container">
-    <h2>Storage in HCM city</h2>
+    <h3>Storage in HCM city</h3>
     <CategoryListMan />
   </div>
 </template>

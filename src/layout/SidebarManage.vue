@@ -29,11 +29,15 @@
         <span>Order's delivery</span>
         <span class="tooltiptext">Order's delivery</span>
       </li>
-      <!-- <li class="nav-item" @click="ManageRoute"> -->
-      <li class="nav-item" @click="Route('manageView')">
-        <i class="bx bx-briefcase bx-sm bx-fw" />
-        <span>Manage</span>
-        <span class="tooltiptext">Manage</span>
+      <li class="nav-item" @click="Route('financeView')">
+        <i class="bx bx-money-withdraw bx-sm bx-fw" />
+        <span>Finance</span>
+        <span class="tooltiptext">Finance</span>
+      </li>
+      <li class="nav-item" @click="manageRoute('manageView')">
+        <i class="bx bx-user bx-sm bx-fw" />
+        <span>Customers</span>
+        <span class="tooltiptext">Customers</span>
       </li>
       <li class="nav-item" @click="Route('home')">
         <i class="bx bx-home bx-sm bx-fw" />
@@ -58,6 +62,9 @@ export default {
     Route(value) {
       this.$router.push({ name: value });
     },
+    manageRoute(value) {
+      this.$router.push({ name: value, params: { id: "user" } });
+    },
   },
 };
 </script>
@@ -79,6 +86,9 @@ export default {
 .store-logo h1 {
   text-align: center;
   color: #b767ff;
+  font-family: "Dancing Script", cursive;
+  font-weight: 600;
+  font-size: 60px;
 }
 .store-logo p {
   font-size: 12px;

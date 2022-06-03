@@ -21,6 +21,8 @@
         <img
           class="header-user-image"
           alt="user avatar"
+          data-bs-target="#loginForm"
+          data-bs-toggle="modal"
           src="../assets/img/hinh-nen-vit-avatar-anh-vit-cute-ngoc-nghech-1.jpg"
         />
       </div>
@@ -50,6 +52,8 @@
       </ul>
     </div> -->
   </div>
+  <LoginForm />
+
   <div class="router-view">
     <slot />
   </div>
@@ -85,7 +89,12 @@
 </template>
 
 <script>
+import LoginForm from "../components/LoginForm.vue";
+
 export default {
+  components: {
+    LoginForm,
+  },
   methods: {
     Route(value) {
       this.$router.push({ name: value });
@@ -122,6 +131,8 @@ export default {
 .logo-slogan h1 {
   color: #b767ff;
   font-size: 60px;
+  font-family: "Dancing Script", cursive;
+  font-weight: 600;
 }
 .logo-slogan P {
   font-weight: 500;
@@ -205,6 +216,8 @@ footer {
 .furniture-slogan h1 {
   color: #b767ff;
   font-size: 60px;
+  font-family: "Dancing Script", cursive;
+  font-weight: 600;
 }
 .furniture-slogan p {
   font-weight: 500;

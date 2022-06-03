@@ -82,7 +82,11 @@
             </td>
             <td
               class="status-order"
-              :style="[choice ? { color: 'green' } : { color: 'red' }]"
+              :style="[
+                choice
+                  ? { color: 'green', fontWeight: '600' }
+                  : { color: 'red', fontWeight: '600' },
+              ]"
             >
               Active
             </td>

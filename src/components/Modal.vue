@@ -8,8 +8,10 @@
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ title }}</h5>
+          <div class="modal-header" :style="{ justifyContent: headerPosition }">
+            <h5 class="modal-title">
+              {{ title }}
+            </h5>
           </div>
           <div class="modal-body"><slot></slot></div>
           <div class="confirm-btn">
@@ -42,6 +44,7 @@
 export default {
   name: "ModalCustom",
   props: {
+    headerPosition: String,
     title: String,
     btnProperty: Object,
     confirmText: String,
@@ -56,7 +59,7 @@ export default {
 
 <style scoped>
 .modal-header {
-  justify-content: center;
+  /* justify-content: center; */
   letter-spacing: 0.3px;
 }
 .confirm-btn {
@@ -67,9 +70,10 @@ export default {
   padding: 0 20px;
 }
 .confirm-btn button {
-  width: 90%;
+  width: 40%;
   font-weight: 500;
   letter-spacing: 0.2px;
+  border-radius: 7px;
 }
 .cancel-btn {
   background: rgb(167, 160, 160);

@@ -1,7 +1,7 @@
 <template>
   <div class="delivery-view container">
     <div class="title">
-      <h4>Delivery Order</h4>
+      <h3>Delivery Order</h3>
       <p>Gather and manage all the making orders over store in HCM city</p>
     </div>
     <DeliveryCounter />

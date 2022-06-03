@@ -11,6 +11,8 @@ import StorageView from "../views/StorageView.vue";
 import ManageView from "../views/ManageView.vue";
 import ProductCategoryView from "../views/ProductCategory.vue";
 import ProductManDetailsView from "../views/ProductManDetailsView.vue";
+import FinanceView from "../views/FinanceView.vue";
+import RegisterView from "../views/RegisterView.vue";
 
 const routes = [
   {
@@ -27,6 +29,12 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+  },
+  {
+    path: "/register-view",
+    name: "registerView",
+    component: RegisterView,
+    meta: { layout: "empty" },
   },
   {
     path: "/furniture-view",
@@ -60,7 +68,7 @@ const routes = [
     meta: { layout: "sidebar-manage" },
   },
   {
-    path: "/manage-view",
+    path: "/manage-view/:id",
     name: "manageView",
     component: ManageView,
     meta: { layout: "sidebar-manage" },
@@ -75,6 +83,12 @@ const routes = [
     path: "/delivery-view",
     name: "deliveryView",
     component: DeliveryView,
+    meta: { layout: "sidebar-manage" },
+  },
+  {
+    path: "/finance-view",
+    name: "financeView",
+    component: FinanceView,
     meta: { layout: "sidebar-manage" },
   },
   {

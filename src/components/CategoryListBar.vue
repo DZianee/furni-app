@@ -88,7 +88,8 @@ ul li {
   letter-spacing: 0.5px;
 }
 ul li:hover {
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
+  color: rgb(174, 67, 255);
 }
 </style>

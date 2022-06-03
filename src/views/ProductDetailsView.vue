@@ -1,5 +1,15 @@
 <template>
   <div class="product-details-view container">
+    <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item" @click="Route('furnitureView')">
+          Furniture
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          Product details
+        </li>
+      </ol>
+    </nav>
     <ShoppingWaitingList :open="choice" @close="closeWaitingList" />
     <div class="product-img">
       <img
@@ -53,11 +63,23 @@ export default {
     closeWaitingList(item) {
       this.choice = item;
     },
+    Route(val) {
+      this.$router.push({ name: val });
+    },
   },
 };
 </script>
 
 <style scoped>
+.breadcrumb-item:hover {
+  text-decoration: underline;
+  font-weight: 500;
+  cursor: pointer;
+}
+.breadcrumb-item.active {
+  color: rgb(174, 67, 255);
+  font-weight: 500;
+}
 .container {
   /* border: solid; */
 }
