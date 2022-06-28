@@ -3,6 +3,7 @@
     <div class="table-title">
       <h5>Employee staff</h5>
       <p>Manage the active staffs working in the store</p>
+      <p>{{ result }}</p>
     </div>
     <div class="table-responsive">
       <div class="create-staff-btn">
@@ -233,7 +234,26 @@ export default {
       },
       confirmText: "",
       headerPosition: "",
+      id: "62ac075d3a5d293c62b3b12b",
+      result: [],
     };
+  },
+  async created() {
+    try {
+      // this.$store.dispatch("fetchAccessToken"); 62ac075d3a5d293c62b3b12b
+      this.$axios.defaults.headers[
+        "Authorization"
+      ] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjdlNWZiM2UyODhmYmZmZWZlY2FiMyIsImlhdCI6MTY1NjM5ODkwMywiZXhwIjoxNjU2NDA2MTAzfQ.R3fVlEqRH1I4i65oH2Ktj1gXYj1Gsww-KcrDlR4kZJ8`;
+
+      const res = await this.$axios.get(
+        `api/User/Staff/${this.id}`,
+        this.$axios.defaults.headers["Authorization"]
+      );
+      console.log(res);
+      this.result = res.status;
+    } catch (e) {
+      //
+    }
   },
   methods: {
     openRemoveModal() {
@@ -261,6 +281,9 @@ export default {
       this.headerPosition = "flex-start";
     },
   },
+  // mounted() {
+  //   this.getStaff();
+  // },
 };
 </script>
 
