@@ -137,6 +137,7 @@ export default {
     logouts() {
       console.log(this.logouts);
       this.login = false;
+      this.logouts = false;
       this.showLogout = false;
     },
   },

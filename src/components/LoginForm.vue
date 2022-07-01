@@ -4,6 +4,8 @@
       class="modal fade"
       id="loginForm"
       tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
       aria-labelledby="loginFormLabel"
     >
       <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -16,6 +18,12 @@
               />
             </div>
             <div class="login-container">
+              <i
+                class="bx bx-x bx-md close-icon"
+                data-bs-dismiss="modal"
+                @click="close"
+              ></i>
+
               <div class="success-message card" v-if="succeed">
                 <p>
                   Login verified
@@ -116,6 +124,9 @@ export default {
     Route(val) {
       this.$router.push({ name: val });
     },
+    close() {
+      this.succeed = false;
+    },
     async login() {
       try {
         const userLogin = {
@@ -128,8 +139,9 @@ export default {
           this.$store.dispatch("verifiedUser", true);
           this.loadingIcon = false;
           this.succeed = true;
-          this.$store.dispatch("login", res);
+          this.$emit("login-verified", true);
 
+          this.$store.dispatch("login", res);
           this.errorMessage = false;
         }
         console.log(res);
@@ -137,15 +149,6 @@ export default {
         this.loadingIcon = false;
         this.errorMessage = true;
         console.log(error);
-      }
-    },
-  },
-  watch: {
-    succeed() {
-      if (this.succeed == true) {
-        this.$emit("login-verified", true);
-      } else {
-        this.$emit("login-verified", false);
       }
     },
   },
@@ -168,7 +171,11 @@ img {
   padding: 0;
   grid-template-columns: 1fr 1fr;
 }
-
+.close-icon {
+  position: absolute;
+  top: 10px;
+  right: 7px;
+}
 .login-header h3 {
   font-weight: 600;
   color: #b767ff;
