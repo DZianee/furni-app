@@ -1,9 +1,5 @@
 <template>
   <div class="header">
-    <!-- <img
-      class="header-logo-image"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/YG_Entertainment_Logo.svg/800px-YG_Entertainment_Logo.svg.png"
-    /> -->
     <div class="logo-slogan">
       <h1>TMCi</h1>
       <p>For Trending, Modern and Comfortable life</p>
@@ -18,39 +14,39 @@
         <li class="item" @click="Route('dashboardView')">Management</li>
       </ul>
       <div class="header-user">
-        <img
-          class="header-user-image"
-          alt="user avatar"
-          data-bs-target="#loginForm"
-          data-bs-toggle="modal"
-          src="../assets/img/hinh-nen-vit-avatar-anh-vit-cute-ngoc-nghech-1.jpg"
-        />
-      </div>
-      <div class="cart-icon">
-        <i class="bx bx-cart bx-md"></i>
-        <div class="num-item-cart" @click="Route('shoppingListView')">(12)</div>
+        <div>
+          <div class="avatar-user" v-if="login">
+            <img
+              class="header-user-image"
+              alt="user avatar"
+              :src="`${this.avatar}`"
+              @click="showLogout = !showLogout"
+            />
+            <div class="logout" v-if="showLogout">
+              <p @click="logout">Log-out</p>
+            </div>
+            <span class="text-welcome">
+              Hello <span> {{ user.email }}</span>
+            </span>
+          </div>
+          <div class="icon-user" v-else>
+            <i
+              class="bx bx-user-circle bx-md bx-fw"
+              data-bs-target="#loginForm"
+              data-bs-toggle="modal"
+              alt="user avatar"
+            />
+          </div>
+        </div>
+
+        <div class="cart-icon">
+          <i class="bx bx-cart bx-md"></i>
+          <div class="num-item-cart" @click="Route('shoppingListView')">
+            (12)
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- <div class="header-user">
-      <img
-        class="header-user-image"
-        alt="user avatar"
-        src="../assets/img/hinh-nen-vit-avatar-anh-vit-cute-ngoc-nghech-1.jpg"
-      />
-
-      <ul class="header-user-info">
-        <li class="user-emails">tet</li>
-        <li @click="showProfile">
-          <i class="bx bx-user-pin bx-sm bx-fw" />
-          My Profile
-        </li>
-        <li class="header-user-logout" @click="logout">
-          <i class="bx bx-log-out bx-sm bx-fw" />
-          Logout
-        </li>
-      </ul>
-    </div> -->
   </div>
   <LoginForm />
 
@@ -90,28 +86,68 @@
 
 <script>
 import LoginForm from "../components/LoginForm.vue";
+import listImg from "../assets/JSON/avaImg.json";
 
 export default {
   components: {
     LoginForm,
   },
+  data() {
+    return {
+      login: false,
+      user: {},
+      showLogout: false,
+      logouts: false,
+      avatar: "",
+    };
+  },
+  created() {
+    this.$store.dispatch("getAuth");
+    this.login = this.$store.state.authenticated;
+    this.$store.dispatch("getUser");
+    const data = JSON.parse(this.$store.state.user);
+    this.user = data;
+    console.log(this.user);
+  },
   methods: {
     Route(value) {
       this.$router.push({ name: value });
-      // console.log(value);
+    },
+    loginVerified(val) {
+      this.login = val;
+      console.log(this.login);
+    },
+    getUser() {
+      this.$store.dispatch("getUser");
+      const data = JSON.parse(this.$store.state.user);
+      this.user = data;
+      this.$store.dispatch("getAvatar");
+      if (this.$store.state.avatar == null) {
+        const randomImg = Math.floor(Math.random() * listImg.img.length);
+        this.avatar = listImg.img[randomImg];
+        this.$store.dispatch("storeAvatar", this.avatar);
+      } else {
+        this.avatar = this.$store.state.avatar;
+      }
+      console.log(this.user);
+    },
+    logout() {
+      this.$store.dispatch("logout");
+      this.logouts = true;
+      // this.$store.dispatch("getAuth");
+      // this.login = this.$store.state.authenticated;
     },
   },
-  // mounted() {
-  //   const x = document.querySelector(".header");
-  //   window.onscroll = () => {
-  //     let top = window.scrollY;
-  //     if (top > 120) {
-  //       x.classList.add("active");
-  //     } else {
-  //       x.classList.remove("active");
-  //     }
-  //   };
-  // },
+  watch: {
+    login() {
+      console.log(this.login);
+      this.getUser();
+    },
+    logouts() {
+      console.log(this.logouts);
+      this.login = false;
+    },
+  },
 };
 </script>
 
@@ -132,7 +168,7 @@ export default {
   color: #b767ff;
   font-size: 60px;
   font-family: "Dancing Script", cursive;
-  font-weight: 600;
+  font-weight: 500;
 }
 .logo-slogan P {
   font-weight: 500;
@@ -146,22 +182,22 @@ export default {
   position: absolute;
   width: fit-content;
   display: flex;
-  right: 10px;
   bottom: 15px;
+  right: 10px;
 }
 .header-content ul {
   display: flex;
   align-items: center;
   margin: 15px 0;
-  margin-right: 10px;
+  margin-right: 20px;
   height: fit-content;
 }
 .item {
   list-style-type: none;
   padding: 0 15px;
-  margin: auto 20px;
+  margin: auto 30px;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.7px;
   font-size: 18px;
   color: black;
@@ -169,32 +205,91 @@ export default {
 .item:hover {
   cursor: pointer;
 }
-/* .item.active {
-  list-style-type: none;
-  padding: 0 15px;
-  margin: auto 30px;
-  text-align: center;
-  font-weight: bold;
-  letter-spacing: 0.7px;
-  font-size: 20px;
-  color: black;
-} */
 .header-user {
   width: fit-content;
   margin-right: 20px;
+  display: grid;
+  grid-template-columns: 1fr 0.2fr;
+  column-gap: 10px;
+}
+/* --- before login ---- */
+.bx-user-circle {
+  color: black;
+  transform: translateY(50%);
+  cursor: pointer;
+}
+/* --- after login ---- */
+
+.avatar-user {
+  border-right: solid rgb(164, 174, 184) 1px;
+  position: relative;
+  top: 7px;
 }
 .header-user-image {
   max-width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  transform: translateY(5%);
+  cursor: pointer;
+}
+.text-welcome {
+  padding: 10px;
+  color: black;
+}
+.avatar-user .text-welcome span {
+  padding: 10px 2px;
+  margin-top: 40px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #b767ff;
+}
+.avatar-user span span:hover {
+  text-decoration: underline;
+}
+
+/* .header-user-image {
+  max-width: 40px;
   border-radius: 30px;
   transform: translateY(10%);
+} */
+
+/* --- logout ---- */
+.logout {
+  position: absolute;
+  top: 60px;
+  border: solid #b767ff;
+  padding: 10px;
+  border-radius: 5px;
+  background: white;
+}
+.logout::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 40px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 0px solid transparent;
+  border-bottom: 17px #b767ff solid;
+  width: 20px;
+  height: 20px;
+}
+.logout:hover {
+  cursor: pointer;
+  font-weight: 500;
 }
 .cart-icon {
   position: relative;
+  display: flex;
+  justify-content: flex-end;
 }
 .cart-icon i {
   transform: translateY(12%);
   margin-right: 20px;
-  color: #851de0;
+  color: #b767ff;
+  padding-right: 10px;
 }
 .cart-icon .num-item-cart {
   position: absolute;

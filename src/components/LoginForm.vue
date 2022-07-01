@@ -16,6 +16,15 @@
               />
             </div>
             <div class="login-container">
+              <div class="success-message card" v-if="succeed">
+                <p>
+                  Login verified
+                  <i
+                    class="bx bx-check bx-fw bx-md"
+                    style="color: #00ff00; margin-left: 7px"
+                  ></i>
+                </p>
+              </div>
               <div class="login-header">
                 <h3>Hi, our precious friends</h3>
                 <p>Enjoy the shopping time with one login</p>
@@ -26,32 +35,41 @@
                     <label for="email">Email</label>
                     <input
                       type="email"
+                      name="email"
+                      v-model="email"
                       required
                       data-validate="Email is required"
                       placeholder="Enter your email"
                     />
                   </div>
-                  <Password />
+                  <Password v-model:value="password" />
                   <div class="forgot-pass">Forgot password</div>
-                  <!-- <div class="error-message">Wrong password or username</div> -->
+                  <div class="error-message" v-if="errorMessage">
+                    Wrong password or username. Please try again.
+                  </div>
                   <div class="login-default">
                     <div
                       class="btn btn-login"
                       style="background: #b767ff; color: white"
+                      @click="login"
                     >
-                      Sign in
+                      <i
+                        class="bx bx-loader bx-sm bx-fw bx-spin"
+                        v-if="loadingIcon"
+                      ></i>
+                      {{ loadingIcon ? "Signing In..." : "Sign In" }}
                     </div>
                   </div>
                 </div>
-                <p style="text-align: center">or</p>
-                <div class="login-auto">
+                <!-- <p style="text-align: center">or</p> -->
+                <!-- <div class="login-auto">
                   <div
                     class="btn btn-login-auto"
                     style="background: white; border: 1px grey solid"
                   >
                     Continue with Google
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="new-account">
                 Haven't got an account?
@@ -85,9 +103,50 @@ export default {
   components: {
     Password,
   },
+  data() {
+    return {
+      email: "",
+      password: "",
+      loadingIcon: false,
+      errorMessage: false,
+      succeed: false,
+    };
+  },
   methods: {
     Route(val) {
       this.$router.push({ name: val });
+    },
+    async login() {
+      try {
+        const userLogin = {
+          email: this.email,
+          password: this.password,
+        };
+        const res = await this.$axios.post(`api/User/login`, userLogin);
+        this.loadingIcon = true;
+        if (res.status == 200) {
+          this.$store.dispatch("verifiedUser", true);
+          this.loadingIcon = false;
+          this.succeed = true;
+          this.$store.dispatch("login", res);
+
+          this.errorMessage = false;
+        }
+        console.log(res);
+      } catch (error) {
+        this.loadingIcon = false;
+        this.errorMessage = true;
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    succeed() {
+      if (this.succeed == true) {
+        this.$emit("login-verified", true);
+      } else {
+        this.$emit("login-verified", false);
+      }
     },
   },
 };
@@ -156,8 +215,10 @@ input {
   visibility: hidden;
 }
 .error-message {
-  font-size: 15px;
-  padding: 5px 10px;
+  font-size: 14px;
+  margin-top: -22px;
+  padding: 0px 10px;
+  padding-bottom: 15px;
   color: red;
   font-weight: 500;
 }
@@ -171,8 +232,25 @@ input {
   width: 90%;
   margin-bottom: 7px;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 18px;
   border-radius: 7px;
   padding: 12px 0;
+}
+.new-account {
+  font-size: 15px;
+}
+
+/* --- success message --- */
+.success-message {
+  border: none;
+}
+.success-message p {
+  line-height: 40px;
+  font-weight: 500;
+}
+.success-message p i {
+  border: solid;
+  border-radius: 50px;
+  width: fit-content;
 }
 </style>

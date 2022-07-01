@@ -238,23 +238,6 @@ export default {
       result: [],
     };
   },
-  async created() {
-    try {
-      // this.$store.dispatch("fetchAccessToken"); 62ac075d3a5d293c62b3b12b
-      this.$axios.defaults.headers[
-        "Authorization"
-      ] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjdlNWZiM2UyODhmYmZmZWZlY2FiMyIsImlhdCI6MTY1NjM5ODkwMywiZXhwIjoxNjU2NDA2MTAzfQ.R3fVlEqRH1I4i65oH2Ktj1gXYj1Gsww-KcrDlR4kZJ8`;
-
-      const res = await this.$axios.get(
-        `api/User/Staff/${this.id}`,
-        this.$axios.defaults.headers["Authorization"]
-      );
-      console.log(res);
-      this.result = res.status;
-    } catch (e) {
-      //
-    }
-  },
   methods: {
     openRemoveModal() {
       this.optionModal = "remove";
@@ -280,10 +263,25 @@ export default {
       this.btnProperty.backColor = "#aa40e3";
       this.headerPosition = "flex-start";
     },
+    async getStaff() {
+      try {
+        // this.$axios.defaults.headers[
+        //   "Authorization"
+        // ] =
+
+        const res = await this.$axios.get(
+          `api/User/Staff/62ac075d3a5d293c62b3b12b`,
+          `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjdlNWZiM2UyODhmYmZmZWZlY2FiMyIsImlhdCI6MTY1NjQwNDcwNSwiZXhwIjoxNjU2NDExOTA1fQ.WS0Lso-_mF7nuXRPeusDUWzvpqWRzeRFkVJUfQ7EDBU`
+        );
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
-  // mounted() {
-  //   this.getStaff();
-  // },
+  mounted() {
+    this.getStaff();
+  },
 };
 </script>
 

@@ -16,26 +16,34 @@
         </h1>
         <p>Keep in touch with us by creating account now</p>
       </div>
+      <!-- <form > -->
       <div class="register-content">
         <div class="email">
           <label for="email">Email</label>
           <input
             type="email"
+            name="email"
+            v-model="user.email"
             required
             data-validate="Email is required"
             placeholder="Enter your email"
           />
         </div>
-        <Password />
+        <Password v-model:value="user.password" />
+        <div class="error-message" v-if="errorMessage">
+          Password must be at least 7 characters
+        </div>
         <div class="register-default">
           <div
             class="btn btn-register"
+            @click="register"
             style="background: #b767ff; color: white"
           >
             Sign up
           </div>
         </div>
       </div>
+      <!-- </form> -->
     </div>
     <div class="img-register">
       <img
@@ -50,7 +58,33 @@
 import Password from "../components/PasswordInput.vue";
 export default {
   name: "RegisterView",
+  data() {
+    return {
+      user: {
+        email: "",
+        password: "",
+      },
+      errorMessage: false,
+    };
+  },
   components: { Password },
+  methods: {
+    async register() {
+      try {
+        if (this.user.password.length < 7) {
+          this.errorMessage = true;
+        } else {
+          const res = await this.$axios.post(`api/User/register`, this.user);
+          if (res.status == 200) {
+            this.$router.push({ name: "home" });
+          }
+          console.log(res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };
 </script>
 
@@ -69,7 +103,7 @@ img {
   max-width: 100%;
 }
 .register-header h1 {
-  font-weight: 600;
+  font-weight: 500;
   /* color: #b767ff; */
 }
 .register-header p {

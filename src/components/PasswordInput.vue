@@ -2,19 +2,22 @@
   <div class="password" data-validate="Password input is required">
     <label for="password">Password</label>
     <input
-      name="password"
+      name="pass"
+      :value="value"
       :type="isShow ? 'text' : 'password'"
       required
       placeholder="Enter your password"
+      @input="handleInput"
+      minlength="7"
     />
     <i
       class="form-control-feedback"
-      :class="[{ 'bx bx-show': !isShow }, { 'bx bx-low-vision': isShow }]"
+      :class="[{ 'bx bx-show': isShow }, { 'bx bx-low-vision': !isShow }]"
       style="font-size: 22px"
       @click="toggle"
     ></i>
     <!-- <span v-if="!isValid" class="txt2 m-t-15 m-l-15">
-      Must at least 8 characters
+      Must at least 7 characters
     </span> -->
   </div>
 </template>
@@ -27,9 +30,14 @@ export default {
       isShow: false,
     };
   },
-  //   components: {},
-  //   computed: {},
-  //   emits: ["update:value"],
+  props: {
+    value: {
+      type: [String],
+      default: "",
+    },
+  },
+  emits: ["update:value"],
+
   methods: {
     handleInput(event) {
       this.$emit("update:value", event.target.value);

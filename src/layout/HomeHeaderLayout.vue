@@ -1,9 +1,5 @@
 <template>
   <div class="home-header-layout header">
-    <!-- <img
-      class="header-logo-image"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/YG_Entertainment_Logo.svg/800px-YG_Entertainment_Logo.svg.png"
-    /> -->
     <div class="logo-slogan">
       <h1>TMCi</h1>
       <p>For Trending, Modern and Comfortable life</p>
@@ -18,13 +14,31 @@
         <li class="item" @click="Route('dashboardView')">Management</li>
       </ul>
       <div class="header-user">
-        <img
-          class="header-user-image"
-          data-bs-target="#loginForm"
-          data-bs-toggle="modal"
-          alt="user avatar"
-          src="../assets/img/hinh-nen-vit-avatar-anh-vit-cute-ngoc-nghech-1.jpg"
-        />
+        <div>
+          <div class="avatar-user" v-if="login">
+            <img
+              class="header-user-image"
+              alt="user avatar"
+              :src="`${this.avatar}`"
+              @click="showLogout = !showLogout"
+            />
+            <div class="logout" v-if="showLogout">
+              <p @click="logout">Log-out</p>
+            </div>
+            <span class="text-welcome">
+              Hello <span> {{ user.email }}</span>
+            </span>
+          </div>
+          <div class="icon-user" v-else>
+            <i
+              class="bx bx-user-circle bx-md bx-fw"
+              data-bs-target="#loginForm"
+              data-bs-toggle="modal"
+              alt="user avatar"
+            />
+          </div>
+        </div>
+
         <div class="cart-icon">
           <i class="bx bx-cart bx-md"></i>
           <div class="num-item-cart" @click="Route('shoppingListView')">
@@ -33,28 +47,8 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="header-user">
-      <img
-        class="header-user-image"
-        alt="user avatar"
-        src="../assets/img/hinh-nen-vit-avatar-anh-vit-cute-ngoc-nghech-1.jpg"
-      />
-
-      <ul class="header-user-info">
-        <li class="user-emails">tet</li>
-        <li @click="showProfile">
-          <i class="bx bx-user-pin bx-sm bx-fw" />
-          My Profile
-        </li>
-        <li class="header-user-logout" @click="logout">
-          <i class="bx bx-log-out bx-sm bx-fw" />
-          Logout
-        </li>
-      </ul>
-    </div> -->
   </div>
-  <LoginForm />
+  <LoginForm @login-verified="loginVerified" />
   <div class="router-view">
     <slot />
   </div>
@@ -91,29 +85,99 @@
 
 <script>
 import LoginForm from "../components/LoginForm.vue";
+import listImg from "../assets/JSON/avaImg.json";
 export default {
   components: {
     LoginForm,
   },
+  data() {
+    return {
+      login: false,
+      user: {},
+      showLogout: false,
+      logouts: false,
+      avatar: "",
+    };
+  },
+  created() {
+    this.$store.dispatch("getAuth");
+    this.login = this.$store.state.authenticated;
+    this.$store.dispatch("getUser");
+    const data = JSON.parse(this.$store.state.user);
+    this.user = data;
+    console.log(this.user);
+  },
   methods: {
     Route(value) {
       this.$router.push({ name: value });
-      // console.log(value);
+    },
+    loginVerified(val) {
+      this.login = val;
+      console.log(this.login);
+    },
+    getUser() {
+      this.$store.dispatch("getUser");
+      const data = JSON.parse(this.$store.state.user);
+      this.user = data;
+      this.$store.dispatch("getAvatar");
+      if (this.$store.state.avatar == null) {
+        const randomImg = Math.floor(Math.random() * listImg.img.length);
+        this.avatar = listImg.img[randomImg];
+        this.$store.dispatch("storeAvatar", this.avatar);
+      } else {
+        this.avatar = this.$store.state.avatar;
+      }
+      console.log(this.user);
+    },
+    logout() {
+      this.$store.dispatch("logout");
+      this.logouts = true;
+      // this.$store.dispatch("getAuth");
+      // this.login = this.$store.state.authenticated;
+    },
+  },
+  watch: {
+    login() {
+      console.log(this.login);
+      this.getUser();
+    },
+    logouts() {
+      console.log(this.logouts);
+      this.login = false;
     },
   },
   mounted() {
     const x = document.querySelector(".header");
+    const userIcon = document.querySelector(".bx-user-circle");
     const y = document.querySelectorAll(".item");
     const z = document.querySelector(".cart-icon .num-item-cart");
+    const avatar = document.querySelector(".header-user-image");
+    // const userWelcome = document.querySelector(".text-welcome ");
+    console.log(avatar);
+    // console.log(userWelcome);
     window.onscroll = () => {
       let top = window.scrollY;
       if (top > 120) {
         x.classList.add("active");
         z.classList.add("active");
         y.forEach((item) => item.classList.add("active"));
+        if (avatar) {
+          // userWelcome.classList.add("active");
+          avatar.classList.add("active");
+        }
+        if (userIcon) {
+          userIcon.classList.add("active");
+        }
       } else {
         x.classList.remove("active");
-        z.classList.add("active");
+        if (avatar) {
+          // userWelcome.classList.remove("active");
+          avatar.classList.remove("active");
+        }
+        if (userIcon) {
+          userIcon.classList.remove("active");
+        }
+        z.classList.remove("active");
         y.forEach((item) => item.classList.remove("active"));
       }
     };
@@ -146,7 +210,7 @@ export default {
   color: #b767ff;
   font-size: 60px;
   font-family: "Dancing Script", cursive;
-  font-weight: 600;
+  font-weight: 500;
 }
 .logo-slogan P {
   font-weight: 500;
@@ -166,7 +230,7 @@ export default {
   display: flex;
   align-items: center;
   margin: 15px 0;
-  margin-right: 10px;
+  margin-right: 20px;
   height: fit-content;
 }
 .item {
@@ -184,7 +248,7 @@ export default {
   padding: 0 15px;
   margin: auto 30px;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.7px;
   font-size: 18px;
   color: black;
@@ -197,20 +261,91 @@ export default {
   width: fit-content;
   margin-right: 20px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 0.2fr;
+  column-gap: 10px;
+}
+/* --- before login ---- */
+.bx-user-circle {
+  color: white;
+  transform: translateY(50%);
+  cursor: pointer;
+}
+.bx-user-circle.active {
+  color: black;
+  cursor: pointer;
+  transform: translateY(50%);
+}
+/* --- after login ---- */
+
+.avatar-user {
+  border-right: solid rgb(164, 174, 184) 1px;
+  position: relative;
+  top: 7px;
 }
 .header-user-image {
   max-width: 40px;
+  height: 40px;
   border-radius: 30px;
-  transform: translateY(10%);
+  transform: translateY(5%);
+  cursor: pointer;
 }
+.text-welcome {
+  padding: 10px;
+  color: black;
+}
+.text-welcome.active {
+  padding: 10px;
+  color: black;
+}
+.avatar-user .text-welcome span {
+  padding: 10px 2px;
+  margin-top: 40px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #b767ff;
+}
+.avatar-user span span:hover {
+  text-decoration: underline;
+}
+
+/* --- logout ---- */
+.logout {
+  position: absolute;
+  top: 70px;
+  border: solid #b767ff;
+  padding: 10px;
+  border-radius: 5px;
+  background: white;
+}
+.logout::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 40px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 0px solid transparent;
+  border-bottom: 17px #b767ff solid;
+  width: 20px;
+  height: 20px;
+}
+.logout:hover {
+  cursor: pointer;
+  font-weight: 500;
+}
+
 .cart-icon {
   position: relative;
+  display: flex;
+  justify-content: flex-end;
 }
 .cart-icon i {
   transform: translateY(12%);
   margin-right: 20px;
   color: #b767ff;
+  padding-right: 10px;
 }
 .cart-icon .num-item-cart {
   position: absolute;
