@@ -56,6 +56,7 @@
 
 <script>
 import Password from "../components/PasswordInput.vue";
+import listImg from "../assets/JSON/avaImg.json";
 export default {
   name: "RegisterView",
   data() {
@@ -63,6 +64,7 @@ export default {
       user: {
         email: "",
         password: "",
+        avatar: "",
       },
       errorMessage: false,
     };
@@ -71,6 +73,9 @@ export default {
   methods: {
     async register() {
       try {
+        const randomImg = Math.floor(Math.random() * listImg.img.length);
+        this.user.avatar = listImg.img[randomImg];
+        // this.$store.dispatch("storeAvatar", this.user.avatar);
         if (this.user.password.length < 7) {
           this.errorMessage = true;
         } else {

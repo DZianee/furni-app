@@ -23,6 +23,7 @@ export default createStore({
       sessionStorage.setItem("User", JSON.stringify(res.data.data));
       sessionStorage.setItem("Token", res.data.data.token);
       sessionStorage.setItem("refreshToken", res.data.data.refreshToken);
+      sessionStorage.setItem("Avatar", res.data.data.avatar);
     },
     verifiedUser({ commit }, res) {
       commit("setAuth", res);

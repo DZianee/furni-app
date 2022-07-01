@@ -19,7 +19,7 @@
             <img
               class="header-user-image"
               alt="user avatar"
-              :src="`${this.avatar}`"
+              :src="`${user.avatar}`"
               @click="showLogout = !showLogout"
             />
             <div class="logout" v-if="showLogout">
@@ -48,7 +48,7 @@
       </div>
     </div>
   </div>
-  <LoginForm />
+  <LoginForm @login-verified="loginVerified" />
 
   <div class="router-view">
     <slot />
@@ -86,7 +86,6 @@
 
 <script>
 import LoginForm from "../components/LoginForm.vue";
-import listImg from "../assets/JSON/avaImg.json";
 
 export default {
   components: {
@@ -121,14 +120,6 @@ export default {
       this.$store.dispatch("getUser");
       const data = JSON.parse(this.$store.state.user);
       this.user = data;
-      this.$store.dispatch("getAvatar");
-      if (this.$store.state.avatar == null) {
-        const randomImg = Math.floor(Math.random() * listImg.img.length);
-        this.avatar = listImg.img[randomImg];
-        this.$store.dispatch("storeAvatar", this.avatar);
-      } else {
-        this.avatar = this.$store.state.avatar;
-      }
       console.log(this.user);
     },
     logout() {
@@ -146,6 +137,7 @@ export default {
     logouts() {
       console.log(this.logouts);
       this.login = false;
+      this.showLogout = false;
     },
   },
 };
