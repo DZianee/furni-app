@@ -81,7 +81,7 @@ export default {
   padding: 10px;
 }
 .card h3 {
-  font-weight: 600;
+  font-weight: 500;
 }
 .card p span {
   font-weight: 500;

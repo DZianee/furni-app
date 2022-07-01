@@ -6,7 +6,7 @@
         Over 100+ modern and fresh new furnitures are ready to show up and
         experience
       </div>
-      <div class="view-btn">View more</div>
+      <div class="view-btn" @click="Route('furnitureView')">View more</div>
     </div>
     <div class="product-summary">
       <div class="card chair-armchair">
@@ -36,6 +36,11 @@
 <script>
 export default {
   name: "HomeProductOverview",
+  methods: {
+    Route(val) {
+      this.$router.push({ name: val });
+    },
+  },
 };
 </script>
 
