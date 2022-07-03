@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import RemoveModal from "./RemoveModal.vue";
+import RemoveModal from "./Modal/ModalRemove.vue";
 export default {
   name: "CartItem",
   props: {

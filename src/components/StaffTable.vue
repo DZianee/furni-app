@@ -27,18 +27,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="staff-name">Ly Hong Chao</td>
-            <td>Manager</td>
-            <td>90283738</td>
+          <tr v-for="item in staff" :key="item.index">
+            <td class="staff-name">{{ item.firstname }} {{ item.lastname }}</td>
+            <td>{{ item.role.name }}</td>
+            <td>{{ item.phone }}</td>
             <td
               :style="[
-                choice
+                choice == item.status
                   ? { color: 'green', fontWeight: '600' }
                   : { color: 'red', fontWeight: '600' },
               ]"
             >
-              Active
+              {{ item.status }}
             </td>
             <td class="adjust">
               <i
@@ -65,34 +65,6 @@
                 </div>
               </div>
             </td>
-          </tr>
-          <tr>
-            <td class="staff-name">Ly Lac Lac</td>
-            <td>Employee</td>
-            <td>90283738</td>
-            <td>Active</td>
-            <td><i class="bx bx-dots-horizontal-rounded"></i></td>
-          </tr>
-          <tr>
-            <td class="staff-name">Ly Lac Hy</td>
-            <td>Employee</td>
-            <td>90283738</td>
-            <td>Active</td>
-            <td><i class="bx bx-dots-horizontal-rounded"></i></td>
-          </tr>
-          <tr>
-            <td class="staff-name">Ly Y Vy</td>
-            <td>Employee</td>
-            <td>90283738</td>
-            <td>Active</td>
-            <td><i class="bx bx-dots-horizontal-rounded"></i></td>
-          </tr>
-          <tr>
-            <td class="staff-name">Ly Duong Thien Phat</td>
-            <td>Employee</td>
-            <td>90283738</td>
-            <td>Active</td>
-            <td><i class="bx bx-dots-horizontal-rounded"></i></td>
           </tr>
         </tbody>
       </table>
@@ -167,50 +139,97 @@
           <div class="staff-fullname">
             <div class="firstname">
               <label for="firstname">Firstname</label>
-              <input type="text" required />
+              <input type="text" required v-model="newStaff.firstname" />
             </div>
             <div class="lastname">
               <label for="lastname">Lastname</label>
-              <input type="text" required />
+              <input type="text" required v-model="newStaff.lastname" />
             </div>
           </div>
           <div class="staff_email-pass">
             <div class="email">
               <label for="email">Email</label>
-              <input type="email" autocomplete="false" required />
+              <input
+                type="email"
+                autocomplete="false"
+                required
+                v-model="newStaff.email"
+              />
             </div>
             <div class="password">
               <label for="password">Password</label>
-              <input type="password" required />
+              <input
+                type="password"
+                required
+                v-model="newStaff.password"
+                minlength="7"
+              />
             </div>
           </div>
           <div class="staff_role-status">
             <div class="role">
               <label for="role">Role</label>
-              <select name="role" required>
-                <option value="manager">Manager</option>
-                <option value="employee">Employee</option>
-                <option value="default user">Default user</option>
+              <select name="role" required v-model="newStaff.role">
+                <option
+                  v-for="role in roleList"
+                  :key="role.index"
+                  :value="role._id"
+                >
+                  {{ role.name }}
+                </option>
               </select>
             </div>
             <div class="status">
               <label for="status">Status</label>
               <select name="status" required>
                 <option value="active">Active</option>
-                <option value="unactive">Unactive</option>
               </select>
             </div>
           </div>
           <div class="staff-address">
             <div class="address">
               <label for="address">Address</label>
-              <input type="text" required />
+              <div>
+                <input
+                  type="text"
+                  v-model="newStaff.address.street"
+                  required
+                  placeholder="1 Cach Mang Thang Tam"
+                />
+                <div class="districy-city">
+                  <select
+                    name="district"
+                    v-model="newStaff.address.district"
+                    required
+                  >
+                    <option
+                      v-for="d in destinationList.district"
+                      :key="d.id"
+                      :value="d.name"
+                    >
+                      {{ d.name }}
+                    </option>
+                  </select>
+                  <input
+                    type="text"
+                    required
+                    placeholder="City"
+                    v-model="newStaff.address.city"
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div class="staff-phone">
             <div class="phone">
               <label for="phone">Mobile</label>
-              <input type="text" required />
+              <input
+                type="text"
+                required
+                v-model="newStaff.phone"
+                minlength="10"
+                maxlength="10"
+              />
             </div>
           </div>
         </div>
@@ -220,6 +239,7 @@
 </template>
 
 <script>
+import destinationList from "../assets/JSON/destinationCity.json";
 export default {
   name: "StaffTableManage",
   data() {
@@ -234,11 +254,63 @@ export default {
       },
       confirmText: "",
       headerPosition: "",
-      id: "62ac075d3a5d293c62b3b12b",
-      result: [],
+      typeCase: 0,
+      destinationList: destinationList,
+      roleList: [],
+      staff: [],
+      newStaff: {
+        avatar: "",
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        phone: "",
+        role: "",
+        address: {
+          street: "",
+          ward: "",
+          district: "",
+          city: "",
+        },
+      },
     };
   },
+  async created() {
+    try {
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/User/Staff/62ac075d3a5d293c62b3b12b`,
+        this.$axios.defaults.headers["Authorization"]
+      );
+      this.staff = res.data.data;
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   methods: {
+    submit() {
+      if (this.typeCase == 3) {
+        console.log(this.newStaff);
+      }
+
+      // switch (this.typeCase) {
+      //   case 1:
+      //     break;
+      //   case 2:
+      //     break;
+      //   case 3:
+      //     try {
+      //       console.log(this.newStaff);
+      //     } catch (error) {
+      //       console.log(error);
+      //     }
+      //     break;
+
+      //   default:
+      //     break;
+      // }
+    },
     openRemoveModal() {
       this.optionModal = "remove";
       this.modalTitle = "Remove Confirmation";
@@ -246,6 +318,7 @@ export default {
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#fd5d5d";
       this.headerPosition = "center";
+      this.typeCase = 1;
     },
     openEditModal() {
       this.optionModal = "edit";
@@ -254,38 +327,57 @@ export default {
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#aa40e3";
       this.headerPosition = "flex-start";
+      this.typeCase = 2;
     },
-    openCreateStaff() {
+    async openCreateStaff() {
       this.optionModal = "create";
       this.modalTitle = "New Employee";
       this.confirmText = "Create";
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#aa40e3";
       this.headerPosition = "flex-start";
-    },
-    async getStaff() {
-      try {
-        // this.$axios.defaults.headers[
-        //   "Authorization"
-        // ] =
+      this.typeCase = 3;
 
+      try {
+        this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/User/Staff/62ac075d3a5d293c62b3b12b`,
-          `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjdlNWZiM2UyODhmYmZmZWZlY2FiMyIsImlhdCI6MTY1NjQwNDcwNSwiZXhwIjoxNjU2NDExOTA1fQ.WS0Lso-_mF7nuXRPeusDUWzvpqWRzeRFkVJUfQ7EDBU`
+          `api/Role`,
+          this.$axios.defaults.headers["Authorization"]
         );
+        this.roleList = res.data.data;
         console.log(res);
       } catch (error) {
         console.log(error);
       }
     },
+    // async getStaff() {
+    //   try {
+    //     // this.$axios.defaults.headers[
+    //     //   "Authorization"
+    //     // ] =
+
+    //     const res = await this.$axios.get(
+    //       `api/User/Staff/62ac075d3a5d293c62b3b12b`,
+    //       `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjdlNWZiM2UyODhmYmZmZWZlY2FiMyIsImlhdCI6MTY1NjQwNDcwNSwiZXhwIjoxNjU2NDExOTA1fQ.WS0Lso-_mF7nuXRPeusDUWzvpqWRzeRFkVJUfQ7EDBU`
+    //     );
+    //     console.log(res);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
   },
-  mounted() {
-    this.getStaff();
-  },
+  // mounted() {
+  //   this.getStaff();
+  // },
 };
 </script>
 
 <style scoped>
+.districy-city {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 7px;
+}
 .manage-staff-table {
   display: grid;
   grid-template-columns: 0.4fr 1fr;

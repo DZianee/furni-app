@@ -9,7 +9,10 @@ import DefaultLayout from "./layout/DefaultLayout.vue";
 import HomeHeaderLayout from "./layout/HomeHeaderLayout.vue";
 import EmptyLayout from "./layout/EmptyLayout.vue";
 import SidebarManage from "./layout/SidebarManage.vue";
-import Modal from "./components/Modal.vue";
+import CreateModal from "./components/Modal/Modal.vue";
+import InfoModal from "./components/Modal/ModalInfo.vue";
+import RemoveModal from "./components/Modal/ModalRemove.vue";
+import WarningModal from "./components/Modal/ModalWarning.vue";
 import "@/assets/css/main.css";
 
 const app = createApp(App);
@@ -59,5 +62,8 @@ app
   .component("home-header-layout", HomeHeaderLayout)
   .component("sidebar-manage-layout", SidebarManage)
   .component("empty-layout", EmptyLayout)
-  .component("confirm-modal", Modal)
+  .component("create-modal", CreateModal)
+  .component("info-modal", InfoModal)
+  .component("remove-modal", RemoveModal)
+  .component("warning-modal", WarningModal)
   .mount("#app");

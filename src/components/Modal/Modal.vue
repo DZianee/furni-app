@@ -2,7 +2,7 @@
   <transition>
     <div
       class="modal fade"
-      id="modal"
+      id="createModal"
       tabindex="-1"
       aria-labelledby="modalLabel"
     >
@@ -13,6 +13,7 @@
               {{ title }}
             </h5>
           </div>
+          <!-- <form> -->
           <div class="modal-body"><slot></slot></div>
           <div class="confirm-btn">
             <button
@@ -23,17 +24,18 @@
               Cancel
             </button>
             <button
-              type="button"
+              type="submit"
               class="btn"
               :style="{
                 backgroundColor: btnProperty.backColor,
                 color: btnProperty.color,
               }"
-              @click="submit"
+              @submit.prevent="submit"
             >
               {{ confirmText }}
             </button>
           </div>
+          <!-- </form> -->
         </div>
       </div>
     </div>

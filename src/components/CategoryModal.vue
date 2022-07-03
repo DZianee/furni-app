@@ -12,32 +12,50 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Category</h5>
           </div>
-          <div class="modal-body">
-            <div class="cate-name">
-              <label for="categoryName">Name:</label>
-              <input type="text" required maxlength="50" class="form-control" />
+          <form @submit.prevent="createCate">
+            <div class="modal-body">
+              <div class="cate-name">
+                <label for="categoryName">Name:</label>
+                <input
+                  type="text"
+                  name="cateName"
+                  required
+                  maxlength="50"
+                  minlength="5"
+                  class="form-control"
+                  v-model="newCate.name"
+                />
+              </div>
+              <div class="cate-code">
+                <label for="categoryName">Category's code:</label>
+                <input
+                  type="text"
+                  name="code"
+                  required
+                  maxlength="5"
+                  minlength="2"
+                  class="form-control"
+                  v-model="newCate.code"
+                />
+              </div>
             </div>
-            <div class="cate-code">
-              <label for="categoryName">Category's code:</label>
-              <input type="text" required class="form-control" />
+            <div class="confirm-btn">
+              <button
+                type="button"
+                class="btn cancel-btn"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn"
+                style="background: #aa40e3; color: white"
+              >
+                Create
+              </button>
             </div>
-          </div>
-          <div class="confirm-btn">
-            <button
-              type="button"
-              class="btn cancel-btn"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn"
-              style="background: #aa40e3; color: white"
-            >
-              Create
-            </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -47,6 +65,32 @@
 <script>
 export default {
   name: "CategoryModal",
+  data() {
+    return {
+      newCate: {
+        name: "",
+        code: "",
+      },
+    };
+  },
+  methods: {
+    async createCate() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.post(
+          `api/Category/newCate`,
+          this.newCate,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.$router.go();
+        }
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };
 </script>
 

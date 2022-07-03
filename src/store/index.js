@@ -41,7 +41,7 @@ export default createStore({
       sessionStorage.clear();
     },
 
-    fetchAccessToken({ commit }) {
+    accessToken({ commit }) {
       commit("setToken", sessionStorage.getItem("Token"));
       axios.defaults.headers[
         "Authorization"

@@ -13,95 +13,138 @@
           <div class="modal-header">
             <h5 class="modal-title">New Product</h5>
           </div>
-          <div class="modal-body">
-            <div class="product-info">
-              <h6>Information overview</h6>
-              <div class="product-name">
-                <label for="productName">Product name:</label>
-                <input type="text" required class="form-control" />
-              </div>
-              <div class="product_price-quantity">
-                <div class="product-price">
-                  <label for="productPrice">Price:</label>
-                  <input type="text" required class="form-control" />
+          <form>
+            <div class="modal-body">
+              <div class="product-info">
+                <h6>Information overview</h6>
+                <div class="product-name">
+                  <label for="productName">Product name:</label>
+                  <input
+                    type="text"
+                    required
+                    class="form-control"
+                    v-model="newProduct.name"
+                  />
                 </div>
-                <div class="product-quantity">
-                  <label for="productQuantity">Quantity:</label>
-                  <input type="text" required class="form-control" />
+                <div class="product_price-quantity">
+                  <div class="product-price">
+                    <label for="productPrice">Price:</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="newProduct.price"
+                    />
+                  </div>
+                  <div class="product-quantity">
+                    <label for="productQuantity">Quantity:</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="newProduct.importQuantity"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div class="product-color">
-                <label for="productColor">Color:</label>
-                <div class="color-check">
-                  <div v-for="color in colorStore" :key="color">
-                    <label class="color">
-                      <input type="checkbox" />
-                      <span
-                        class="checkmark"
-                        :style="{ backgroundColor: color }"
-                      ></span>
-                    </label>
+                <div class="product-color">
+                  <label for="productColor">Color:</label>
+                  <div class="color-check">
+                    <div v-for="color in colorStore" :key="color">
+                      <label class="color">
+                        <input type="checkbox" />
+                        <span
+                          class="checkmark"
+                          :style="{ backgroundColor: color }"
+                        ></span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="technical-info">
-              <h6>Technical Info</h6>
-              <div class="measurement">
-                <div class="height">
-                  <label for="">H</label>
-                  <input type="text" class="form-control" required />
+              <div class="technical-info">
+                <h6>Technical Info</h6>
+                <div class="measurement">
+                  <div class="height">
+                    <label for="">H</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      required
+                      v-model="newProduct.technicalInfo.height"
+                    />
+                  </div>
+                  <div class="width">
+                    <label for="">W</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      required
+                      v-model="newProduct.technicalInfo.width"
+                    />
+                  </div>
+                  <div class="depth">
+                    <label for="">D</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="newProduct.technicalInfo.depth"
+                    />
+                  </div>
+                  <div class="length">
+                    <label for="">L</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="newProduct.technicalInfo.length"
+                    />
+                  </div>
                 </div>
-                <div class="width">
-                  <label for="">W</label>
-                  <input type="text" class="form-control" required />
+              </div>
+              <div class="product-img">
+                <h6>Illustrate image</h6>
+                <input type="file" accept="image/*" />
+              </div>
+              <div class="product-details">
+                <h6>Details Information</h6>
+                <div class="product-des">
+                  <label for="productDes">Product description:</label>
+                  <QuillEditor
+                    :heightEditor="'100'"
+                    :contentEdit="newProduct.description"
+                    :editorCase="1"
+                    @handleInput="handleInput"
+                  />
                 </div>
-                <div class="depth">
-                  <label for="">D</label>
-                  <input type="text" class="form-control" />
-                </div>
-                <div class="length">
-                  <label for="">L</label>
-                  <input type="text" class="form-control" />
+                <div class="product-about">
+                  <label for="productAbout">About product (Company):</label>
+                  <QuillEditor
+                    :heightEditor="'100'"
+                    :contentEdit="newProduct.about"
+                    :editorCase="2"
+                    @handleInput="handleInput"
+                  />
                 </div>
               </div>
             </div>
-            <div class="product-img">
-              <h6>Illustrate image</h6>
-              <!-- <img
-                src="https://images.pexels.com/photos/4857784/pexels-photo-4857784.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
-                alt="product-img"
-              /> -->
+            <div class="confirm-btn">
+              <button
+                type="button"
+                class="btn cancel-btn"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn"
+                style="background: #aa40e3; color: white"
+                @click="createProduct"
+              >
+                Create
+              </button>
             </div>
-            <div class="product-details">
-              <h6>Details Information</h6>
-              <div class="product-des">
-                <label for="productDes">Product description:</label>
-                <QuillEditor :heightEditor="100" />
-              </div>
-              <div class="product-about">
-                <label for="productAbout">About product (Company):</label>
-                <QuillEditor :heightEditor="100" />
-              </div>
-            </div>
-          </div>
-          <div class="confirm-btn">
-            <button
-              type="button"
-              class="btn cancel-btn"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn"
-              style="background: #aa40e3; color: white"
-            >
-              Create
-            </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -132,7 +175,38 @@ export default {
         "lightgrey",
         "#fff0f0",
       ],
+      newProduct: {
+        name: "",
+        code: "",
+        price: 0,
+        importQuantity: 0,
+        color: [],
+        type: "",
+        description: "",
+        about: "",
+        technicalInfo: {
+          width: 0,
+          height: 0,
+          length: 0,
+          depth: 0,
+        },
+        category: "",
+        productImg: "",
+      },
     };
+  },
+  props: {
+    cateId: String,
+  },
+  methods: {
+    handleInput(value, caseOption) {
+      console.log(caseOption);
+      if (caseOption == "1") {
+        this.newProduct.description = value;
+      } else if (caseOption == "2") {
+        this.newProduct.about = value;
+      }
+    },
   },
 };
 </script>

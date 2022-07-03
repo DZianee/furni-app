@@ -138,6 +138,10 @@
 <script>
 export default {
   name: "ProductList",
+  props: {
+    cateId: String,
+    cateProductList: Array,
+  },
   methods: {
     Route(value) {
       this.$router.push({ name: value });

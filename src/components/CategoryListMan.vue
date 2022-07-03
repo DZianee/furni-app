@@ -11,60 +11,48 @@
     </div>
     <CategoryModal />
     <div class="category-container">
-      <div class="card category-item">
+      <div
+        class="card category-item"
+        v-for="cate in categoryList"
+        :key="cate.index"
+      >
         <div class="category-content">
-          <h6 class="cate-name" @click="Route('productCategoryView')">
-            Chairs/Armchairs
+          <h6 class="cate-name" @click="Route('productCategoryView', cate._id)">
+            {{ cate.name }}
           </h6>
           <div class="cate-info">
             <div class="cate-code">
               <p style="font-weight: 500">Code:</p>
-              <p>CAS</p>
+              <p>{{ cate.code }}</p>
             </div>
-            <div class="cate-quantity">
+            <!-- <div class="cate-quantity">
               <p style="font-weight: 500">Quantity:</p>
-              <p>194</p>
-            </div>
-          </div>
-        </div>
-        <div class="adjust-btn">
-          <div class="btn edit-info">Modify</div>
-          <div class="btn remove-info">Remove</div>
-        </div>
-      </div>
-      <div class="card category-item">
-        <div class="category-content">
-          <h6 class="cate-name">Chairs/Armchairs</h6>
-          <div class="cate-info">
-            <div class="cate-code">
-              <p style="font-weight: 500">Code:</p>
-              <p>CAS</p>
-            </div>
-            <div class="cate-quantity">
-              <p style="font-weight: 500">Quantity:</p>
-              <p>194</p>
-            </div>
+              <p v-for="i in inStock" :key="i.index">
+                {{ i.inStock }}
+              </p>
+            </div> -->
           </div>
         </div>
         <div class="adjust-btn">
           <div
             class="btn edit-info"
+            @click="openEditModal(cate._id)"
             data-bs-target="#modal"
             data-bs-toggle="modal"
-            @click="openEditModal('edit')"
           >
             Modify
           </div>
           <div
             class="btn remove-info"
+            @click="openRemoveModal(cate._id)"
             data-bs-target="#modal"
             data-bs-toggle="modal"
-            @click="openRemoveModal('remove')"
           >
             Remove
           </div>
         </div>
       </div>
+
       <component
         :is="'confirm-modal'"
         :title="modalTitle"
@@ -76,11 +64,27 @@
           <div v-if="modalContentOpt == 'edit'">
             <div class="modal-cate-name">
               <label for="categoryName">Name:</label>
-              <input type="text" required maxlength="50" class="form-control" />
+              <input
+                type="text"
+                required
+                name="cateName"
+                maxlength="50"
+                minlength="5"
+                class="form-control"
+                v-model="cateDetails.name"
+              />
             </div>
             <div class="modal-cate-code">
               <label for="categoryName">Category's code:</label>
-              <input type="text" required class="form-control" />
+              <input
+                type="text"
+                name="code"
+                minlength="2"
+                maxlength="5"
+                required
+                class="form-control"
+                v-model="cateDetails.code"
+              />
             </div>
           </div>
           <div v-if="modalContentOpt == 'remove'">
@@ -106,29 +110,111 @@ export default {
         backColor: "",
       },
       confirmText: "",
+      categoryList: [],
+      cateDetails: {},
+      optionCase: 0,
+      removeId: "",
     };
   },
+  async created() {
+    try {
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/Category/`,
+        this.$axios.defaults.headers["Authorization"]
+      );
+      this.categoryList = res.data.data.content;
+      console.log(this.categoryList);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   methods: {
-    Route(value) {
-      this.$router.push({ name: value });
+    Route(value, id) {
+      this.$router.push({ name: value, params: { id: id } });
     },
-    close() {
-      this.isOpenModal = false;
+    // close() {
+    //   this.isOpenModal = false;
+    // },
+    async submitModal() {
+      switch (this.optionCase) {
+        case 1:
+          console.log("modi");
+
+          try {
+            const updateCate = {
+              name: this.cateDetails.name,
+              code: this.cateDetails.code,
+            };
+            this.$store.dispatch("accessToken");
+            const res = await this.$axios.put(
+              `api/Category/updateCate/${this.cateDetails._id}`,
+              updateCate,
+              this.$axios.defaults.headers["Authorization"]
+            );
+            console.log(res);
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+        case 2:
+          try {
+            console.log(this.optionCase);
+            console.log(this.removeId);
+            this.$store.dispatch("accessToken");
+            const res = await this.$axios.delete(
+              `api/Category/${this.removeId}`,
+              this.$axios.defaults.headers["Authorization"]
+            );
+            this.$router.go();
+            console.log(res);
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+        default:
+          break;
+      }
     },
-    openEditModal(value) {
-      this.modalContentOpt = value;
+    async openEditModal(value) {
+      this.modalContentOpt = "edit";
       this.modalTitle = "Category Information";
       this.confirmText = "Submit changes";
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#aa40e3";
+      this.optionCase = 1;
+
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Category/cateDetails/${value}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.cateDetails = res.data.data.content;
+        console.log(this.cateDetails);
+      } catch (error) {
+        console.log(error);
+      }
     },
     openRemoveModal(value) {
-      this.modalContentOpt = value;
+      this.modalContentOpt = "remove";
       this.modalTitle = "Remove Confirmation";
       this.confirmText = "Remove";
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#fd5d5d";
+      this.removeId = value;
+      this.optionCase = 2;
+
+      console.log(this.removeId);
     },
+  },
+  watch: {
+    optionCase() {
+      console.log(this.optionCase);
+    },
+  },
+  mounted() {
+    console.log(this.optionCase);
   },
 };
 </script>

@@ -6,19 +6,19 @@
         alt="overview-cate-img"
       /> -->
       <div class="content">
-        <h6 class="cate-name">Chairs/Armchairs</h6>
+        <h6 class="cate-name">{{ cateDetails.name }}</h6>
         <div class="cate-info">
           <div class="cate-code">
             <p style="font-weight: 500">Product Code:</p>
-            <p>CAS</p>
+            <p>{{ cateDetails.code }}</p>
           </div>
           <div class="cate-quantity">
             <p style="font-weight: 500">Total Quantity:</p>
-            <p>194</p>
+            <p>{{ totalProduct }}</p>
           </div>
           <div class="cate-place">
             <p style="font-weight: 500">Destination:</p>
-            <p>HCM</p>
+            <p>District 3, Ho Chi Minh city</p>
           </div>
         </div>
       </div>
@@ -71,6 +71,11 @@ export default {
   name: "CateProductOverview",
   components: {
     "vue3-autocounter": Vue3autocounter,
+  },
+  props: {
+    cateDetails: Object,
+    totalProduct: Number,
+    subItemTotal: Array,
   },
 };
 </script>

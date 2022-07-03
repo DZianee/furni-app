@@ -8,7 +8,7 @@
     <div class="header-content">
       <ul>
         <li class="item" @click="Route('home')">Home</li>
-        <li class="item" @click="Route('furnitureView')">Furniture</li>
+        <li class="item" @click="RouteFurni('furnitureView')">Furniture</li>
         <li class="item" @click="Route('servicesView')">Services</li>
         <li class="item" @click="Route('companyView')">Company</li>
         <li class="item" @click="Route('dashboardView')">Management</li>
@@ -109,6 +109,9 @@ export default {
   methods: {
     Route(value) {
       this.$router.push({ name: value });
+    },
+    RouteFurni(value) {
+      this.$router.push({ name: value, params: { id: "all" } });
     },
     loginVerified(val) {
       this.login = val;

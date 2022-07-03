@@ -48,30 +48,37 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="item-code" @click="Route('productManDetailsView')">
-              CAS1I989
-            </td>
-            <td class="item-name">Testing product name at current</td>
-            <td class="item-type">Chair</td>
-            <td class="item-price">229.000 VND</td>
-            <td class="item-quantity">20</td>
-            <td
-              class="item-img"
-              data-bs-target="#imgModal"
-              data-bs-toggle="modal"
-            >
-              View image
-            </td>
-            <td class="item_remove-bin">
-              <i
-                class="bx bx-trash"
-                data-bs-target="#modal"
+          <div v-if="cateDetails.productList == 0">
+            <p class="empty-content-message">
+              There is no content in this table yet
+            </p>
+          </div>
+          <div v-else>
+            <tr v-for="item in cateDetails.productList" :key="item.index">
+              <td class="item-code" @click="Route('productManDetailsView')">
+                {{ item.code }}
+              </td>
+              <td class="item-name">{{ item.name }}</td>
+              <td class="item-type">{{ item.type }}</td>
+              <td class="item-price">{{ item.price }} VND</td>
+              <td class="item-quantity">20</td>
+              <td
+                class="item-img"
+                data-bs-target="#imgModal"
                 data-bs-toggle="modal"
-                @click="openRemoveModal"
-              ></i>
-            </td>
-          </tr>
+              >
+                View image
+              </td>
+              <td class="item_remove-bin">
+                <i
+                  class="bx bx-trash"
+                  data-bs-target="#modal"
+                  data-bs-toggle="modal"
+                  @click="openRemoveModal"
+                ></i>
+              </td>
+            </tr>
+          </div>
         </tbody>
       </table>
     </div>
@@ -101,7 +108,7 @@
         </div>
       </div>
     </div>
-    <ProductCateModal />
+    <ProductCateModal :cateId="cateId" />
   </div>
 </template>
 
@@ -118,7 +125,11 @@ export default {
         backColor: "",
       },
       confirmText: "",
+      cateId: this.$route.params.id,
     };
+  },
+  props: {
+    cateDetails: Object,
   },
   methods: {
     openRemoveModal() {

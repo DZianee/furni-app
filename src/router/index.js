@@ -37,7 +37,7 @@ const routes = [
     meta: { layout: "empty" },
   },
   {
-    path: "/furniture-view",
+    path: "/furniture-view/:id",
     name: "furnitureView",
     component: FurnitureView,
   },
@@ -92,7 +92,7 @@ const routes = [
     meta: { layout: "sidebar-manage" },
   },
   {
-    path: "/product-category-view",
+    path: "/product-category-view/:id",
     name: "productCategoryView",
     component: ProductCategoryView,
     meta: { layout: "sidebar-manage" },

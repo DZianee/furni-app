@@ -2,15 +2,23 @@
   <div class="category-list-bar">
     <p id="testing">Back to top</p>
     <div class="category-title" id="toTop">
-      <h1>Explore more than 100+ high quality furniture items</h1>
+      <div v-if="cateTitle == '' || cateTitle === 'All'">
+        <h1>Explore more than 100+ high quality furniture items</h1>
+      </div>
+      <div v-else>
+        <h1>{{ cateTitle }}</h1>
+      </div>
     </div>
     <div class="list-categories">
       <ul>
-        <li>All</li>
-        <li>Chairs/Armchairs</li>
-        <li>Sofa</li>
-        <li>Shelves</li>
-        <li>Mix Stuffs</li>
+        <li @click="getCateTitle('All')">All</li>
+        <li
+          v-for="cate in categoryList"
+          :key="cate.index"
+          @click="getCateTitleId(cate.name, cate._id)"
+        >
+          {{ cate.name }}
+        </li>
       </ul>
     </div>
   </div>
@@ -19,6 +27,36 @@
 <script>
 export default {
   name: "CategoryListBar",
+  data() {
+    return {
+      categoryList: [],
+      cateTitle: "",
+    };
+  },
+  async created() {
+    try {
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/Category/`,
+        this.$axios.defaults.headers["Authorization"]
+      );
+      this.categoryList = res.data.data;
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  methods: {
+    getCateTitleId(val, id) {
+      this.cateTitle = val;
+      console.log(id);
+      this.$router.push({ name: "furnitureView", params: { id: id } });
+    },
+    getCateTitle(val) {
+      this.cateTitle = val;
+      this.$router.push({ name: "furnitureView", params: { id: "all" } });
+    },
+  },
   mounted() {
     let mybutton = document.getElementById("testing");
 
@@ -29,8 +67,8 @@ export default {
 
     function scrollFunction() {
       if (
-        document.body.scrollTop > 20 ||
-        document.documentElement.scrollTop > 20
+        document.body.scrollTop > 50 ||
+        document.documentElement.scrollTop > 50
       ) {
         mybutton.style.display = "block";
       } else {

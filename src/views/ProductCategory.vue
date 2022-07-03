@@ -9,11 +9,15 @@
       </ol>
     </nav>
     <div class="title">
-      <h4>Chairs & Armchairs in Stock</h4>
+      <h4>{{ cateDetails.name }}</h4>
     </div>
-    <CateProductOverview />
+    <CateProductOverview
+      :cateDetails="cateDetails"
+      :subItemTotal="SubItemTotal"
+      :totalProduct="totalProduct"
+    />
     <hr />
-    <ProductCateTable />
+    <ProductCateTable :cateDetails="cateDetails" />
   </div>
 </template>
 
@@ -23,6 +27,28 @@ import ProductCateTable from "../components/ProductCateTable.vue";
 export default {
   name: "ProductCategoryView",
   components: { CateProductOverview, ProductCateTable },
+  data() {
+    return {
+      cateDetails: {},
+      totalProduct: 0,
+      subItemTotal: [],
+    };
+  },
+  async created() {
+    try {
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/Category/cateDetails/${this.$route.params.id}`,
+        this.$axios.defaults.headers["Authorization"]
+      );
+      this.cateDetails = res.data.data.content;
+      this.totalProduct = res.data.data.totalProduct;
+      this.subItemTotal = res.data.total;
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   methods: {
     Route(value) {
       this.$router.push({ name: value });
