@@ -13,29 +13,24 @@
               {{ title }}
             </h5>
           </div>
-          <!-- <form> -->
-          <div class="modal-body"><slot></slot></div>
-          <div class="confirm-btn">
-            <button
-              type="button"
-              class="btn cancel-btn"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="btn"
-              :style="{
-                backgroundColor: btnProperty.backColor,
-                color: btnProperty.color,
-              }"
-              @submit.prevent="submit"
-            >
-              {{ confirmText }}
-            </button>
-          </div>
-          <!-- </form> -->
+          <form @submit.prevent="submit">
+            <div class="modal-body"><slot></slot></div>
+            <div class="confirm-btn">
+              <button type="button" class="btn reset-btn" @click="reset">
+                Reset
+              </button>
+              <button
+                type="submit"
+                class="btn"
+                :style="{
+                  backgroundColor: btnProperty.backColor,
+                  color: btnProperty.color,
+                }"
+              >
+                {{ confirmText }}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -54,6 +49,9 @@ export default {
   methods: {
     submit() {
       this.$emit("submit");
+    },
+    reset() {
+      this.$emit("reset-form");
     },
   },
 };
@@ -77,7 +75,7 @@ export default {
   letter-spacing: 0.2px;
   border-radius: 7px;
 }
-.cancel-btn {
+.reset-btn {
   background: rgb(167, 160, 160);
   color: white;
 }

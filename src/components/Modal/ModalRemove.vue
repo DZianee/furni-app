@@ -3,27 +3,33 @@
     <div class="remove_modal">
       <div class="modal fade" id="removeModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Remove Confirmation</h5>
+          <form>
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Remove Confirmation</h5>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to remove this item ?</p>
+              </div>
+              <div class="remove-btns">
+                <button
+                  type="button"
+                  data-bs-dismiss="modal"
+                  class="btn_cancel"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="btn_remove btn-danger"
+                  type="submit"
+                  @click.prevent="deleteConfirm"
+                  data-bs-dismiss="modal"
+                >
+                  Remove
+                </button>
+              </div>
             </div>
-            <div class="modal-body">
-              <p>Are you sure you want to remove this item ?</p>
-            </div>
-            <div class="remove-btns">
-              <button type="button" data-bs-dismiss="modal" class="btn_cancel">
-                Cancel
-              </button>
-              <button
-                type="button"
-                data-bs-dismiss="modal"
-                class="btn_remove btn-danger"
-                @click.prevent="deleteConfirm"
-              >
-                Remove
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -34,20 +40,6 @@
 export default {
   name: "RemoveModal",
   methods: {
-    // async deleteTopic() {
-    //   try {
-    //     this.$store.dispatch("fetchAccessToken");
-    //     const res = await this.$axios.delete(
-    //       `api/v1/Topic/${this.topicInfo.id}`,
-    //       this.$axios.defaults.headers["Authorization"]
-    //     );
-    //     if (res.status == 200) {
-    //       this.$router.go();
-    //     }
-    //   } catch (e) {
-    //     //
-    //   }
-    // },
     deleteConfirm() {
       this.$emit("delete-confirm");
     },
