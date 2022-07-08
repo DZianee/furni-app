@@ -8,7 +8,7 @@
       </p>
     </div>
     <NavForManagement />
-    <div v-if="routeId == 'user' || routeId == ''">
+    <div v-if="routeId == 'user'">
       <StaffTableManage />
       <CustomerListTable />
     </div>

@@ -5,86 +5,65 @@
     </div>
     <div class="statistic"></div>
     <div class="table-responsive"></div>
-    <div class="create-modal">
-      <div class="staff-fullname">
-        <div class="firstname">
-          <label for="firstname">Firstname</label>
-          <input type="text" required />
-        </div>
-        <div class="lastname">
-          <label for="lastname">Lastname</label>
-          <input type="text" required />
-        </div>
-      </div>
-      <div class="staff_email-pass">
-        <div class="email">
-          <label for="email">Email</label>
-          <input type="email" autocomplete="false" required />
-        </div>
-        <Password />
-      </div>
-      <div class="staff_role-status">
-        <div class="role">
-          <label for="role">Role</label>
-          <select name="role" required>
-            <option disabled value="">Please Select</option>
-          </select>
-        </div>
-        <div class="status">
-          <label for="status">Status</label>
-          <select name="status" required>
-            <option disabled value="">Select status</option>
-            <option value="Active">Active</option>
-          </select>
-        </div>
-      </div>
-      <div class="staff-address">
-        <div class="address">
-          <label for="address">Address</label>
-          <div>
-            <input
-              class="address-input"
-              type="text"
-              required
-              placeholder="1 Cach Mang Thang Tam"
-            />
-            <div class="district-city">
-              <div class="district">
-                <select name="district" required>
-                  <option disabled value="">Select district</option>
-                </select>
-              </div>
-              <div class="city">
-                <select name="city" required>
-                  <option disabled value="">Select city</option>
-                  <option value="HCM">HCM</option>
-                </select>
-              </div>
-            </div>
+    <!-- <div style="display: flex; justify-content: center">
+      <i class="bx bx-error bx-lg" style="color: #ffd600"></i>
+    </div>
+    <p>You cannot remove this item since it's being used recently</p> -->
+    <div class="Confirm-Modal">
+      <span class="Confirm-Modal-backdrop" @click="closeModal"></span>
+      <div class="Confirm-Modal-container">
+        <!-- <div class="Confirm-Modal-close" @click="closeModal">
+          <i
+            class="bi form-control-feedback bi-x-lg"
+            style="font-size: 22px"
+          ></i>
+        </div> -->
+        <!-- <header class="Confirm-Modal-header">
+          <p>{{ title }}</p>
+        </header> -->
+        <div class="Confirm-Modal-body">
+          <div style="display: flex; justify-content: center">
+            <i class="bx bx-error bx-lg" style="color: #ffd600"></i>
           </div>
+          <p>You cannot remove this item since it's being used recently</p>
         </div>
-      </div>
-      <div class="staff-phone">
-        <div class="phone">
-          <label for="phone">Mobile</label>
-          <input
-            class="phone-input"
-            type="text"
-            required
-            minlength="10"
-            maxlength="10"
-          />
+        <div class="cancel-btns">
+          <button
+            type="button"
+            @click="closeModal"
+            class="btn_cancel btn-warning"
+          >
+            Close
+          </button>
         </div>
+        <!-- <slot></slot> -->
+        <!-- <div class="remove-btns">
+            <button type="button" class="btn btn_cancel" @click="closeModal">
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn_remove btn-success"
+              v-if="confirmText"
+              :disabled="!activeConfirmButton"
+              @click="submitModal"
+            >
+              {{ confirmText }}
+            </button> -->
+        <!-- <button type="button" class="btn btn_remove btn-success" v-if="CommentRejectButton" @click="CommentSubmit(false)">
+              {{ CommentRejectButton }}
+            </button>
+            <button type="button" class="btn btn_remove btn-success" v-if="CommentConfirmButton" @click="CommentSubmit(true)">
+              {{ CommentConfirmButton }}
+            </button> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Password from "../components/PasswordInput.vue";
 export default {
   name: "FinanceView",
-  components: { Password },
 };
 </script>
 
@@ -100,83 +79,86 @@ export default {
   border: solid;
   font-family: "Roboto", sans-serif;
 }
-.create-modal {
-  width: 40%;
-  padding-right: 10px;
-}
-.staff-fullname,
-.staff-phone,
-.staff-address,
-.staff_role-status,
-.staff_email-pass {
-  padding: 10px 0;
+.Confirm-Modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
 }
 
-.staff_role-status,
-.staff-fullname,
-.staff_email-pass {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  /* justify-content: space-around; */
+.Confirm-Modal-backdrop {
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
 }
-.address-input,
-.phone-input {
-  width: 95%;
-}
-.district-city {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-top: 20px;
-  /* padding: 10px; */
-  column-gap: 14px;
-  width: 97%;
-}
-label {
-  font-size: 14px;
+
+.Confirm-Modal-container {
+  position: relative;
+  width: 470px;
+  max-width: calc(100% - 32px);
+  min-height: 200px;
+  background-color: white;
+  border-radius: 5px;
+  animation: modalfadein ease 0.3s;
+
+  font-family: Roboto;
   font-weight: 500;
-  color: rgb(107, 104, 104);
-  padding: 10px;
-  letter-spacing: 0.3px;
+  font-size: 16px;
+  z-index: 2;
 }
-input {
-  width: 90%;
-  margin: 0 18px;
-  font-size: 14px;
-  padding: 9px 12px;
+
+/* .Confirm-Modal-header {
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  left: calc(50% - 250px / 2);
+  top: 20px;
+  text-align: center;
+} */
+
+/* .Confirm-Modal-header p {
+  font-size: 20px;
+} */
+
+/* .Confirm-Modal-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 20px;
+} */
+
+.Confirm-Modal-body {
+  padding: 16px;
+  margin-top: 15px;
+}
+.Confirm-Modal-body p {
+  margin-top: 15px;
+}
+
+.btn_cancel {
+  /* background-color: #b767ff; */
+  width: 25%;
+  padding: 7px 0;
   border-radius: 7px;
-  border: solid 1px lightgrey;
-}
-.role select,
-.status select {
-  width: 90%;
-  font-size: 14px;
-  padding: 9px 12px;
-  border-radius: 7px;
-  margin: 0 18px;
-  border: solid 1px lightgrey;
-}
-.district select,
-.city select {
-  width: 95%;
-  font-size: 14px;
-  padding: 9px 12px;
-  border-radius: 7px;
-  margin: 0 18px;
-  border: solid 1px lightgrey;
-}
-.password /deep/ input {
-  width: 90%;
-  margin: 0 18px;
-  font-size: 14px;
-  padding: 9px 12px;
-  border-radius: 7px;
-  border: solid 1px lightgrey;
-}
-.password /deep/ label {
-  font-size: 14px;
   font-weight: 500;
-  color: rgb(107, 104, 104);
-  padding: 10px;
-  letter-spacing: 0.3px;
+  transform: translateX(170px);
+}
+.btn-mar-right {
+  margin-right: 10px;
+}
+.btn {
+  margin-left: 8px;
+  margin-right: 8px;
 }
 </style>

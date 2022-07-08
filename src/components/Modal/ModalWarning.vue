@@ -1,30 +1,48 @@
 <template>
   <transition>
-    <div class="warning_modal">
-      <div
-        class="modal fade"
-        id="warningModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <!-- <div class="modal-header">
-              <h5 class="modal-title">Remove Confirmation</h5>
-            </div> -->
-            <div class="modal-body">
-              <div style="display: flex; justify-content: center">
-                <i class="bx bx-error bx-md" style="color: #ffeb3b"></i>
-              </div>
-              <p>You cannot remove this item since it's being used recently</p>
-            </div>
-            <div class="cancel-btns">
-              <button type="button" data-bs-dismiss="modal" class="btn_cancel">
-                Close
-              </button>
-            </div>
+    <div class="Confirm-Modal" v-if="openModal">
+      <span class="Confirm-Modal-backdrop" @click="close"></span>
+      <div class="Confirm-Modal-container">
+        <!-- <div class="Confirm-Modal-close" @click="close">
+          <i
+            class="bi form-control-feedback bi-x-lg"
+            style="font-size: 22px"
+          ></i>
+        </div> -->
+        <!-- <header class="Confirm-Modal-header">
+          <p>{{ title }}</p>
+        </header> -->
+        <div class="Confirm-Modal-body">
+          <div style="display: flex; justify-content: center">
+            <i class="bx bx-error bx-lg" style="color: #ffd600"></i>
           </div>
+          <p>You cannot remove this item since it's being used recently</p>
         </div>
+        <div class="cancel-btns">
+          <button type="button" @click="close" class="btn_cancel btn-warning">
+            Close
+          </button>
+        </div>
+        <!-- <slot></slot> -->
+        <!-- <div class="remove-btns">
+            <button type="button" class="btn btn_cancel" @click="closeModal">
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn_remove btn-success"
+              v-if="confirmText"
+              :disabled="!activeConfirmButton"
+              @click="submitModal"
+            >
+              {{ confirmText }}
+            </button> -->
+        <!-- <button type="button" class="btn btn_remove btn-success" v-if="CommentRejectButton" @click="CommentSubmit(false)">
+              {{ CommentRejectButton }}
+            </button>
+            <button type="button" class="btn btn_remove btn-success" v-if="CommentConfirmButton" @click="CommentSubmit(true)">
+              {{ CommentConfirmButton }}
+            </button> -->
       </div>
     </div>
   </transition>
@@ -33,67 +51,98 @@
 <script>
 export default {
   name: "RemoveModal",
+  props: {
+    openModal: Boolean,
+  },
+  methods: {
+    close() {
+      this.$emit("close-modal");
+    },
+  },
 };
 </script>
 
 <style scoped>
-.modal {
-  margin-top: 100px;
-  border-radius: 7px;
+.Confirm-Modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
 }
-.modal-content {
-  /* height: 170px; */
+
+.Confirm-Modal-backdrop {
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.Confirm-Modal-container {
   position: relative;
-}
-.modal-title {
-  margin-left: 135px;
-  font-weight: 700;
-}
-.modal-body p {
-  font-size: 16px;
+  width: 470px;
+  max-width: calc(100% - 32px);
+  min-height: 200px;
+  background-color: white;
+  border-radius: 5px;
+  animation: modalfadein ease 0.3s;
+
+  font-family: Roboto;
   font-weight: 500;
+  font-size: 16px;
+  z-index: 2;
+}
+
+/* .Confirm-Modal-header {
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  left: calc(50% - 250px / 2);
+  top: 20px;
   text-align: center;
+} */
+
+/* .Confirm-Modal-header p {
+  font-size: 20px;
+} */
+
+/* .Confirm-Modal-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 20px;
+} */
+
+.Confirm-Modal-body {
+  padding: 16px;
+  margin-top: 15px;
 }
-.cancel-btns {
-  /* position: absolute; */
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
+.Confirm-Modal-body p {
+  margin-top: 15px;
 }
-.remove-btns button {
-  margin: 7px;
-}
-button {
+
+.btn_cancel {
+  /* background-color: #b767ff; */
+  width: 25%;
+  padding: 7px 0;
   border-radius: 7px;
-  height: 35px;
-  width: 102px;
-  font-size: 16px;
   font-weight: 500;
+  transform: translateX(170px);
 }
-.btn_cancel:hover {
-  background-color: rgb(218, 218, 218);
+.btn-mar-right {
+  margin-right: 10px;
 }
-@media screen and (max-width: 580px) {
-  .modal-dialog {
-    padding: 0 70px 0 30px;
-    border-radius: 7px;
-    left: 50%;
-    transform: translateX(-50%) !important;
-  }
-  .modal-title {
-    margin-left: 120px;
-  }
-  input {
-    width: 100%;
-  }
-}
-@media screen and (max-width: 480px) {
-  .modal-dialog {
-    padding: 0;
-  }
-  .modal-content {
-    margin: 0;
-    /* height: 220px; */
-  }
-}
+/* .btn {
+  margin-left: 8px;
+  margin-right: 8px;
+} */
 </style>

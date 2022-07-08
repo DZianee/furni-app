@@ -463,33 +463,64 @@ export default {
   },
   methods: {
     async getStaff() {
-      try {
+      let staffFeatures;
+      let res;
+      if (this.features.role == "") {
+        staffFeatures = {
+          kindOf: 1,
+          search: "",
+          status: "Active",
+        };
+        try {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(
+            `api/User/Staff/62ac075d3a5d293c62b3b12b/`,
+            {
+              params: {
+                kindOf: staffFeatures.kindOf,
+                search: staffFeatures.search,
+                status: staffFeatures.status,
+              },
+            },
+            this.$axios.defaults.headers["Authorization"]
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (this.features.role != "") {
+        staffFeatures = {
+          kindOf: 1,
+          search: "",
+          status: "Active",
+          role: this.features.role,
+        };
         this.$store.dispatch("accessToken");
-        const res = await this.$axios.get(
+        res = await this.$axios.get(
           `api/User/Staff/62ac075d3a5d293c62b3b12b/`,
           {
             params: {
-              kindOf: this.features.kindOf,
-              search: this.features.search,
-              status: this.features.status,
-              role: this.features.role,
+              kindOf: staffFeatures.kindOf,
+              search: staffFeatures.search,
+              status: staffFeatures.status,
+              role: staffFeatures.role,
             },
           },
           this.$axios.defaults.headers["Authorization"]
         );
-        this.staff = res.data.data;
-        console.log(res);
-      } catch (error) {
-        console.log(error);
       }
+
+      this.staff = res.data.data;
+      console.log(res);
     },
     async getRole() {
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/Role`,
+          `api/Role/staffRolesList/62ac075d3a5d293c62b3b12b`,
           this.$axios.defaults.headers["Authorization"]
         );
+        console.log(res);
         this.roleList = res.data.data;
         console.log(res);
       } catch (error) {
@@ -863,5 +894,6 @@ input {
 .btn-reset-features {
   background: rgb(218, 218, 218);
   width: 25%;
+  font-weight: 500;
 }
 </style>

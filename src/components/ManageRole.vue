@@ -7,7 +7,7 @@
     <div class="create-role-btn">
       <button
         type="button"
-        data-bs-target="#modal"
+        data-bs-target="#createModal"
         data-bs-toggle="modal"
         @click="openCreateRole"
       >
@@ -19,52 +19,40 @@
         <thead>
           <tr>
             <th class="role-id">ID</th>
-            <th class="role-name">Role name</th>
+            <th class="role-name">Name</th>
             <th class="role-adjust">Adjust</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="id" style="font-weight: 600">454545434</td>
-            <td class="name">Manager</td>
+          <tr v-for="role in roleList" :key="role.index">
+            <td class="id">{{ role._id }}</td>
+            <td class="name">{{ role.name }}</td>
             <td class="adjust">
               <div class="edit" style="color: green">
                 <i
                   class="bx bx-edit-alt bx-fw"
-                  data-bs-target="#modal"
+                  data-bs-target="#infoModal"
                   data-bs-toggle="modal"
-                  @click="openEditModal"
+                  @click="openEditModal(role._id)"
                 ></i>
               </div>
               <div class="remove" style="color: red">
+                <!-- <div v-if="displayModal"> -->
                 <i
                   class="bx bx-trash bx-fw"
-                  data-bs-target="#modal"
+                  data-bs-target="#removeModal"
                   data-bs-toggle="modal"
-                  @click="openRemoveModal"
+                  @click="openRemoveModal(role._id)"
                 ></i>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="id">5563234</td>
-            <td class="name">Employee</td>
-            <td class="adjust">
-              <div class="edit" style="color: green">
-                <i
-                  class="bx bx-edit-alt bx-fw"
-                  data-bs-target="#modal"
-                  data-bs-toggle="modal"
-                  @click="openEditModal"
-                ></i>
-              </div>
-              <div class="remove" style="color: red">
-                <i
-                  class="bx bx-trash bx-fw"
-                  data-bs-target="#modal"
-                  data-bs-toggle="modal"
-                  @click="openRemoveModal"
-                ></i>
+                <!-- </div> -->
+                <!-- <div v-else>
+                  <i
+                    class="bx bx-trash bx-fw"
+                    data-bs-target="#warningModal"
+                    data-bs-toggle="modal"
+                    @click="checkRole"
+                  ></i>
+                </div> -->
               </div>
             </td>
           </tr>
@@ -72,26 +60,40 @@
       </table>
     </div>
     <component
-      :is="'confirm-modal'"
+      :is="'create-modal'"
       :title="modalTitle"
       :confirmText="confirmText"
       :btnProperty="btnProperty"
       :headerPosition="headerPosition"
-      @submit="submitModal"
+      @submit="createRoles"
     >
       <div class="modal-content">
-        <div class="create-modal" v-if="optionModal == 'create'">
+        <div class="create-modal">
           <label for="role">Role name</label>
-          <input type="text" required />
-        </div>
-        <div class="edit-modal" v-if="optionModal == 'edit'">
-          <label for="role">Role name</label>
-          <input type="text" value="testing role" required />
-        </div>
-        <div class="remove-modal" v-if="optionModal == 'remove'">
-          <p>Are you sure you want to remove this role ?</p>
+          <input type="text" name="role" v-model="name" required />
         </div>
       </div>
+    </component>
+    <component
+      :is="'info-modal'"
+      :title="modalTitle"
+      :confirmText="confirmText"
+      :btnProperty="btnProperty"
+      :headerPosition="headerPosition"
+      @submit="editRole"
+    >
+      <div class="modal-content">
+        <label for="role">Role name</label>
+        <input type="text" v-model="roleDetails.name" required />
+      </div>
+    </component>
+    <component :is="'remove-modal'" @delete-confirm="removeConfirm">
+    </component>
+    <component
+      :is="'warning-modal'"
+      @close-modal="closeWarning"
+      :openModal="displayWarning"
+    >
     </component>
   </div>
 </template>
@@ -101,7 +103,8 @@ export default {
   name: "ManageRole",
   data() {
     return {
-      optionModal: "",
+      checkedValue: false,
+      displayWarning: false,
       modalTitle: "",
       btnProperty: {
         color: "",
@@ -109,33 +112,136 @@ export default {
       },
       confirmText: "",
       headerPosition: "",
+      roleList: [],
+      removeId: "",
+      // newRole: {
+      //   name: "",
+      // },
+      name: "",
+      roleDetails: {},
     };
   },
   methods: {
-    openRemoveModal() {
-      this.optionModal = "remove";
-      this.modalTitle = "Remove Confirmation";
-      this.confirmText = "Remove";
-      this.btnProperty.color = "white";
-      this.btnProperty.backColor = "#fd5d5d";
-      this.headerPosition = "center";
+    async getRole() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Role`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.roleList = res.data.data;
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
     },
-    openEditModal() {
-      this.optionModal = "edit";
+
+    async editRole() {
+      try {
+        const updateRole = { name: this.roleDetails.name };
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.put(
+          `api/Role/updateRole/${this.roleDetails._id}`,
+          updateRole,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.$router.go();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async removeConfirm() {
+      let res;
+      try {
+        if (this.checkedValue == true) {
+          this.displayWarning = true;
+        } else {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.delete(`api/Role/${this.removeId}`);
+          if (res.status == 200) {
+            this.getRole();
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async checkRole() {
+      let res;
+      try {
+        this.$store.dispatch("accessToken");
+        res = await this.$axios.get(`api/Role/checkRole/${this.removeId}`);
+        if (res.status == 200) {
+          this.checkedValue = true;
+          console.log(res);
+        } else {
+          this.checkedValue = false;
+          console.log(res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    closeWarning() {
+      this.displayWarning = false;
+    },
+    openRemoveModal(value) {
+      this.removeId = value;
+      this.checkRole();
+    },
+    async openEditModal(value) {
       this.modalTitle = "Role";
       this.confirmText = "Submit changes";
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#aa40e3";
       this.headerPosition = "center";
+
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Role/roleDetails/${value}`,
+          this.newRole,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        console.log(res);
+        this.roleDetails = res.data.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     openCreateRole() {
-      this.optionModal = "create";
       this.modalTitle = "New Role";
       this.confirmText = "Create";
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#aa40e3";
       this.headerPosition = "center";
+
+      console.log("test");
     },
+    async createRoles() {
+      try {
+        // const newRole = { name: this.name };
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.post(
+          `api/Role/newRole`,
+          { name: this.name },
+          this.$axios.defaults.headers["Authorization"]
+        );
+
+        if (res.status == 200) {
+          this.getRole();
+          console.log(res);
+        }
+        console.log("test");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  mounted() {
+    this.getRole();
   },
 };
 </script>
