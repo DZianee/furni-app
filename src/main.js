@@ -13,6 +13,8 @@ import CreateModal from "./components/Modal/Modal.vue";
 import InfoModal from "./components/Modal/ModalInfo.vue";
 import RemoveModal from "./components/Modal/ModalRemove.vue";
 import WarningModal from "./components/Modal/ModalWarning.vue";
+import ImgModal from "./components/Modal/ModalImg.vue";
+import Pagination from "./components/Pagination/PaginationBar.vue";
 import "@/assets/css/main.css";
 
 const app = createApp(App);
@@ -66,4 +68,6 @@ app
   .component("info-modal", InfoModal)
   .component("remove-modal", RemoveModal)
   .component("warning-modal", WarningModal)
+  .component("img-modal", ImgModal)
+  .component("pagination-feature", Pagination)
   .mount("#app");

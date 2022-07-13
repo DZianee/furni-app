@@ -98,7 +98,7 @@ const routes = [
     meta: { layout: "sidebar-manage" },
   },
   {
-    path: "/product-manage-details-view",
+    path: "/product-manage-details-view/:id",
     name: "productManDetailsView",
     component: ProductManDetailsView,
     meta: { layout: "sidebar-manage" },

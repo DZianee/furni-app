@@ -8,6 +8,7 @@ export default createStore({
     authenticated: false,
     user: null,
     avatar: null,
+    cateId: null,
   },
   mutations: {
     setAuth: (state, auth) => (state.authenticated = auth),
@@ -16,6 +17,7 @@ export default createStore({
     setToken: (state, accessToken) => (state.token = accessToken),
     setRefreshToken: (state, refreshToken) =>
       (state.refreshToken = refreshToken),
+    setCateId: (state, cate) => (state.cateId = cate),
   },
   actions: {
     login({ commit }, res) {
@@ -32,6 +34,10 @@ export default createStore({
     storeAvatar({ commit }, res) {
       commit("setAvatar", res);
       sessionStorage.setItem("Avatar", res);
+    },
+    storeCateId({ commit }, res) {
+      commit("setCateId", res);
+      sessionStorage.setItem("CateId", res);
     },
     logout({ commit }) {
       commit("setAuth", false);
@@ -59,6 +65,9 @@ export default createStore({
     },
     getAvatar({ commit }) {
       commit("setAvatar", sessionStorage.getItem("Avatar"));
+    },
+    getCateId({ commit }) {
+      commit("setCateId", sessionStorage.getItem("CateId"));
     },
   },
 });

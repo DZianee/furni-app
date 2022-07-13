@@ -1,7 +1,7 @@
 <template>
   <div class="product-cate-table">
     <div class="title">
-      <h4>List of items</h4>
+      <h4>List of items ({{ totalProducts }})</h4>
     </div>
     <div class="create-product-btn">
       <button
@@ -12,28 +12,60 @@
         New Product +
       </button>
     </div>
-    <div class="features-bar">
-      <div class="search-bar">
+    <div class="cus-features">
+      <div
+        class="features-icon"
+        @click="displayFeaturesBox = !displayFeaturesBox"
+      >
+        <span style="fonr-weight: 500; font-size: 15px; padding: 10px">
+          <i class="bx bx-sm bx-fw bx-menu-alt-left"></i>Features
+        </span>
+      </div>
+      <div class="features container" v-if="displayFeaturesBox">
         <input
           type="search"
-          class="form-control"
-          placeholder="Search here..."
+          class="search-feature"
+          placeholder="Search here"
+          v-model="features.search"
         />
-      </div>
-      <div class="filter-sort">
-        <select class="filter-type form-control">
-          <option value="chair">Chair</option>
-          <option value="armchair">Armchair</option>
-        </select>
-        <select class="sort-name form-control">
-          <option value="name">Name</option>
-        </select>
-        <select class="asc-desc form-control">
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-        </select>
+        <div class="sort">
+          <label for="sort">Sort</label>
+          <div class="sort-container">
+            <select name="sort" v-model="features.kindOf" class="sort-features">
+              <option value="1" selected>Ascending</option>
+              <option value="-1">Descending</option>
+            </select>
+            <select
+              name="sortName"
+              v-model="features.sortName"
+              class="sortName-features"
+            >
+              <option value="" disabled>Select</option>
+              <option value="name">Name</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-features">
+          <label for="filter">Filter</label>
+          <div>
+            <select
+              name="status"
+              v-model="features.status"
+              class="filter-status"
+            >
+              <option value="Active">Active</option>
+              <option value="Unactive">Unactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-features">
+          <div class="btn btn-reset-features" @click="resetFeatures">Reset</div>
+          <div class="btn btn-submit-features" @click="submitFeatures">Go</div>
+        </div>
       </div>
     </div>
+
     <div class="table-responsive">
       <table class="table">
         <thead>
@@ -48,67 +80,44 @@
           </tr>
         </thead>
         <tbody>
-          <div v-if="cateDetails.productList == 0">
-            <p class="empty-content-message">
-              There is no content in this table yet
-            </p>
+          <div v-if="productList == ''" class="empty-content-message">
+            <p>There is no content in this table yet</p>
           </div>
-          <div v-else>
-            <tr v-for="item in cateDetails.productList" :key="item.index">
-              <td class="item-code" @click="Route('productManDetailsView')">
-                {{ item.code }}
-              </td>
-              <td class="item-name">{{ item.name }}</td>
-              <td class="item-type">{{ item.type }}</td>
-              <td class="item-price">{{ item.price }} VND</td>
-              <td class="item-quantity">20</td>
-              <td
-                class="item-img"
-                data-bs-target="#imgModal"
+          <tr v-for="item in productList" :key="item.index" v-else>
+            <td
+              class="item-code"
+              @click="Route('productManDetailsView', item._id)"
+            >
+              {{ item.code }}
+            </td>
+            <td class="item-name">{{ item.name }}</td>
+            <td class="item-type">{{ item.type }}</td>
+            <td class="item-price">{{ item.price }} VND</td>
+            <td class="item-quantity">20</td>
+            <td
+              class="item-img"
+              data-bs-target="#imgModal"
+              data-bs-toggle="modal"
+              @click="getImg(item.productImg)"
+            >
+              View image
+            </td>
+            <td class="item_remove-bin">
+              <i
+                class="bx bx-trash"
+                data-bs-target="#removeModal"
                 data-bs-toggle="modal"
-              >
-                View image
-              </td>
-              <td class="item_remove-bin">
-                <i
-                  class="bx bx-trash"
-                  data-bs-target="#modal"
-                  data-bs-toggle="modal"
-                  @click="openRemoveModal"
-                ></i>
-              </td>
-            </tr>
-          </div>
+                @click="openRemoveModal"
+              ></i>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-    <component
-      :is="'confirm-modal'"
-      :title="modalTitle"
-      :confirmText="confirmText"
-      :btnProperty="btnProperty"
-      @submit="submitModal"
-    >
-      <div class="modal-content">
-        <p>Are you sure you want to remove this row ?</p>
-      </div>
+    <component :is="'remove-modal'" @delete-confirm="deleteConfirm">
     </component>
-    <div
-      class="modal fade img-modal"
-      id="imgModal"
-      tabindex="-1"
-      aria-labelledby="imgModal"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <img
-            src="https://images.pexels.com/photos/4857784/pexels-photo-4857784.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
-            alt="iitem-img"
-          />
-        </div>
-      </div>
-    </div>
-    <ProductCateModal :cateId="cateId" />
+    <component :is="'img-modal'" :img="img"> </component>
+    <ProductCateModal :cateId="cateId" :cateCode="cateCode" />
   </div>
 </template>
 
@@ -119,28 +128,57 @@ export default {
   components: { ProductCateModal },
   data() {
     return {
+      displayFeaturesBox: false,
       modalTitle: "",
       btnProperty: {
         color: "",
         backColor: "",
       },
       confirmText: "",
+      productList: [],
+      totalProducts: 0,
+      img: "",
       cateId: this.$route.params.id,
+      features: {
+        kindOf: 1,
+        sortName: "",
+        search: "",
+        status: "Active",
+      },
     };
   },
   props: {
-    cateDetails: Object,
+    cateCode: String,
   },
   methods: {
+    async getProduct() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(`api/Product/${this.cateId}`);
+        this.productList = res.data.data;
+        this.totalProducts = res.data.totalProducts;
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    getImg(value) {
+      this.img = value;
+      console.log(this.img);
+    },
     openRemoveModal() {
       this.modalTitle = "Remove Confirmation";
       this.confirmText = "Remove";
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#fd5d5d";
     },
-    Route(value) {
-      this.$router.push({ name: value });
+    Route(value, id) {
+      this.$router.push({ name: value, params: { id: id, cate: this.cateId } });
+      console.log(this.cateId);
     },
+  },
+  mounted() {
+    this.getProduct();
   },
 };
 </script>
@@ -197,7 +235,93 @@ export default {
   border: solid 1px rgb(199, 195, 195);
 }
 
+/* --- Features ---- */
+.features-icon {
+  cursor: pointer;
+}
+.features {
+  border-top: solid 1px rgb(228, 228, 228);
+  border-bottom: solid 1px rgb(228, 228, 228);
+  padding: 30px 60px;
+}
+.features label {
+  font-size: 14px;
+  font-weight: 500;
+  color: grey;
+}
+.search-feature {
+  width: 90%;
+  padding: 9px 9px;
+  border-radius: 7px;
+  border: solid 1px lightgrey;
+}
+/* .features select {
+  width: 70%;
+  padding: 7px 12px;
+  font-size: 14px;
+  border-radius: 7px;
+  border: solid 1px lightgrey;
+} */
+.sort,
+.filter-features {
+  margin-top: 30px;
+  padding-left: 20px;
+}
+.sort {
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
+}
+.sort-container {
+  display: flex;
+  gap: 80px;
+}
+.sort-container select,
+.filter-features select {
+  width: 25%;
+  padding: 9px 12px;
+  font-size: 14px;
+  border-radius: 7px;
+  border: solid 1px lightgrey;
+}
+.filter-features {
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
+}
+/* .filter-features div {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  row-gap: 20px;
+} */
+.btn-features {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.btn-submit-features {
+  color: white;
+  background: #aa40e3;
+  width: 10%;
+  font-weight: 500;
+}
+.btn-submit-features:hover {
+  color: white;
+}
+.btn-reset-features {
+  background: rgb(218, 218, 218);
+  width: 10%;
+  font-weight: 500;
+}
 /* - - - Table - - - */
+
+.empty-content-message {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  transform: translateX(350px);
+  color: rgb(125, 122, 122);
+  font-style: italic;
+}
 .table-responsive {
   margin: 20px;
   padding: 10px;
@@ -216,7 +340,7 @@ tbody td {
 }
 .item-code {
   font-weight: 600;
-  color: black;
+  color: #a65de7;
 }
 .item-code:hover {
   text-decoration: underline;
@@ -230,13 +354,12 @@ tbody td {
 .item_remove-bin {
   text-align: center;
 }
-.item-img:hover {
-  text-decoration: underline;
+.item-img {
   color: rgb(107, 107, 255);
   cursor: pointer;
   font-weight: 500;
 }
-.item_remove-bin i:hover {
+.item_remove-bin i {
   color: red;
   cursor: pointer;
 }

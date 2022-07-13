@@ -80,4 +80,7 @@ export default {
   background: rgb(167, 160, 160);
   color: white;
 }
+.modal-content {
+  border: 1px solid white;
+}
 </style>

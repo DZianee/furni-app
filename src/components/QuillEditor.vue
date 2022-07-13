@@ -7,8 +7,7 @@
       @update:content="handleInput(editorCase)"
       contentType="html"
     >
-      ></QuillEditor
-    >
+    </QuillEditor>
   </div>
 </template>
 
@@ -25,6 +24,7 @@ export default {
   props: {
     heightEditor: String,
     contentEdit: String,
+    test: String,
     editorCase: Number,
   },
   components: { QuillEditor },
@@ -33,7 +33,16 @@ export default {
       this.$emit("handleInput", this.contentEditor, value);
     },
   },
+  watch: {
+    test() {
+      console.log(this.test);
+    },
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.ql-editor {
+  font-size: 15px;
+}
+</style>

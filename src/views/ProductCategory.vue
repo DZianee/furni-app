@@ -17,7 +17,7 @@
       :totalProduct="totalProduct"
     />
     <hr />
-    <ProductCateTable :cateDetails="cateDetails" />
+    <ProductCateTable :cateCode="cateDetails.code" />
   </div>
 </template>
 
@@ -41,6 +41,7 @@ export default {
         `api/Category/cateDetails/${this.$route.params.id}`,
         this.$axios.defaults.headers["Authorization"]
       );
+      this.$store.dispatch("storeCateId", res.data.data.content._id);
       this.cateDetails = res.data.data.content;
       this.totalProduct = res.data.data.totalProduct;
       this.subItemTotal = res.data.total;

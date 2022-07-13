@@ -40,12 +40,8 @@
               </div>
             </div>
             <div class="confirm-btn">
-              <button
-                type="button"
-                class="btn cancel-btn"
-                data-bs-dismiss="modal"
-              >
-                Cancel
+              <button type="button" class="btn cancel-btn" @click="resetForm">
+                Reset
               </button>
               <button
                 type="submit"
@@ -89,6 +85,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    resetForm() {
+      this.newCate = {};
     },
   },
 };

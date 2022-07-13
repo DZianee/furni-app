@@ -116,8 +116,24 @@
           </tr>
         </tbody>
       </table>
+      <component
+        :is="'pagination-feature'"
+        :totalPages="totalPages"
+        @click-next="pageChange"
+        @click-previous="pageChange"
+        :currentPage="currentPage"
+      ></component>
     </div>
     <component :is="'remove-modal'" @delete-confirm="removeConfirm">
+    </component>
+    <component
+      :is="'info-modal'"
+      @submit="updateInfo"
+      :title="modalTitle"
+      :confirmText="confirmText"
+      :btnProperty="btnProperty"
+      :headerPosition="headerPosition"
+    >
     </component>
   </div>
 </template>
@@ -143,6 +159,9 @@ export default {
         status: "Active",
       },
       displayFeaturesBox: false,
+      totalPages: 0,
+      currentPage: 1,
+      displayPreBtn: false,
     };
   },
   async created() {
@@ -150,20 +169,22 @@ export default {
       this.$store.dispatch("accessToken");
       const res = await this.$axios.get(
         `api/User/Customer/62ac075d3a5d293c62b3b12b`,
+        {
+          params: {
+            page: this.currentPage,
+          },
+        },
         this.$axios.defaults.headers["Authorization"]
       );
       this.customerList = res.data.data;
       this.customerList.forEach(dateLogin);
-
-      console.log(res);
+      this.totalPages = res.data.pageTotals;
     } catch (error) {
       console.log(error);
     }
     function dateLogin(cus, index, arr) {
       const time = cus.lastLogin.toString();
-      console.log(typeof time);
       const loginDateTime = new Date(time);
-      console.log(loginDateTime);
       let day = loginDateTime.getDate();
       let month = loginDateTime.getMonth();
       let year = loginDateTime.getFullYear();
@@ -182,10 +203,8 @@ export default {
       }
       if (parseInt(loginDateTime.getHours()) < 10) {
         hour = "0" + loginDateTime.getHours();
-        console.log(typeof hour);
       } else {
         hour = parseInt(loginDateTime.getHours()).toString();
-        console.log(typeof hour);
       }
       if (parseInt(min) < 10) {
         min = "0" + (parseInt(min) + 1).toString();
@@ -197,7 +216,32 @@ export default {
     }
   },
   methods: {
-    openRemoveModals() {},
+    removeConfim() {},
+    // updateInfo() {},
+    // async openEditModal(value) {
+    //   this.modalTitle = "Customer's Status";
+    //   this.confirmText = "Submit changes";
+    //   this.btnProperty.color = "white";
+    //   this.btnProperty.backColor = "#aa40e3";
+    //   this.headerPosition = "flex-start";
+
+    //   try {
+    //     this.$store.dispatch("accessToken");
+    //     const res = await this.$axios.get(
+    //       `api/User/userDetails/Customer/${value}`,
+    //       this.$axios.defaults.headers["Authorization"]
+    //     );
+    //     console.log(res);
+    //     this.staffDetails = res.data.data;
+    //     console.log(this.staffDetails);
+    //     this.address.street = res.data.data.address.street;
+    //     this.address.city = res.data.data.address.city;
+    //     this.address.district = res.data.data.address.district;
+    //     this.role = res.data.data.role._id;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     async getCus() {
       try {
         this.$store.dispatch("accessToken");
@@ -209,17 +253,31 @@ export default {
               search: this.features.search,
               status: this.features.status,
               sortName: this.features.sortName,
+              page: this.currentPage,
             },
           },
           this.$axios.defaults.headers["Authorization"]
         );
-        this.staff = res.data.data;
-        console.log(res);
+        this.customerList = res.data.data;
+        this.totalPages = res.data.pageTotals;
       } catch (error) {
         console.log(error);
       }
     },
+    submitFeatures() {
+      this.currentPage = 1;
+      this.getCus();
+    },
+    resetFeatures() {
+      this.features = {};
+    },
+    pageChange(current) {
+      this.currentPage = current;
+      this.getCus();
+      console.log(current);
+    },
   },
+
   watch: {},
 };
 </script>

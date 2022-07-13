@@ -14,90 +14,175 @@
       <h3 style="text-align: center">Details information of Product</h3>
     </div>
     <hr />
-    <div class="details-container">
-      <div class="details-content">
-        <div class="product-info">
-          <h5>Information overview</h5>
-          <div class="product_code-name">
-            <div class="product-code">
-              <label for="productCode">Product Code:</label>
-              <input type="text" readonly class="form-control" />
+    <form enctype="multipart/form-data" @submit.prevent="updateProduct">
+      <div class="details-container">
+        <div class="details-content">
+          <div class="product-info">
+            <h5>Information overview</h5>
+            <div class="product_code-name">
+              <div class="product-code">
+                <label for="productCode">Product Code:</label>
+                <input
+                  type="text"
+                  readonly
+                  class="form-control"
+                  v-model="productDetails.code"
+                />
+              </div>
+              <div class="product-code">
+                <label for="productCode"></label>
+                <!-- <input
+                  type="text"
+                  class="form-control"
+                  v-model="productDetails.type"
+                /> -->
+              </div>
+              <div class="product-name">
+                <label for="productName">Product name:</label>
+                <input
+                  type="text"
+                  minlength="10"
+                  required
+                  class="form-control"
+                  v-model="productDetails.name"
+                />
+              </div>
+              <div class="product-code">
+                <label for="productCode">Type:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="productDetails.type"
+                />
+              </div>
             </div>
-            <div class="product-name">
-              <label for="productName">Product name:</label>
-              <input type="text" required class="form-control" />
+            <div class="product_price-quantity">
+              <div class="product-price">
+                <label for="productPrice">Price:</label>
+                <input
+                  type="number"
+                  required
+                  class="form-control"
+                  v-model="productDetails.price"
+                />
+              </div>
+              <div class="product-quantity">
+                <label for="productQuantity">Quantity:</label>
+                <input
+                  type="number"
+                  minlength="1"
+                  required
+                  class="form-control"
+                  v-model="productDetails.importQuantity"
+                />
+              </div>
             </div>
           </div>
-          <div class="product_price-quantity">
-            <div class="product-price">
-              <label for="productPrice">Price:</label>
-              <input type="text" required class="form-control" />
+          <div class="technical-info">
+            <h5>Technical Info</h5>
+            <div class="measurement">
+              <div class="height">
+                <label for="height">H</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  required
+                  v-model="technicalInfo.height"
+                />
+              </div>
+              <div class="width">
+                <label for="width">W</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  required
+                  v-model="technicalInfo.width"
+                />
+              </div>
+              <div class="depth">
+                <label for="depth">D</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  v-model="technicalInfo.depth"
+                />
+              </div>
+              <div class="length">
+                <label for="length">L</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  v-model="technicalInfo.length"
+                />
+              </div>
             </div>
-            <div class="product-quantity">
-              <label for="productQuantity">Quantity:</label>
-              <input type="text" required class="form-control" />
+          </div>
+          <div class="product-details">
+            <h5>Details Information</h5>
+            <div class="product-des">
+              <label for="description">Product description:</label>
+              <span v-if="productDetails.description != null">
+                <QuillEditor
+                  :heightEditor="'120'"
+                  :contentEdit="productDetails.description"
+                  :editorCase="1"
+                  @handleInput="handleInput"
+                />
+              </span>
+            </div>
+            <div class="product-about">
+              <label for="productAbout">About product (Company):</label>
+              <span v-if="productDetails.about != null">
+                <QuillEditor
+                  :heightEditor="'120'"
+                  :contentEdit="productDetails.about"
+                  :editorCase="2"
+                  @handleInput="handleInput"
+                />
+              </span>
             </div>
           </div>
         </div>
-        <div class="technical-info">
-          <h5>Technical Info</h5>
-          <div class="measurement">
-            <div class="height">
-              <label for="">H</label>
-              <input type="text" class="form-control" required />
-            </div>
-            <div class="width">
-              <label for="">W</label>
-              <input type="text" class="form-control" required />
-            </div>
-            <div class="depth">
-              <label for="">D</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="length">
-              <label for="">L</label>
-              <input type="text" class="form-control" />
+        <div class="details-color-img">
+          <div class="product-color">
+            <label for="productColor">Color:</label>
+            <div class="color-check">
+              <div class="checked-color">
+                <label
+                  class="color"
+                  v-for="color in productDetails.color"
+                  :key="color.index"
+                >
+                  <input type="checkbox" @click="changeColor(color)" checked />
+                  <span
+                    class="checkmark"
+                    :style="{ backgroundColor: color }"
+                  ></span>
+                </label>
+              </div>
+              <div class="add-color">
+                <label class="color" v-for="color in colorStore" :key="color">
+                  <input type="checkbox" @click="getColor(color)" />
+                  <span
+                    class="checkmarks"
+                    :style="{ backgroundColor: color }"
+                  ></span>
+                </label>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="product-details">
-          <h5>Details Information</h5>
-          <div class="product-des">
-            <label for="productDes">Product description:</label>
-            <QuillEditor :heightEditor="120" />
-          </div>
-          <div class="product-about">
-            <label for="productAbout">About product (Company):</label>
-            <QuillEditor :heightEditor="120" />
+          <div class="product-img">
+            <h5>Illustrate image</h5>
+            <img
+              :src="`http://localhost:2371/${productDetails.productImg}`"
+              alt="product-img"
+            />
+            <input type="file" accept="image/*" @change="selectImg" />
           </div>
         </div>
       </div>
-      <div class="details-color-img">
-        <div class="product-color">
-          <label for="productColor">Color:</label>
-          <div class="color-check">
-            <div v-for="color in colorStore" :key="color">
-              <label class="color">
-                <input type="checkbox" />
-                <span
-                  class="checkmark"
-                  :style="{ backgroundColor: color }"
-                ></span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="product-img">
-          <h5>Illustrate image</h5>
-          <!-- <img
-                src="https://images.pexels.com/photos/4857784/pexels-photo-4857784.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
-                alt="product-img"
-              /> -->
-          <input type="file" />
-        </div>
-      </div>
-    </div>
-    <div class="btn submit-btn">Submit changes</div>
+      <button class="btn submit-btn" type="submit">Submit changes</button>
+    </form>
   </div>
 </template>
 
@@ -111,24 +196,123 @@ export default {
   data() {
     return {
       colorStore: [
-        "#f44336",
-        "#ff80ab",
-        "#4527a0",
-        "#8c9eff",
+        "white",
+        "#fff0f0",
         "#f4ff81",
+        "#ff8080",
+        "#f44336",
         "#be79df",
         "#50d890",
-        "#ff8080",
-        "white",
+        "#8c9eff",
+        "#4527a0",
         "grey",
-        "lightgrey",
-        "#fff0f0",
+        "black",
       ],
+      cateId: "",
+      productId: this.$route.params.id,
+      productDetails: {},
+      product: {
+        img: "",
+      },
+      technicalInfo: {
+        height: 0,
+        width: 0,
+        length: 0,
+        depth: 0,
+      },
     };
   },
+  async created() {
+    try {
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/Product/productDetails/${this.productId}`,
+        this.$axios.defaults.headers["Authorization"]
+      );
+      this.productDetails = res.data.data;
+      // const test = this.colorStore.filter(
+      //   (item) => !this.productDetails.color.includes(item)
+      // );
+      // this.colorStore = test;
+      // this.product.color = test;
+      // console.log(this.product.color);
+      this.technicalInfo.width = res.data.data.technicalInfo.width;
+      this.technicalInfo.depth = res.data.data.technicalInfo.depth;
+      this.technicalInfo.length = res.data.data.technicalInfo.length;
+      this.technicalInfo.height = res.data.data.technicalInfo.height;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   methods: {
+    async updateProduct() {
+      try {
+        const updateProduct = new FormData();
+        updateProduct.append("name", this.productDetails.name);
+        updateProduct.append("productImg", this.product.img);
+        updateProduct.append("price", this.productDetails.price);
+        updateProduct.append(
+          "importQuantity",
+          this.productDetails.importQuantity
+        );
+        updateProduct.append("color", this.productDetails.color);
+        updateProduct.append("type", this.productDetails.type);
+        updateProduct.append("description", this.productDetails.description);
+        updateProduct.append("about", this.productDetails.about);
+        updateProduct.append("width", this.technicalInfo.width);
+        updateProduct.append("height", this.technicalInfo.height);
+        updateProduct.append("length", this.technicalInfo.length);
+        updateProduct.append("depth", this.technicalInfo.depth);
+        this.$store.dispatch("accessToken");
+        await this.$axios.put(
+          `api/Product/updateProduct/${this.productId}`,
+          updateProduct,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.$router.push({
+          name: "productCategoryView",
+          params: { id: this.cateId },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
     Route(value) {
-      this.$router.push({ name: value });
+      this.$store.dispatch("getCateId");
+      this.cateId = this.$store.state.cateId;
+      console.log(this.cateId);
+      this.$router.push({ name: value, params: { id: this.cateId } });
+    },
+    handleInput(value, caseOption) {
+      console.log(caseOption);
+      if (caseOption == "1") {
+        this.productDetails.description = value;
+      } else if (caseOption == "2") {
+        this.productDetails.about = value;
+      }
+    },
+    selectImg(e) {
+      this.product.img = e.target.files[0];
+    },
+    getColor(col) {
+      const test = this.productDetails.color.filter((item) => item === col);
+      if (test.length > 0) {
+        return;
+      } else {
+        this.productDetails.color.push(col);
+      }
+      this.eliminateColor(col);
+    },
+    changeColor(col) {
+      this.productDetails.color.push(col);
+      this.eliminateColor(col);
+    },
+    eliminateColor(value) {
+      const test = this.productDetails.color.filter((item) => item === value);
+      if (test.length > 1) {
+        const tests = this.productDetails.color.filter((item) => item != value);
+        this.productDetails.color = tests;
+      }
     },
   },
 };
@@ -157,8 +341,8 @@ export default {
   column-gap: 50px;
   margin-top: 40px;
   padding: 20px;
-  border-radius: 30px;
-  border: solid lightblue;
+  /* border-radius: 30px;
+  border: solid lightblue; */
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
 }
@@ -194,13 +378,29 @@ input {
 .product-about:not(label) {
   padding: 10px 30px;
 }
+
+img {
+  width: 40%;
+  margin-bottom: 20px;
+}
+
 .product-color {
-  display: flex;
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
 }
 .color-check {
   margin-left: 10px;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+}
+.checked-color {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.add-color {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 .color {
   position: relative;
@@ -214,7 +414,8 @@ input {
 }
 
 /* Create a custom checkbox */
-.checkmark {
+.checkmark,
+.checkmarks {
   position: absolute;
   top: 7px;
   left: 0;
@@ -224,7 +425,8 @@ input {
 }
 
 /* On mouse-over, add a grey background color */
-.color:hover input ~ .checkmark {
+.color:hover input ~ .checkmark,
+.color:hover input ~ .checkmarks {
   background-color: rgb(197, 197, 197);
 }
 
@@ -234,7 +436,8 @@ input {
 } */
 
 /* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
+.checkmark:after,
+.checkmarks:after {
   content: "";
   position: absolute;
   display: none;
