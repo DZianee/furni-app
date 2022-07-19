@@ -40,8 +40,11 @@
               v-model="features.sortName"
               class="sortName-features"
             >
-              <option value="" disabled>Select</option>
+              <option value="" disabled>Select type</option>
               <option value="name">Name</option>
+              <option value="price">Price</option>
+              <option value="importQuantity">Quantity</option>
+              <option value="createdAt">Date create</option>
             </select>
           </div>
         </div>
@@ -54,8 +57,8 @@
               v-model="features.status"
               class="filter-status"
             >
-              <option value="Active">Active</option>
-              <option value="Unactive">Unactive</option>
+              <option value="IN STOCK">IN STOCK</option>
+              <option value="OUT OF STOCK">OUT OF STOCK</option>
             </select>
           </div>
         </div>
@@ -76,6 +79,8 @@
             <th style="text-align: center">Price (per one)</th>
             <th style="text-align: center">Import quantity</th>
             <th>Image</th>
+            <th>Date create</th>
+            <th>Status</th>
             <th></th>
           </tr>
         </thead>
@@ -93,7 +98,7 @@
             <td class="item-name">{{ item.name }}</td>
             <td class="item-type">{{ item.type }}</td>
             <td class="item-price">{{ item.price }} VND</td>
-            <td class="item-quantity">20</td>
+            <td class="item-quantity">{{ item.importQuantity }}</td>
             <td
               class="item-img"
               data-bs-target="#imgModal"
@@ -102,17 +107,34 @@
             >
               View image
             </td>
+            <td>{{ item.createdAt }}</td>
+            <td
+              :style="[
+                status == item.status
+                  ? { color: 'green', fontWeight: '600' }
+                  : { color: 'red', fontWeight: '600' },
+              ]"
+            >
+              {{ item.status }}
+            </td>
             <td class="item_remove-bin">
               <i
                 class="bx bx-trash"
                 data-bs-target="#removeModal"
                 data-bs-toggle="modal"
-                @click="openRemoveModal"
+                @click="openRemoveModal(item._id)"
               ></i>
             </td>
           </tr>
         </tbody>
       </table>
+      <component
+        :is="'pagination-feature'"
+        :totalPages="totalPages"
+        @click-next="pageChange"
+        @click-previous="pageChange"
+        :currentPage="currentPage"
+      ></component>
     </div>
     <component :is="'remove-modal'" @delete-confirm="deleteConfirm">
     </component>
@@ -128,6 +150,11 @@ export default {
   components: { ProductCateModal },
   data() {
     return {
+      status: "IN STOCK",
+      currentPage: 1,
+      totalPages: 0,
+      displayPreBtn: false,
+      removeId: "",
       displayFeaturesBox: false,
       modalTitle: "",
       btnProperty: {
@@ -143,38 +170,100 @@ export default {
         kindOf: 1,
         sortName: "",
         search: "",
-        status: "Active",
+        status: "IN STOCK",
       },
     };
   },
   props: {
     cateCode: String,
   },
+  async created() {
+    try {
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/Product/${this.cateId}`,
+        { params: { page: this.currentPage } },
+        this.$axios.defaults.headers["Authorization"]
+      );
+      this.productList = res.data.data;
+      this.productList.forEach((item) => this.convertDateTime(item));
+      this.totalProducts = res.data.totalProducts;
+      this.totalPages = res.data.pageTotals;
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   methods: {
     async getProduct() {
       try {
         this.$store.dispatch("accessToken");
-        const res = await this.$axios.get(`api/Product/${this.cateId}`);
+        const res = await this.$axios.get(
+          `api/Product/${this.cateId}`,
+          {
+            params: {
+              kindOf: this.features.kindOf,
+              search: this.features.search,
+              status: this.features.status,
+              sortName: this.features.sortName,
+              page: this.currentPage,
+            },
+          },
+          this.$axios.defaults.headers["Authorization"]
+        );
         this.productList = res.data.data;
+        this.productList.forEach((item) => this.convertDateTime(item));
         this.totalProducts = res.data.totalProducts;
+        this.totalPages = res.data.pageTotals;
         console.log(res);
       } catch (error) {
         console.log(error);
       }
     },
+    convertDateTime(value) {
+      const result = new Date(value.createdAt);
+      var year = result.getFullYear();
+      var month = ("0" + (result.getMonth() + 1)).slice(-2);
+      var day = ("0" + result.getDate()).slice(-2);
+      value.createdAt = day + "-" + month + "-" + year;
+    },
     getImg(value) {
       this.img = value;
       console.log(this.img);
     },
-    openRemoveModal() {
-      this.modalTitle = "Remove Confirmation";
-      this.confirmText = "Remove";
-      this.btnProperty.color = "white";
-      this.btnProperty.backColor = "#fd5d5d";
+    openRemoveModal(value) {
+      this.removeId = value;
+    },
+    async deleteConfirm() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.delete(
+          `api/Product/${this.removeId}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.getProduct();
+          console.log(res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     Route(value, id) {
-      this.$router.push({ name: value, params: { id: id, cate: this.cateId } });
+      this.$router.push({ name: value, params: { id: id } });
       console.log(this.cateId);
+    },
+    submitFeatures() {
+      this.currentPage = 1;
+      this.getProduct();
+    },
+    resetFeatures() {
+      this.features = {};
+    },
+    pageChange(current) {
+      this.currentPage = current;
+      this.getProduct();
+      console.log(current);
     },
   },
   mounted() {
@@ -318,14 +407,13 @@ export default {
   margin-top: 20px;
   display: flex;
   justify-content: center;
-  transform: translateX(350px);
+  transform: translateX(400px);
   color: rgb(125, 122, 122);
   font-style: italic;
 }
 .table-responsive {
   margin: 20px;
   padding: 10px;
-  height: 400px;
 }
 thead th {
   padding: 10px;

@@ -234,10 +234,9 @@ export default {
   padding: 0 15px;
   margin: auto 30px;
   text-align: center;
-  font-weight: 600;
-  letter-spacing: 0.7px;
+  font-weight: 500;
   font-size: 18px;
-  color: white;
+  color: black;
 }
 .item.active {
   list-style-type: none;
@@ -245,6 +244,7 @@ export default {
   margin: auto 30px;
   text-align: center;
   font-weight: 500;
+  transition: all 0.7s;
   letter-spacing: 0.7px;
   font-size: 18px;
   color: black;
@@ -262,14 +262,16 @@ export default {
 }
 /* --- before login ---- */
 .bx-user-circle {
-  color: white;
+  color: black;
   transform: translateY(50%);
   cursor: pointer;
+  visibility: hidden;
 }
 .bx-user-circle.active {
   color: black;
   cursor: pointer;
   transform: translateY(50%);
+  visibility: visible;
 }
 /* --- after login ---- */
 
@@ -347,8 +349,9 @@ export default {
   position: absolute;
   right: 5px;
   bottom: 10px;
-  color: white;
+  color: black;
   cursor: pointer;
+  visibility: hidden;
 }
 .cart-icon .num-item-cart.active {
   position: absolute;
@@ -356,6 +359,7 @@ export default {
   bottom: 10px;
   color: black;
   cursor: pointer;
+  visibility: visible;
 }
 footer {
   display: flex;

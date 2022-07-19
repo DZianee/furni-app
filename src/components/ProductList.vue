@@ -46,90 +46,89 @@
         </div>
       </div>
     </div>
-    <div class="product-list container">
-      <div class="card product-item" @click="Route('productDetailsView')">
+    <div class="product-list container" v-if="cateId === 'all' || cateId == ''">
+      <div
+        class="card product-item"
+        v-for="product in productList"
+        :key="product.index"
+        @click="Route('productDetailsView', 'all', product._id)"
+      >
         <img
-          src="https://images.pexels.com/photos/7602905/pexels-photo-7602905.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
+          :src="`http://localhost:2371/${product.productImg}`"
           alt="product-img"
         />
         <div class="item-info">
           <div class="item-name">
-            <h6>Testing item nam info</h6>
+            <h6>{{ product.name }}</h6>
+          </div>
+          <div
+            class="item-status"
+            :style="[
+              status == product.status
+                ? {
+                    color: '#e040fb',
+                    fontWeight: '600',
+                    textShadow: ' 0 0 10px #ff8a80',
+                  }
+                : { color: 'red', fontWeight: '600' },
+            ]"
+          >
+            <p>{{ product.status }}</p>
           </div>
           <div class="item-price">
-            <p>250.000 VND</p>
+            <p>{{ product.price }} VND</p>
           </div>
         </div>
       </div>
-      <div class="card product-item">
+      <div
+        class="btn btn_load-more"
+        @click="loadMore"
+        v-if="displayLoadMoreBtn"
+      >
+        Load more
+      </div>
+    </div>
+    <!-- <div v-observe-visibility="visibilityChanged"></div> -->
+    <div class="product-list container" v-if="cateId != 'all'">
+      <div
+        class="card product-item"
+        v-for="product in cateProductList"
+        :key="product.index"
+        @click="Route('productDetailsView', product.category, product._id)"
+      >
         <img
-          src="https://images.pexels.com/photos/7602905/pexels-photo-7602905.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
+          :src="`http://localhost:2371/${product.productImg}`"
           alt="product-img"
         />
         <div class="item-info">
           <div class="item-name">
-            <h6>Testing item nam info gy gdygd gdhgd</h6>
+            <h6>{{ product.name }}</h6>
+          </div>
+          <div
+            class="item-status"
+            :style="[
+              status == product.status
+                ? {
+                    color: '#e040fb',
+                    fontWeight: '600',
+                    textShadow: ' 0 0 10px #ff8a80',
+                  }
+                : { color: 'red', fontWeight: '600' },
+            ]"
+          >
+            <p>{{ product.status }}</p>
           </div>
           <div class="item-price">
-            <p>250.000 VND</p>
+            <p>{{ product.price }} VND</p>
           </div>
         </div>
       </div>
-      <div class="card product-item">
-        <img
-          src="https://images.pexels.com/photos/7602905/pexels-photo-7602905.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
-          alt="product-img"
-        />
-        <div class="item-info">
-          <div class="item-name">
-            <h6>Testing item nam info gy gdygd gdhgd</h6>
-          </div>
-          <div class="item-price">
-            <p>250.000 VND</p>
-          </div>
-        </div>
-      </div>
-      <div class="card product-item">
-        <img
-          src="https://images.pexels.com/photos/7602905/pexels-photo-7602905.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
-          alt="product-img"
-        />
-        <div class="item-info">
-          <div class="item-name">
-            <h6>Testing item nam info gy gdygd gdhgd</h6>
-          </div>
-          <div class="item-price">
-            <p>250.000 VND</p>
-          </div>
-        </div>
-      </div>
-      <div class="card product-item">
-        <img
-          src="https://images.pexels.com/photos/7602905/pexels-photo-7602905.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
-          alt="product-img"
-        />
-        <div class="item-info">
-          <div class="item-name">
-            <h6>Testing item nam info gy gdygd gdhgd</h6>
-          </div>
-          <div class="item-price">
-            <p>250.000 VND</p>
-          </div>
-        </div>
-      </div>
-      <div class="card product-item">
-        <img
-          src="https://images.pexels.com/photos/7602905/pexels-photo-7602905.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
-          alt="product-img"
-        />
-        <div class="item-info">
-          <div class="item-name">
-            <h6>Testing item nam info gy gdygd gdhgd</h6>
-          </div>
-          <div class="item-price">
-            <p>250.000 VND</p>
-          </div>
-        </div>
+      <div
+        class="btn btn_load-more"
+        @click="loadMore"
+        v-if="displayLoadMoreBtn"
+      >
+        Load more
       </div>
     </div>
   </div>
@@ -138,14 +137,99 @@
 <script>
 export default {
   name: "ProductList",
+  data() {
+    return {
+      displayLoadMoreBtn: true,
+      productList: [],
+      tempProductList: [],
+      status: "IN STOCK",
+      currentPage: 1,
+      pageTotals: 0,
+      // page: 0,
+    };
+  },
   props: {
     cateId: String,
     cateProductList: Array,
   },
+  async created() {
+    try {
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/Product`,
+        {
+          params: {
+            page: this.currentPage,
+          },
+        },
+        this.$axios.defaults.headers["Authorization"]
+      );
+      this.productList = res.data.data;
+      this.tempProductList = this.productList;
+      this.pageTotals = res.data.pageTotals;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   methods: {
-    Route(value) {
-      this.$router.push({ name: value });
+    Route(value, cateId, id) {
+      this.$router.push({ name: value, params: { cateType: cateId, id: id } });
+      console.log(cateId);
     },
+    async getProduct() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Product`,
+          {
+            params: {
+              page: this.currentPage,
+            },
+          },
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.pageTotals = res.data.pageTotals;
+        this.productList = this.tempProductList.concat(res.data.data);
+        this.tempProductList = this.productList;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    loadMore() {
+      if (this.currentPage == this.pageTotals) {
+        return;
+      } else {
+        this.currentPage = this.currentPage + 1;
+        this.getProduct();
+      }
+    },
+  },
+  watch: {
+    currentPage() {
+      if (this.currentPage == this.pageTotals) {
+        this.displayLoadMoreBtn = false;
+      } else {
+        this.displayLoadMoreBtn = true;
+      }
+    },
+  },
+  // mounted() {
+  //   let observer = new IntersectionObserver(isElScrolledIntoView, {
+  //     root: null,
+  //     rootMargin: "0px",
+  //     threshold: 0.25,
+  //   });
+  //   const elements = document.querySelector("footer");
+
+  //   observer.observe(elements);
+  //   function isElScrolledIntoView(entries) {
+  //     if (entries[0].isIntersecting) {
+  //       console.warn("Intersecting with the viewport");
+  //     }
+  //   }
+  // },
+  mounted() {
+    console.log(this.cateId);
   },
 };
 </script>
@@ -181,7 +265,7 @@ export default {
 .product-list {
   margin-top: 40px;
   display: flex;
-  gap: 50px;
+  gap: 60px;
   flex-wrap: wrap;
   row-gap: 70px;
   justify-content: center;
@@ -199,8 +283,11 @@ export default {
 }
 .item-name h6 {
   line-height: 35px;
+  letter-spacing: 0.5px;
 }
 .item-price p {
-  color: rgb(126, 122, 122);
+  color: rgb(98, 95, 95);
+  float: right;
+  letter-spacing: 0.2px;
 }
 </style>

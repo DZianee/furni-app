@@ -2,7 +2,7 @@
   <div class="category-list-bar">
     <p id="testing">Back to top</p>
     <div class="category-title" id="toTop">
-      <div v-if="cateTitle == '' || cateTitle === 'All'">
+      <div v-if="cateTitle == '' || cateTitle === 'all'">
         <h1>Explore more than 100+ high quality furniture items</h1>
       </div>
       <div v-else>
@@ -11,7 +11,7 @@
     </div>
     <div class="list-categories">
       <ul>
-        <li @click="getCateTitle('All')">All</li>
+        <li @click="getCateTitle('all')">All</li>
         <li
           v-for="cate in categoryList"
           :key="cate.index"
@@ -33,6 +33,9 @@ export default {
       cateTitle: "",
     };
   },
+  props: {
+    test: String,
+  },
   async created() {
     try {
       this.$store.dispatch("accessToken");
@@ -40,7 +43,7 @@ export default {
         `api/Category/`,
         this.$axios.defaults.headers["Authorization"]
       );
-      this.categoryList = res.data.data;
+      this.categoryList = res.data.data.content;
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -49,12 +52,18 @@ export default {
   methods: {
     getCateTitleId(val, id) {
       this.cateTitle = val;
-      console.log(id);
+      this.$emit("cate-title-id", id);
       this.$router.push({ name: "furnitureView", params: { id: id } });
     },
     getCateTitle(val) {
       this.cateTitle = val;
+      this.$emit("cate-title-all", "all");
       this.$router.push({ name: "furnitureView", params: { id: "all" } });
+    },
+  },
+  watch: {
+    test() {
+      this.cateTitle = this.test;
     },
   },
   mounted() {

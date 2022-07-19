@@ -5,12 +5,13 @@
     <!-- <video src=""></video> -->
     <video autoplay loop>
       <source
-        src="https://player.vimeo.com/progressive_redirect/playback/665395712/rendition/720p?loc=external&oauth2_token_id=1027659655&signature=34a448e7345858b0bf09fb6654247161c7fe367ef61bad94332f8072d5b0cca7"
-        type="video/mp4"
+        src="https://cdn.videvo.net/videvo_files/video/premium/video0194/large_watermarked/Young%20woman%20sitting%20on%20sofa%20reading%20book%20and%20smiling%20at%20camera_preview.mp4"
       />
       Your browser doesn't support HTML5 video tag.
     </video>
-    <div></div>
+    <div class="hello-home">
+      <p>Make House becomes HOME</p>
+    </div>
     <HomeCounter />
     <HomeProductOverview />
     <HomeServices />
@@ -41,5 +42,40 @@ export default {
 <style scoped>
 video {
   width: 100%;
+}
+.hello-home {
+  position: absolute;
+  top: 39%;
+  left: 15%;
+  z-index: 1;
+  font-size: 80px;
+  font-weight: 500;
+  padding: 22px;
+  border-radius: 7px;
+  width: 70%;
+  height: 24%;
+  /* background: rgb(218, 218, 218); */
+  background: #d065ee;
+  opacity: 0.9;
+}
+.hello-home::after {
+  content: "";
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  background: rgb(218, 218, 218);
+  filter: blur(8px);
+}
+.hello-home p {
+  position: absolute;
+  left: 10%;
+  z-index: 1;
+  font-size: 55px;
+  font-weight: 500;
+  padding: 23px;
+  border: red;
 }
 </style>

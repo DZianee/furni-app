@@ -48,6 +48,7 @@ export default {
 }
 .title h3 {
   text-align: center;
+  font-size: 21px;
 }
 .product-img-container {
   display: grid;

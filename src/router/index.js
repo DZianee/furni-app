@@ -47,7 +47,7 @@ const routes = [
     component: ServicesView,
   },
   {
-    path: "/product-details-view",
+    path: "/product-details-view/:cateType/:id",
     name: "productDetailsView",
     component: ProductDetailsView,
   },

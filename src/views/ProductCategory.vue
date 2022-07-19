@@ -13,7 +13,6 @@
     </div>
     <CateProductOverview
       :cateDetails="cateDetails"
-      :subItemTotal="SubItemTotal"
       :totalProduct="totalProduct"
     />
     <hr />
@@ -44,7 +43,6 @@ export default {
       this.$store.dispatch("storeCateId", res.data.data.content._id);
       this.cateDetails = res.data.data.content;
       this.totalProduct = res.data.data.totalProduct;
-      this.subItemTotal = res.data.total;
       console.log(res);
     } catch (error) {
       console.log(error);

@@ -14,12 +14,16 @@ import InfoModal from "./components/Modal/ModalInfo.vue";
 import RemoveModal from "./components/Modal/ModalRemove.vue";
 import WarningModal from "./components/Modal/ModalWarning.vue";
 import ImgModal from "./components/Modal/ModalImg.vue";
+import CmtModal from "./components/Modal/ModalComment.vue";
 import Pagination from "./components/Pagination/PaginationBar.vue";
 import "@/assets/css/main.css";
+// import Vue from "vue";
+import VueObserveVisibility from "vue-observe-visibility";
 
 const app = createApp(App);
 app.config.globalProperties.$axios = axios;
 app.use(store);
+app.use(VueObserveVisibility);
 
 // axios.interceptors.response.use(
 //   function (response) {
@@ -69,5 +73,6 @@ app
   .component("remove-modal", RemoveModal)
   .component("warning-modal", WarningModal)
   .component("img-modal", ImgModal)
+  .component("comment-modal", CmtModal)
   .component("pagination-feature", Pagination)
   .mount("#app");

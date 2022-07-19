@@ -18,26 +18,26 @@
         <table class="table table-bordered details-info">
           <tbody>
             <tr>
-              <th scope="row">Width</th>
-              <td>Mark</td>
+              <th scope="row">Width (cm)</th>
+              <td>{{ technicalInfo.width }}</td>
             </tr>
             <tr>
-              <th scope="row">Depth</th>
-              <td>Jacob</td>
+              <th scope="row">Depth (cm)</th>
+              <td>{{ technicalInfo.depth }}</td>
             </tr>
             <tr>
-              <th scope="row">Heigh of sitting</th>
-              <td>Larry</td>
+              <th scope="row">Length of sitting (cm)</th>
+              <td>{{ technicalInfo.length }}</td>
             </tr>
             <tr>
-              <th scope="row">Heigh of sitting back</th>
-              <td>Larry</td>
+              <th scope="row">Heigh of sitting back (cm)</th>
+              <td>{{ technicalInfo.height }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <UserReview />
+    <UserReview :productId="productId" :reviewList="reviewList" />
   </div>
 </template>
 
@@ -46,6 +46,11 @@ import UserReview from "./UserReview.vue";
 export default {
   name: "TechnicalInfo",
   components: { UserReview },
+  props: {
+    technicalInfo: Object,
+    productId: String,
+    reviewList: Array,
+  },
 };
 </script>
 
@@ -57,6 +62,10 @@ export default {
 }
 .title h4 {
   padding: 10px 20px;
+  font-size: 21px;
+}
+th {
+  font-weight: 500;
 }
 .about-content p {
   line-height: 32px;

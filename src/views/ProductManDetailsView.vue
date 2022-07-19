@@ -20,7 +20,7 @@
           <div class="product-info">
             <h5>Information overview</h5>
             <div class="product_code-name">
-              <div class="product-code">
+              <div class="product-code" style="margin-bottom: 15px">
                 <label for="productCode">Product Code:</label>
                 <input
                   type="text"
@@ -52,6 +52,7 @@
                 <input
                   type="text"
                   class="form-control"
+                  required
                   v-model="productDetails.type"
                 />
               </div>
@@ -103,6 +104,7 @@
                 <label for="depth">D</label>
                 <input
                   type="number"
+                  required
                   class="form-control"
                   v-model="technicalInfo.depth"
                 />
@@ -111,6 +113,7 @@
                 <label for="length">L</label>
                 <input
                   type="number"
+                  required
                   class="form-control"
                   v-model="technicalInfo.length"
                 />
@@ -153,7 +156,12 @@
                   v-for="color in productDetails.color"
                   :key="color.index"
                 >
-                  <input type="checkbox" @click="changeColor(color)" checked />
+                  <input
+                    type="checkbox"
+                    @click="changeColor(color)"
+                    checked
+                    required
+                  />
                   <span
                     class="checkmark"
                     :style="{ backgroundColor: color }"
@@ -269,6 +277,8 @@ export default {
           updateProduct,
           this.$axios.defaults.headers["Authorization"]
         );
+        this.$store.dispatch("getCateId");
+        this.cateId = this.$store.state.cateId;
         this.$router.push({
           name: "productCategoryView",
           params: { id: this.cateId },
@@ -280,7 +290,6 @@ export default {
     Route(value) {
       this.$store.dispatch("getCateId");
       this.cateId = this.$store.state.cateId;
-      console.log(this.cateId);
       this.$router.push({ name: value, params: { id: this.cateId } });
     },
     handleInput(value, caseOption) {
@@ -343,14 +352,14 @@ export default {
   padding: 20px;
   /* border-radius: 30px;
   border: solid lightblue; */
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
-    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+  /* box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px; */
 }
 .details-color-img {
   margin-top: 50px;
 }
 label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: rgb(107, 104, 104);
   padding: 10px;

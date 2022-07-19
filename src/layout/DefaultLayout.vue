@@ -106,7 +106,7 @@ export default {
     this.$store.dispatch("getUser");
     const data = JSON.parse(this.$store.state.user);
     this.user = data;
-    console.log(this.user);
+    // console.log(this.user);
   },
   methods: {
     Route(value) {
@@ -114,28 +114,28 @@ export default {
     },
     loginVerified(val) {
       this.login = val;
-      console.log(this.login);
+      // console.log(this.login);
     },
     getUser() {
       this.$store.dispatch("getUser");
       const data = JSON.parse(this.$store.state.user);
       this.user = data;
-      console.log(this.user);
+      // console.log(this.user);
     },
     logout() {
       this.$store.dispatch("logout");
-      this.logouts = true;
+      // this.logouts = true;
       // this.$store.dispatch("getAuth");
       // this.login = this.$store.state.authenticated;
     },
   },
   watch: {
     login() {
-      console.log(this.login);
+      // console.log(this.login);
       this.getUser();
     },
     logouts() {
-      console.log(this.logouts);
+      // console.log(this.logouts);
       this.login = false;
       this.logouts = false;
       this.showLogout = false;

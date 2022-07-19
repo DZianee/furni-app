@@ -2,7 +2,7 @@
   <div class="product-details-view container">
     <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item" @click="Route('furnitureView')">
+        <li class="breadcrumb-item" @click="Route('furnitureView', cateId)">
           Furniture
         </li>
         <li class="breadcrumb-item active" aria-current="page">
@@ -13,12 +13,15 @@
     <ShoppingWaitingList :open="choice" @close="closeWaitingList" />
     <div class="product-img">
       <img
-        src="https://deba.vn/wp-content/uploads/2017/05/shop-15.jpg"
+        :src="`http://localhost:2371/${productDetails.productImg}`"
         alt="product-img"
       />
     </div>
     <div class="product-details-info">
-      <ProductDetailsInfo @open-waiting-list="openWaitingList" />
+      <ProductDetailsInfo
+        @open-waiting-list="openWaitingList"
+        :productDetails="productDetails"
+      />
       <div class="product-des">
         <h4>Descriptions</h4>
         <hr />
@@ -32,7 +35,11 @@
         </p>
       </div>
     </div>
-    <ProductDescriptionInfo />
+    <ProductDescriptionInfo
+      :technicalInfo="technicalInfo"
+      :productId="productId"
+      :reviewList="reviewList"
+    />
     <RelatedProduct />
   </div>
 </template>
@@ -48,6 +55,11 @@ export default {
     return {
       choice: false,
       open: false,
+      productId: this.$route.params.id,
+      productDetails: {},
+      technicalInfo: {},
+      cateId: "",
+      reviewList: [],
     };
   },
   components: {
@@ -57,15 +69,39 @@ export default {
     ShoppingWaitingList,
   },
   methods: {
+    async getProductDetails() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Product/productDetails/${this.productId}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        console.log(res);
+        this.productDetails = res.data.data;
+        console.log(this.productDetails);
+        this.cateId = this.productDetails.category;
+        this.reviewList = this.productDetails.review;
+        this.technicalInfo = this.productDetails.technicalInfo;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     openWaitingList(item) {
       this.choice = item;
     },
     closeWaitingList(item) {
       this.choice = item;
     },
-    Route(val) {
-      this.$router.push({ name: val });
+    Route(val, id) {
+      if (this.$route.params.cateType === "all") {
+        this.$router.push({ name: val, params: { id: "all" } });
+      } else {
+        this.$router.push({ name: val, params: { id: id } });
+      }
     },
+  },
+  mounted() {
+    this.getProductDetails();
   },
 };
 </script>
@@ -97,5 +133,8 @@ export default {
   letter-spacing: 0.7px;
   line-height: 32px;
   padding: 0 12px;
+}
+.product-des h4 {
+  font-size: 21px;
 }
 </style>

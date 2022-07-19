@@ -306,13 +306,13 @@
                 <option disabled value="">Please select status</option>
                 <option
                   value="Active"
-                  :selected="staffDetails.status == 'Active'"
+                  :selected="staffDetails.status === 'Active'"
                 >
                   Active
                 </option>
                 <option
                   value="Unactive"
-                  :selected="staffDetails.status == 'Unactive'"
+                  :selected="staffDetails.status === 'Unactive'"
                 >
                   Unactive
                 </option>
