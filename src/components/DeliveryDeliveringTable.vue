@@ -1,11 +1,53 @@
 <template>
   <div class="delivery-new-table">
+    <div class="order-features" style="cursor: pointer">
+      <div class="features-icon" @click="displayFeatures = !displayFeatures">
+        <span style="font-weight: 400; font-size: 15px; padding: 10px">
+          <i class="bx bx-sm bx-fw bx-menu-alt-left"></i>Features
+        </span>
+      </div>
+      <div class="features" v-if="displayFeatures">
+        <div class="features-bar">
+          <div class="search-bar">
+            <input
+              type="search"
+              class="form-control"
+              v-model="features.search"
+              placeholder="Search here..."
+            />
+          </div>
+          <div class="filter-sort">
+            <div class="filter-status">
+              <label for="filterStatus">Sort:</label>
+              <select
+                name="sort"
+                class="form-control"
+                v-model="features.kindOf"
+              >
+                <option value="1">Ascending</option>
+                <option value="-1">Descending</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="btn-features">
+          <div class="btn btn-reset-features" @click="resetFeatures">Reset</div>
+          <div class="btn btn-submit-features" @click="submitFeatures">Go</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="features">
+      <div class="search">
+        <input type="search" v-model="features.search" />
+      </div>
+    </div>
     <div class="sort-feature">
       <select name="sort" v-model="kindOf">
         <option value="1">Ascending</option>
         <option value="-1">Descending</option>
       </select>
-    </div>
+    </div> -->
     <div class="table-responsive">
       <table class="table">
         <thead>
@@ -143,14 +185,14 @@
             >
               {{ order.status }}
             </td>
-            <td class="item_remove-bin">
+            <!-- <td class="item_remove-bin">
               <i
                 class="bx bx-trash"
                 data-bs-target="#removeModal"
                 data-bs-toggle="modal"
                 @click="openRemoveModal(order._id)"
               ></i>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>
@@ -173,11 +215,13 @@ export default {
   data() {
     return {
       removeId: "",
+      displayFeatures: false,
       showCheckProcess: false,
       choice: "Active",
-      kindOf: 1,
       features: {
         sortName: "dateCreate",
+        search: "",
+        kindOf: 1,
       },
       updateOrder: {
         status: "",
@@ -195,7 +239,7 @@ export default {
         city: "",
         district: "",
       },
-      totalNewOrders: 0,
+      totalDeliveryOrders: 0,
     };
   },
   components: {
@@ -221,22 +265,22 @@ export default {
         console.log(error);
       }
     },
-    async getNewOrders() {
+    async getDeliveryOrders() {
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/Order/newOrders`,
+          `api/Order/deliveryOrders`,
           {
             params: {
-              kindOf: this.kindOf,
+              kindOf: this.features.kindOf,
               sortName: this.features.sortName,
+              search: this.features.search,
             },
           },
           this.$axios.defaults.headers["Authorization"]
         );
         this.orderList = res.data.data;
-        this.totalNewOrders = res.data.totalOrders;
-        this.$emit("count-new-order", this.totalNewOrders);
+        this.totalDeliveryOrders = res.data.totalOrders;
         this.orderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
         console.log(error);
@@ -268,7 +312,8 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         if (res.status == 200) {
-          this.getNewOrders();
+          this.getDeliveryOrders();
+          this.showCheckProcess = false;
         }
       } catch (error) {
         console.log(error);
@@ -284,7 +329,6 @@ export default {
         );
         this.cartDetails = res.data.data.cart;
         this.orderDetails = res.data.data;
-        console.log(this.orderDetails);
       } catch (error) {
         console.log(error);
       }
@@ -300,7 +344,6 @@ export default {
         this.address.city = res.data.data.address.city;
         this.address.street = res.data.data.address.street;
         this.address.district = res.data.data.address.district;
-        console.log(this.userInfo);
       } catch (error) {
         console.log(error);
       }
@@ -318,35 +361,41 @@ export default {
     closeCheck() {
       this.showCheckProcess = false;
     },
-    openRemoveModal(id) {
-      this.removeId = id;
+    // openRemoveModal(id) {
+    //   this.removeId = id;
+    // },
+    // async deleteConfirm() {
+    //   try {
+    //     this.$store.dispatch("accessToken");
+    //     const res = await this.$axios.delete(
+    //       `api/Order/${this.removeId}`,
+    //       this.$axios.defaults.headers["Authorization"]
+    //     );
+    //     if (res.status == 200) {
+    //       this.getDeliveryOrders();
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    submitFeatures() {
+      this.getDeliveryOrders();
     },
-    async deleteConfirm() {
-      try {
-        this.$store.dispatch("accessToken");
-        const res = await this.$axios.delete(
-          `api/Order/${this.removeId}`,
-          this.$axios.defaults.headers["Authorization"]
-        );
-        if (res.status == 200) {
-          this.getNewOrders();
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    resetFeatures() {
+      this.features = {};
     },
   },
   watch: {
-    totalNewOrders() {
-      console.log(this.totalNewOrders);
-      this.$emit("total-new-orders", this.totalNewOrders, "new");
+    totalDeliveryOrders() {
+      console.log(this.totalDeliveryOrders);
+      this.$emit("total-delivery-orders", this.totalDeliveryOrders);
     },
-    kindOf() {
-      this.getNewOrders();
-    },
+    // kindOf() {
+    //   this.getDeliveryOrders();
+    // },
   },
   mounted() {
-    this.getNewOrders();
+    this.getDeliveryOrders();
   },
 };
 </script>
@@ -361,7 +410,7 @@ export default {
   font-style: italic;
 }
 /* --- features --- */
-.sort-feature {
+/* .sort-feature {
   display: flex;
   justify-content: flex-end;
   margin: 0 30px 20px 0;
@@ -369,6 +418,65 @@ export default {
 .sort-feature select {
   padding: 7px 9px;
   width: 12%;
+} */
+
+/* --- feature --- */
+.order-features {
+  padding: 15px 0;
+}
+.features {
+  margin-top: 10px;
+  border-top: solid 1px rgb(228, 228, 228);
+  padding: 30px 10px;
+}
+.features-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* background: #f9f5f4; */
+}
+.search-bar {
+  width: 26%;
+}
+.search-bar input {
+  background: #faf8f8;
+}
+.filter-sort {
+  display: flex;
+  gap: 25px;
+  width: 50%;
+}
+.filter-sort select {
+  font-weight: 500;
+  font-size: 15px;
+  background: #faf8f8;
+  width: 200px;
+}
+.features-bar label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(105, 102, 102);
+}
+
+.btn-features {
+  margin-top: 3%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.btn-submit-features {
+  color: white;
+  background: #aa40e3;
+  width: 10%;
+  font-weight: 500;
+}
+.btn-submit-features:hover {
+  color: white;
+}
+.btn-reset-features {
+  background: rgb(218, 218, 218);
+  width: 10%;
+  font-weight: 500;
 }
 /* --- table --- */
 table {
@@ -429,8 +537,8 @@ span select {
   position: relative;
 }
 .process-order .process-content {
-  color: #f4511e;
-  text-shadow: 0 0 7px #ff7043;
+  color: #00ad48;
+  text-shadow: 0 0 7px #64dd17;
   font-weight: 500;
   cursor: pointer;
 }
@@ -447,7 +555,7 @@ span select {
   border-radius: 4px;
   transition: all 0.8s;
 }
-i {
+.item_remove-bin i {
   position: absolute;
   right: 10px;
   cursor: pointer;

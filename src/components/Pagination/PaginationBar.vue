@@ -40,6 +40,7 @@ export default {
   },
   watch: {
     currentPage() {
+      console.log(this.totalPages);
       if (this.currentPage > 1) {
         this.displayPreviousBtn = true;
       } else {
@@ -51,6 +52,13 @@ export default {
         this.displayNextBtn = true;
       }
     },
+  },
+  mounted() {
+    if (this.currentPage == this.totalPages) {
+      this.displayNextBtn = false;
+    } else {
+      this.displayNextBtn = true;
+    }
   },
 };
 </script>

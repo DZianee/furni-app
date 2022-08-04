@@ -14,23 +14,22 @@
           <div class="modal-body">
             <div class="customer-email">
               <label for="cusEmail">Email:</label>
-              <input type="text" value="hcm@hcm,con.cm" readonly />
+              <!-- <input type="text" :value="userInfo.email" readonly /> -->
+              <p>{{ userInfo.email }}</p>
             </div>
             <div class="customer-fullname">
               <label for="cusFullname">Fullname:</label>
-              <input type="text" value="I dont knoe alos" readonly />
+              <p>{{ userInfo.firstname }} {{ userInfo.lastname }}</p>
             </div>
             <div class="customer-phone">
               <label for="cusPhone">Phone (Mobile):</label>
-              <input type="text" value="48735754" readonly />
+              <p>{{ userInfo.phone }}</p>
             </div>
             <div class="customer-address">
               <label for="cusAddress">Address:</label>
-              <input
-                type="text"
-                value="232 dbhg dfff. fhddfhuff, hfgfyg"
-                readonly
-              />
+              <p>
+                {{ address.street }}, {{ address.district }}, {{ address.city }}
+              </p>
             </div>
           </div>
           <div class="btn btn-close-modal" data-bs-dismiss="modal">Close</div>
@@ -41,7 +40,21 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "CusInfoModal",
+  props: {
+    userrId: String,
+    userInfo: Object,
+    address: Object,
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    async getUserDetails() {},
+  },
+  mounted() {},
+};
 </script>
 
 <style scoped>
@@ -66,12 +79,12 @@ label {
   color: rgb(107, 104, 104);
   letter-spacing: 0.3px;
 }
-input {
-  border: none;
+p {
   font-size: 15px;
 }
 .btn-close-modal {
   background-color: #c673f3;
+  border-radius: 7px;
   color: white;
   width: 90%;
   margin: 25px auto;

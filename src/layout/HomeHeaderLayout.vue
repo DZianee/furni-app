@@ -26,7 +26,10 @@
               <p @click="logout">Log-out</p>
             </div>
             <span class="text-welcome">
-              Hello <span> {{ user.email }}</span>
+              Hello
+              <span @click="RouteId('profileView', user.id, 'profile')">
+                {{ user.email }}</span
+              >
             </span>
           </div>
           <div class="icon-user" v-else>
@@ -42,7 +45,7 @@
         <div class="cart-icon">
           <i class="bx bx-cart bx-md"></i>
           <div class="num-item-cart" @click="Route('shoppingListView')">
-            (12)
+            ({{ totalProductsInCart }})
           </div>
         </div>
       </div>
@@ -101,42 +104,49 @@ export default {
   created() {
     this.$store.dispatch("getAuth");
     this.login = this.$store.state.authenticated;
-    this.$store.dispatch("getUser");
-    const data = JSON.parse(this.$store.state.user);
-    this.user = data;
-    console.log(this.user);
+  },
+  computed: {
+    totalProductsInCart() {
+      this.$store.dispatch("getShoppingList");
+      let result = JSON.parse(this.$store.state.shoppingList);
+      if (result == null) {
+        result = 0;
+      } else {
+        result = result.length;
+      }
+      return result;
+    },
   },
   methods: {
     Route(value) {
       this.$router.push({ name: value });
+    },
+    RouteId(value, id, name) {
+      this.$router.push({ name: value, params: { id: id, name: name } });
     },
     RouteFurni(value) {
       this.$router.push({ name: value, params: { id: "all" } });
     },
     loginVerified(val) {
       this.login = val;
-      console.log(this.login);
     },
     getUser() {
       this.$store.dispatch("getUser");
       const data = JSON.parse(this.$store.state.user);
       this.user = data;
-      console.log(this.user);
     },
     logout() {
       this.$store.dispatch("logout");
       this.logouts = true;
-      // this.$store.dispatch("getAuth");
-      // this.login = this.$store.state.authenticated;
+      this.$router.go();
     },
   },
   watch: {
     login() {
-      console.log(this.login);
       this.getUser();
+      // this.$router.go();
     },
     logouts() {
-      console.log(this.logouts);
       this.login = false;
       this.logouts = false;
       this.showLogout = false;
@@ -148,9 +158,6 @@ export default {
     const y = document.querySelectorAll(".item");
     const z = document.querySelector(".cart-icon .num-item-cart");
     const avatar = document.querySelector(".header-user-image");
-    // const userWelcome = document.querySelector(".text-welcome ");
-    console.log(avatar);
-    // console.log(userWelcome);
     window.onscroll = () => {
       let top = window.scrollY;
       if (top > 120) {
@@ -177,6 +184,7 @@ export default {
         y.forEach((item) => item.classList.remove("active"));
       }
     };
+    this.getUser();
   },
 };
 </script>

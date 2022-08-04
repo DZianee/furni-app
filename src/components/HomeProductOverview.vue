@@ -6,23 +6,25 @@
         Over 100+ modern and fresh new furnitures are ready to show up and
         experience
       </div>
-      <div class="view-btn" @click="Route('furnitureView')">View more</div>
+      <div class="view-btn" @click="Route('furnitureView', 'all')">
+        View more
+      </div>
     </div>
     <div class="product-summary">
-      <div class="card chair-armchair">
+      <div class="card chair-armchair" @click="Route('furnitureView', 'all')">
         <img
           src="https://images.pexels.com/photos/6707630/pexels-photo-6707630.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
           alt="armchair/chair"
         />
         <div class="img-text">Chair/Armchair</div>
       </div>
-      <div class="card shelves">
+      <div class="card shelves" @click="Route('furnitureView', 'all')">
         <img
           src="https://images.pexels.com/photos/8989419/pexels-photo-8989419.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
         />
         <div class="img-text">Shelves</div>
       </div>
-      <div class="card other-stuffs">
+      <div class="card other-stuffs" @click="Route('furnitureView', 'all')">
         <img
           src="https://images.pexels.com/photos/7393989/pexels-photo-7393989.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
           alt="other-stuffs"
@@ -37,8 +39,8 @@
 export default {
   name: "HomeProductOverview",
   methods: {
-    Route(val) {
-      this.$router.push({ name: val });
+    Route(val, id) {
+      this.$router.push({ name: val, params: { id: id } });
     },
   },
 };

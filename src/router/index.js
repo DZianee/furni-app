@@ -13,6 +13,15 @@ import ProductCategoryView from "../views/ProductCategory.vue";
 import ProductManDetailsView from "../views/ProductManDetailsView.vue";
 import FinanceView from "../views/FinanceView.vue";
 import RegisterView from "../views/RegisterView.vue";
+import InputProfileView from "../views/InputProfileView.vue";
+import ProfileView from "../views/ProfileView.vue";
+/* children components */
+import ActivityAllOrders from "../components/OrderAll.vue";
+import ActivityNewOrders from "../components/OrderNew.vue";
+import ActivityCheckedOrders from "../components/OrderChecked.vue";
+import ActivityCompletedOrders from "../components/OrderCompleted.vue";
+import ActivityDeliveryOrders from "../components/OrderDelivery.vue";
+import ActivityCancelledOrders from "../components/OrderCancelled.vue";
 
 const routes = [
   {
@@ -37,6 +46,26 @@ const routes = [
     meta: { layout: "empty" },
   },
   {
+    path: "/profile-view/:id/:name",
+    name: "profileView",
+    component: ProfileView,
+    meta: { layout: "without-footer" },
+    children: [
+      { path: "allorders", component: ActivityAllOrders },
+      { path: "neworders", component: ActivityNewOrders },
+      { path: "receivedorders", component: ActivityCheckedOrders },
+      { path: "deliveryorders", component: ActivityDeliveryOrders },
+      { path: "completedorders", component: ActivityCompletedOrders },
+      { path: "cancelledorders", component: ActivityCancelledOrders },
+    ],
+  },
+  {
+    path: "/profile-input-view/:id",
+    name: "inputProfileView",
+    component: InputProfileView,
+    meta: { layout: "empty" },
+  },
+  {
     path: "/furniture-view/:id",
     name: "furnitureView",
     component: FurnitureView,
@@ -55,6 +84,7 @@ const routes = [
     path: "/shopping-list-view",
     name: "shoppingListView",
     component: ShoppingListView,
+    meta: { layout: "without-footer" },
   },
   {
     path: "/success-order-view",
@@ -80,7 +110,7 @@ const routes = [
     meta: { layout: "sidebar-manage" },
   },
   {
-    path: "/delivery-view",
+    path: "/delivery-view/:id",
     name: "deliveryView",
     component: DeliveryView,
     meta: { layout: "sidebar-manage" },

@@ -39,6 +39,7 @@
       :technicalInfo="technicalInfo"
       :productId="productId"
       :reviewList="reviewList"
+      :totalReviews="totalReviews"
     />
     <RelatedProduct />
   </div>
@@ -54,12 +55,13 @@ export default {
   data() {
     return {
       choice: false,
-      open: false,
       productId: this.$route.params.id,
       productDetails: {},
       technicalInfo: {},
       cateId: "",
       reviewList: [],
+      totalLikes: 0,
+      totalReviews: 0,
     };
   },
   components: {
@@ -73,14 +75,12 @@ export default {
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/Product/productDetails/${this.productId}`,
-          this.$axios.defaults.headers["Authorization"]
+          `api/Product/productDetails/${this.productId}`
         );
-        console.log(res);
         this.productDetails = res.data.data;
-        console.log(this.productDetails);
         this.cateId = this.productDetails.category;
         this.reviewList = this.productDetails.review;
+        this.totalReviews = this.productDetails.countReviews;
         this.technicalInfo = this.productDetails.technicalInfo;
       } catch (error) {
         console.log(error);
@@ -100,6 +100,7 @@ export default {
       }
     },
   },
+
   mounted() {
     this.getProductDetails();
   },

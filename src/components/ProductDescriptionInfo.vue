@@ -37,7 +37,11 @@
         </table>
       </div>
     </div>
-    <UserReview :productId="productId" :reviewList="reviewList" />
+    <UserReview
+      :productId="productId"
+      :reviewList="reviewList"
+      :countReviews="totalReviews"
+    />
   </div>
 </template>
 
@@ -50,6 +54,7 @@ export default {
     technicalInfo: Object,
     productId: String,
     reviewList: Array,
+    totalReviews: Number,
   },
 };
 </script>

@@ -3,13 +3,13 @@
     <div class="card new-orders">
       <div class="name-counter">
         <h6>New orders</h6>
-        <p>22/22/2022</p>
+        <p>{{ dateNow }}</p>
       </div>
       <p class="counter">
         <vue3-autocounter
           ref="counter"
           :startAmount="0"
-          :endAmount="88"
+          :endAmount="countNew"
           prefix=""
           suffix=""
           separator=""
@@ -38,13 +38,13 @@
     <div class="card month-orders">
       <div class="name-counter">
         <h6>This month orders</h6>
-        <p>12/2022</p>
+        <p>{{ monthNow }}</p>
       </div>
       <p class="counter">
         <vue3-autocounter
           ref="counter"
           :startAmount="0"
-          :endAmount="428"
+          :endAmount="countOrdersInMonth()"
           prefix=""
           suffix=""
           separator=""
@@ -63,6 +63,84 @@ export default {
   name: "DeliveryCounter",
   components: {
     "vue3-autocounter": Vue3autocounter,
+  },
+  props: {
+    counterNewOrders: Number,
+  },
+  data() {
+    return {
+      countNew: 0,
+      totalAllOrders: 0,
+      orderList: [],
+      orderMonthList: [],
+    };
+  },
+  computed: {
+    dateNow() {
+      const currDate = new Date(Date.now());
+      var year = currDate.getFullYear();
+      var month = ("0" + (currDate.getMonth() + 1)).slice(-2);
+      var day = ("0" + currDate.getDate()).slice(-2);
+      return day + "/" + month + "/" + year;
+    },
+    monthNow() {
+      const currMonth = new Date(Date.now());
+      var year = currMonth.getFullYear();
+      var month = ("0" + (currMonth.getMonth() + 1)).slice(-2);
+      return month + "/" + year;
+    },
+  },
+  methods: {
+    async getNewOrders() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order/newOrders`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.countNew = res.data.totalOrders;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    convertDateTime(value) {
+      const dateTime = new Date(value.dateCreate);
+      let convertedResult = dateTime.getMonth() + 1;
+      value.dateCreate = convertedResult;
+    },
+    countOrdersInMonth() {
+      let result;
+      const dateNow = new Date(Date.now());
+      const currMonth = dateNow.getMonth() + 1;
+      const thisMonth = this.orderList.filter(
+        (item) => item.dateCreate == currMonth
+      );
+      result = thisMonth.length;
+      return result;
+    },
+    async getAllOrders() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.countAllOrders = res.data.totalOrders;
+        this.orderList = res.data.data;
+        this.orderList.forEach((item) => this.convertDateTime(item));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    counterNewOrders() {
+      this.countNew = this.counterNewOrders;
+    },
+  },
+  mounted() {
+    this.getNewOrders();
+    this.getAllOrders();
   },
 };
 </script>

@@ -221,6 +221,7 @@ export default {
       }
     },
     convertDateTime(value) {
+      console.log(value.createdAt);
       const result = new Date(value.createdAt);
       var year = result.getFullYear();
       var month = ("0" + (result.getMonth() + 1)).slice(-2);

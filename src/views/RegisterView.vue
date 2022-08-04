@@ -81,7 +81,10 @@ export default {
         } else {
           const res = await this.$axios.post(`api/User/register`, this.user);
           if (res.status == 200) {
-            this.$router.push({ name: "home" });
+            this.$router.push({
+              name: "inputProfileView",
+              params: { id: res.data.data._id },
+            });
           }
           console.log(res);
         }

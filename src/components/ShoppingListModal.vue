@@ -4,80 +4,64 @@
       class="modal fade shoplist-modal"
       id="shoplistModal"
       tabindex="-1"
+      data-bs-backdrop="static"
       aria-labelledby="shoplistModal"
     >
-      <div
-        class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
-      >
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-          <div class="modal-header">
+          <!-- <div class="modal-header">
             <h5>Shopping List</h5>
-          </div>
+          </div> -->
           <div class="modal-body">
+            <h5>Shopping List</h5>
+
             <div class="order-info">
-              <div class="order-id">
-                <label for="orderId">Order ID:</label>
-                <input type="text" readonly value="3452524" />
-              </div>
               <div class="order-date">
                 <label for="orderDate">Date created:</label>
-                <input type="text" readonly value="21/12/2021" />
+                <input type="text" readonly :value="dateCreated" />
+              </div>
+              <div class="order-id">
+                <label for="orderId">Order ID:</label>
+                <input type="text" readonly :value="orderDetails.orderId" />
               </div>
             </div>
             <p class="shop-title">List items</p>
             <div class="table-responsive">
               <table class="table">
-                <tr>
+                <tr v-for="item in cartDetails" :key="item.index">
                   <td>
                     <img
-                      src="https://www.ikea.com/qa/en/images/products/aepplaryd-2-seat-sofa-lejde-light-grey__0992863_pe820294_s5.jpg?f=xl"
+                      :src="`http://localhost:2371/${item.productImg}`"
                       alt="item-img"
                     />
                   </td>
                   <td class="item-name">
-                    <h6>Rosa testing testing testing only dfdf</h6>
-                    <div>
-                      <i
-                        class="bx bx-square"
-                        style="color: red; background: red"
-                      ></i>
+                    <h6>{{ item.name }}</h6>
+                    <div class="item-color">
+                      <div class="color-check">
+                        <div>
+                          <label class="color">
+                            <input type="radio" name="productColor" disabled />
+                            <span
+                              class="checkmark"
+                              :style="{ backgroundColor: item.color }"
+                            ></span>
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </td>
-                  <td class="item-quantity">x 4</td>
-                  <td class="item-price">123.234.542 VND</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img
-                      src="https://www.ikea.com/qa/en/images/products/aepplaryd-2-seat-sofa-lejde-light-grey__0992863_pe820294_s5.jpg?f=xl"
-                      alt="item-img"
-                    />
+                  <td class="item-quantity">x {{ item.quantity }}</td>
+                  <td class="item-price">
+                    {{ totalPerProduct(item.quantity, item.amount) }} VND
                   </td>
-                  <td class="item-name">
-                    <h6>Rosa testing testing testing only dfdf</h6>
-                  </td>
-                  <td class="item-quantity">x 4</td>
-                  <td class="item-price">123.234.542 VND</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img
-                      src="https://www.ikea.com/qa/en/images/products/aepplaryd-2-seat-sofa-lejde-light-grey__0992863_pe820294_s5.jpg?f=xl"
-                      alt="item-img"
-                    />
-                  </td>
-                  <td class="item-name">
-                    <h6>Rosa testing testing testing only dfdf</h6>
-                  </td>
-                  <td class="item-quantity">x 4</td>
-                  <td class="item-price">123.234.542 VND</td>
                 </tr>
               </table>
             </div>
             <hr />
             <div class="table-responsive ship">
               <table class="table shipping-total">
-                <tr class="shipping-fee">
+                <!-- <tr class="shipping-fee">
                   <td class="shipping-fee-name">
                     <p>Shipping fee</p>
                   </td>
@@ -85,17 +69,27 @@
                   <td class="fee">
                     <p style="text-align: center">2343 VND</p>
                   </td>
-                </tr>
+                </tr> -->
                 <tr class="total-order-bill">
                   <td class="total-order-name">
                     <p>Total's bill</p>
                   </td>
                   <td></td>
                   <td class="total-bill">
-                    <p style="text-align: center">2343 VND</p>
+                    <p style="text-align: center; font-weight: 500">
+                      {{ orderDetails.totalBill }} VND (<span style="color: red"
+                        >*</span
+                      >)
+                    </p>
                   </td>
                 </tr>
               </table>
+            </div>
+            <div class="note" style="padding: 7px 35px">
+              <p style="color: red; font-size: 14px">
+                * Note: This has already included the shipping fee 20.000 VND in
+                bill.
+              </p>
             </div>
           </div>
           <div class="btn btn-close-modal" data-bs-dismiss="modal">Close</div>
@@ -106,71 +100,98 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "shoppingListModal",
+  props: {
+    cartDetails: Array,
+    orderDetails: Object,
+  },
+  computed: {
+    dateCreated() {
+      const dateTime = new Date(this.orderDetails.dateCreate);
+      var year = dateTime.getFullYear();
+      var month = ("0" + (dateTime.getMonth() + 1)).slice(-2);
+      var day = ("0" + dateTime.getDate()).slice(-2);
+      return day + "-" + month + "-" + year;
+    },
+  },
+  methods: {
+    totalPerProduct(quantity, value) {
+      let count = 0;
+      count = quantity * value;
+      return count;
+    },
+  },
+};
 </script>
 
 <style scoped>
 /* --- modal --- */
-.modal-header {
+/* .modal-header {
   display: flex;
   justify-content: center;
-}
+} */
 .modal-body {
   margin-top: 10px;
+}
+.modal-body h5 {
+  color: #9c13e5;
 }
 .shop-title {
   font-weight: 500;
   font-size: 18px;
   padding: 10px;
   margin-top: 10px;
+  /* color: #9612dd; */
 }
 /* --- table --- */
 .table-responsive {
   height: 390px;
   border-top: 1px solid lightgrey;
   padding: 0 25px;
+  overflow-y: auto;
 }
 .order-info {
   display: flex;
-  gap: 30px;
-  justify-content: center;
+  flex-flow: column;
+  align-items: flex-end;
+  padding-right: 20px;
 }
 .order-id,
 .order-date {
-  padding: 10px;
-  padding-left: 60px;
-  display: grid;
-  /* gap: 20px; */
-  grid-template-columns: 1fr 1fr;
+  padding: 10px 0;
+  display: flex;
+  gap: 20px;
 }
 
 label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: rgb(107, 104, 104);
   letter-spacing: 0.3px;
 }
 input {
   border: none;
-  font-size: 15px;
+  font-size: 14px;
 }
-.item-name,
-.item-quantity,
-.item-price {
-  transform: translateY(30%);
+.item-name {
+  width: 40%;
+  font-size: 14px;
+}
+.item-name h6 {
+  line-height: 32px;
 }
 .item-quantity {
-  text-align: center;
+  padding: 0 12px;
 }
 
 .table img {
-  width: 120px;
-  /* transform: translateX(35%); */
+  width: 150px;
 }
-.cart_stable-price-title,
+/* .cart_stable-price-title,
 .shopping-cart_stable-price {
   padding: 20px;
-}
+} */
 /* --- shipping table --- */
 .table-responsive.ship {
   padding: 0 25px;
@@ -192,11 +213,80 @@ input {
   background-color: #c673f3;
   color: white;
   width: 90%;
+  padding: 7px 0;
+  border-radius: 7px;
   margin: 25px auto;
   font-weight: 500;
+  font-size: 18px;
 }
 .btn-close-modal:hover {
   background-color: #bb53f3;
   color: white;
+}
+
+/* --- Custom checkbox --- */
+.item-color {
+  width: 20%;
+  margin-top: -7%;
+}
+.color-check {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.color {
+  position: relative;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+/* Hide the browser's default checkbox */
+.color input {
+  visibility: hidden;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 7px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  border-radius: 30px;
+  /* border: solid 1px grey; */
+}
+
+/* On mouse-over, add a grey background color */
+.color:hover input ~ .checkmark {
+  background-color: rgb(197, 197, 197);
+}
+
+/* When the checkbox is checked, add a blue background */
+/* .color input:checked ~ .checkmark {
+  background-color: #2196f3;
+} */
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.color input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.color .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 </style>

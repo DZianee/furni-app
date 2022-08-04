@@ -143,14 +143,14 @@
             >
               {{ order.status }}
             </td>
-            <td class="item_remove-bin">
+            <!-- <td class="item_remove-bin">
               <i
                 class="bx bx-trash"
                 data-bs-target="#removeModal"
                 data-bs-toggle="modal"
                 @click="openRemoveModal(order._id)"
               ></i>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>
@@ -195,7 +195,7 @@ export default {
         city: "",
         district: "",
       },
-      totalNewOrders: 0,
+      totalCheckedOrders: 0,
     };
   },
   components: {
@@ -221,11 +221,11 @@ export default {
         console.log(error);
       }
     },
-    async getNewOrders() {
+    async getCheckedOrders() {
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/Order/newOrders`,
+          `api/Order/checkedOrders`,
           {
             params: {
               kindOf: this.kindOf,
@@ -235,8 +235,7 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.orderList = res.data.data;
-        this.totalNewOrders = res.data.totalOrders;
-        this.$emit("count-new-order", this.totalNewOrders);
+        this.totalCheckedOrders = res.data.totalOrders;
         this.orderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
         console.log(error);
@@ -268,7 +267,8 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         if (res.status == 200) {
-          this.getNewOrders();
+          this.getCheckedOrders();
+          this.showCheckProcess = false;
         }
       } catch (error) {
         console.log(error);
@@ -329,7 +329,7 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         if (res.status == 200) {
-          this.getNewOrders();
+          this.getCheckedOrders();
         }
       } catch (error) {
         console.log(error);
@@ -337,16 +337,16 @@ export default {
     },
   },
   watch: {
-    totalNewOrders() {
-      console.log(this.totalNewOrders);
-      this.$emit("total-new-orders", this.totalNewOrders, "new");
+    totalCheckedOrders() {
+      console.log(this.totalCheckedOrders);
+      this.$emit("total-checked-orders", this.totalCheckedOrders);
     },
     kindOf() {
-      this.getNewOrders();
+      this.getCheckedOrders();
     },
   },
   mounted() {
-    this.getNewOrders();
+    this.getCheckedOrders();
   },
 };
 </script>
@@ -429,8 +429,8 @@ span select {
   position: relative;
 }
 .process-order .process-content {
-  color: #f4511e;
-  text-shadow: 0 0 7px #ff7043;
+  color: #ff4081;
+  text-shadow: 0 0 7px #ef68fc;
   font-weight: 500;
   cursor: pointer;
 }

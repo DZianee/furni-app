@@ -1,36 +1,77 @@
 <template>
   <div class="delivery-all-table">
-    <div class="features-bar">
-      <div class="search-bar">
-        <input
-          type="search"
-          class="form-control"
-          placeholder="Search here..."
-        />
+    <div class="order-features" style="cursor: pointer">
+      <div class="features-icon" @click="displayFeatures = !displayFeatures">
+        <span style="font-weight: 400; font-size: 15px; padding: 10px">
+          <i class="bx bx-sm bx-fw bx-menu-alt-left"></i>Features
+        </span>
       </div>
-      <div class="filter-sort">
-        <div class="filter-status">
-          <label for="filterStatus">Status:</label>
-          <select class="form-control">
-            <option value="active">Active</option>
-            <option value="unactive">Unactive</option>
-          </select>
+      <div class="features" v-if="displayFeatures">
+        <div class="features-bar">
+          <div class="search-bar">
+            <input
+              type="search"
+              class="form-control"
+              v-model="features.search"
+              placeholder="Search here..."
+            />
+          </div>
+          <div class="filter-sort">
+            <div class="filter-status">
+              <label for="filterStatus">Sort:</label>
+              <select
+                name="sort"
+                class="form-control"
+                v-model="features.kindOf"
+              >
+                <option value="1">Ascending</option>
+                <option value="-1">Descending</option>
+              </select>
+            </div>
+            <div class="filter-status">
+              <label for="filterStatus">Status:</label>
+              <select
+                class="form-control"
+                name="status"
+                v-model="features.status"
+              >
+                <option value="" disabled>Select status</option>
+                <option value="Active">Active</option>
+                <option value="Unactive">Unactive</option>
+              </select>
+            </div>
+            <div class="filter-process">
+              <label for="filterProcess">Process:</label>
+              <select
+                class="form-control"
+                name="process"
+                v-model="features.process"
+              >
+                <option value="" disabled>Select process</option>
+                <option value="New">New</option>
+                <option value="Checked">Checked</option>
+                <option value="Delivering">Delivering</option>
+                <option value="Complete">Closed</option>
+                <option value="Cancel">Cancelled</option>
+              </select>
+            </div>
+            <!-- <div class="filter-payment">
+              <label for="filterPayment">Payment:</label>
+              <select
+                class="form-control"
+                name="payment"
+                v-model="features.payment"
+              >
+                <option value="" disabled>Select payment method</option>
+                <option value="Cash">Cash</option>
+                <option value="MOMO">MOMO</option>
+              </select>
+            </div> -->
+          </div>
         </div>
-        <div class="filter-process">
-          <label for="filterProcess">Process:</label>
-          <select class="form-control">
-            <option value="checked">Checked</option>
-            <option value="delivering">Delivering</option>
-            <option value="complete">Closed</option>
-            <option value="cancel">Cancelled</option>
-          </select>
-        </div>
-        <div class="filter-payment">
-          <label for="filterPayment">Payment:</label>
-          <select class="form-control">
-            <option value="cash">Cash</option>
-            <option value="e-pay">Momo</option>
-          </select>
+        <div class="btn-features">
+          <div class="btn btn-reset-features" @click="resetFeatures">Reset</div>
+          <div class="btn btn-submit-features" @click="submitFeatures">Go</div>
         </div>
       </div>
     </div>
@@ -41,6 +82,7 @@
             <th style="text-align: left">ID</th>
             <th style="text-align: left">Customer</th>
             <th>Date create</th>
+            <th>Transaction ID</th>
             <th>Payment method</th>
             <th>Order's process</th>
             <th>Status</th>
@@ -48,31 +90,87 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <div v-if="orderList.length < 1" class="empty-content-message">
+            <p>There is no content in this table yet</p>
+          </div>
+          <tr v-for="order in orderList" :key="order.index" v-else>
             <td
               class="order-id"
               data-bs-target="#shoplistModal"
               data-bs-toggle="modal"
+              style="text-align: left"
+              @click="openShoppingList(order._id)"
             >
-              2434354
+              {{ order.orderId }}
             </td>
             <td
               class="order-customer"
               data-bs-target="#cusModal"
               data-bs-toggle="modal"
+              style="font-weight: 500"
+              @click="openUserInfo(order.user._id)"
             >
-              Rosan weending
+              {{ order.user.firstname }} {{ order.user.lastname }}
             </td>
-            <td>20/20/2000</td>
-            <td>mimo</td>
+            <td>{{ order.dateCreate }}</td>
+            <td style="font-weight: 500; color: #a65de7">
+              {{ order.payment.transactionID }}
+            </td>
+            <!-- <td
+              :style="[
+                paymentMethod == order.payment.paymentMethod
+                  ? { color: '#00c853', fontWeight: '600' }
+                  : { color: '#f50057', fontWeight: '600' },
+              ]"
+            >
+              {{ order.payment.paymentMethod }} - {{ order.payment.payStatus }}
+              <span></span>
+            </td> -->
+            <td>
+              {{ order.payment.paymentMethod }} -
+              <span style="font-weight: 500">
+                <select
+                  name="payStatus"
+                  v-model="order.payment.payStatus"
+                  @change="getValue(order.payment.payStatus, order._id)"
+                >
+                  <option
+                    value="Paid"
+                    :selected="order.payment.payStatus == 'Paid'"
+                  >
+                    Paid
+                  </option>
+                  <option
+                    value="Unpaid"
+                    :selected="order.payment.payStatus == 'Unpaid'"
+                  >
+                    Unpaid
+                  </option>
+                </select>
+              </span>
+            </td>
             <td class="process-order">
-              <label @click="openCheck" class="process-content">New</label>
-              <div class="modify-process" v-if="showCheckProcess">
-                <i class="bx bx-x bx-sm" @click="closeCheck"></i>
+              <label
+                @click="openCheck(order._id)"
+                class="process-content"
+                :style="changeProcessColor(order.process)"
+                >{{ order.process }}</label
+              >
+              <div class="modify-process" v-if="showCheckProcess == order._id">
+                <i
+                  class="bx bx-x bx-sm"
+                  style="position: absolute; right: 10px"
+                  @click="closeCheck"
+                ></i>
                 <div class="process-check">
                   <div class="check-checked">
                     <label for="checked">
-                      <input type="radio" name="processOrder" value="checked" />
+                      <input
+                        type="radio"
+                        name="processOrder"
+                        value="Checked"
+                        v-model="updateOrder.process"
+                      />
 
                       Checked</label
                     >
@@ -82,7 +180,8 @@
                       <input
                         type="radio"
                         name="processOrder"
-                        value="delivery"
+                        value="Delivery"
+                        v-model="updateOrder.process"
                       />
 
                       Delivering</label
@@ -93,7 +192,8 @@
                       <input
                         type="radio"
                         name="processOrder"
-                        value="completed"
+                        value="Completed"
+                        v-model="updateOrder.process"
                       />
 
                       Completed</label
@@ -104,64 +204,38 @@
                       <input
                         type="radio"
                         name="processOrder"
-                        value="cancelled"
+                        value="Cancelled"
+                        v-model="updateOrder.process"
                       />
 
                       Cancelled</label
                     >
                   </div>
                 </div>
-                <div class="btn btn-submit-check">Save</div>
+                <div
+                  class="btn btn-submit-check"
+                  @click="updateOrders(order._id)"
+                >
+                  Save
+                </div>
               </div>
             </td>
             <td
               class="status-order"
               :style="[
-                choice
+                choice == order.status
                   ? { color: 'green', fontWeight: '600' }
                   : { color: 'red', fontWeight: '600' },
               ]"
             >
-              Active
+              {{ order.status }}
             </td>
             <td class="item_remove-bin">
               <i
                 class="bx bx-trash"
-                data-bs-target="#modal"
+                data-bs-target="#removeModal"
                 data-bs-toggle="modal"
-                @click="openRemoveModal"
-              ></i>
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: left">2434354545</td>
-            <td style="text-align: left">Rosan weending</td>
-            <td>20/20/2000</td>
-            <td>mimo</td>
-            <td>chekced</td>
-            <td>active</td>
-            <td class="item_remove-bin">
-              <i
-                class="bx bx-trash"
-                data-bs-target="#modal"
-                data-bs-toggle="modal"
-                @click="openRemoveModal"
-              ></i>
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: left">2434354545</td>
-            <td style="text-align: left">Rosan weending</td>
-            <td>20/20/2000</td>
-            <td>mimo</td>
-            <td>chekced</td>
-            <td>active</td>
-            <td class="item_remove-bin">
-              <i
-                class="bx bx-trash"
-                data-bs-target="#modal"
-                data-bs-toggle="modal"
-                @click="openRemoveModal"
+                @click="openRemoveModal(order._id)"
               ></i>
             </td>
           </tr>
@@ -169,18 +243,19 @@
       </table>
     </div>
     <component
-      :is="'confirm-modal'"
-      :title="modalTitle"
-      :confirmText="confirmText"
-      :btnProperty="btnProperty"
-      @submit="submitModal"
-    >
-      <div class="modal-content">
-        <p>Are you sure you want to remove this row ?</p>
-      </div>
+      :is="'pagination-feature'"
+      :totalPages="pageTotals"
+      @click-next="pageChange"
+      @click-previous="pageChange"
+      :currentPage="currentPage"
+    ></component>
+    <component :is="'remove-modal'" @delete-confirm="deleteConfirm">
     </component>
-    <CustomerInfoModal />
-    <ShoppingListModal />
+    <CustomerInfoModal :address="address" :userInfo="userInfo" />
+    <ShoppingListModal
+      :cartDetails="cartDetails"
+      :orderDetails="orderDetails"
+    />
   </div>
 </template>
 
@@ -191,39 +266,273 @@ export default {
   name: "DeliveryAllTable",
   data() {
     return {
+      removeId: "",
+      displayFeatures: false,
       showCheckProcess: false,
       choice: "Active",
-      modalTitle: "",
-      btnProperty: {
-        color: "",
-        backColor: "",
+      orderList: [],
+      updateOrder: {
+        status: "",
+        process: "",
+        payStatus: "",
+        transactionID: "",
+        paymentMethod: "",
       },
-      confirmText: "",
+      cartDetails: [],
+      orderDetails: {},
+      userInfo: {},
+      address: {
+        street: "",
+        city: "",
+        district: "",
+      },
+      features: {
+        kindOf: 1,
+        search: "",
+        status: "Active",
+        process: "",
+        sortName: "dateCreate",
+      },
+      currentPage: 1,
+      pageTotals: 1,
+      totalOrders: 0,
     };
   },
   components: {
     CustomerInfoModal,
     ShoppingListModal,
   },
+  async created() {
+    try {
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/Order`,
+        { params: { page: this.currentPage } },
+        this.$axios.defaults.headers["Authorization"]
+      );
+      console.log(res);
+      this.orderList = res.data.data;
+      this.pageTotals = res.data.pageTotals;
+      this.totalOrders = res.data.totalOrders;
+      this.orderList.forEach((item) => this.convertDateTime(item));
+    } catch (error) {
+      console.log(error);
+    }
+  },
   methods: {
-    openCheck() {
-      this.showCheckProcess = true;
+    async getValue(value, id) {
+      this.updateOrder.payStatus = value;
+      await this.getOrderDetails(id);
+      this.updateOrders(id);
+    },
+    openCheck(value) {
+      this.showCheckProcess = value;
     },
     closeCheck() {
       this.showCheckProcess = false;
     },
-    openRemoveModal() {
-      this.modalTitle = "Remove Confirmation";
-      this.confirmText = "Remove";
-      this.btnProperty.color = "white";
-      this.btnProperty.backColor = "#fd5d5d";
+    changeProcessColor(value) {
+      if (value === "New") {
+        return "color: #f4511e; text-shadow: 0 0 7px #ff7043";
+      } else if (value === "Checked") {
+        return "color: #ff4081; text-shadow: 0 0 7px #ef68fc";
+      } else if (value === "Delivery") {
+        return "color: #00ad48; text-shadow: 0 0 7px #64dd17";
+      } else if (value === "Completed") {
+        return "color: #2962ff; text-shadow: 0 0 7px #73e8ff";
+      } else if (value === "Cancelled") {
+        return "color: #ff5252; text-shadow: 0 0 7px #ff867f";
+      }
     },
+    async updateOrders(value) {
+      let order;
+      try {
+        if (this.updateOrder.process === "Cancelled") {
+          order = {
+            status: "Unactive",
+            process: this.updateOrder.process,
+          };
+        } else if (this.updateOrder.payStatus == "") {
+          order = {
+            process: this.updateOrder.process,
+          };
+        } else if (this.updateOrder.payStatus != "") {
+          order = {
+            payStatus: this.updateOrder.payStatus,
+            transactionID: this.updateOrder.transactionID,
+            paymentMethod: this.updateOrder.paymentMethod,
+          };
+        }
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.put(
+          `api/Order/updateOrder/${value}`,
+          order,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.getOrders();
+          this.showCheckProcess = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getOrderDetails(value) {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order/orderDetails/${value}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.updateOrder.transactionID = res.data.data.payment.transactionID;
+        this.updateOrder.paymentMethod = res.data.data.payment.paymentMethod;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async openShoppingList(value) {
+      console.log(value);
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order/orderDetails/${value}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.cartDetails = res.data.data.cart;
+        this.orderDetails = res.data.data;
+        console.log(this.orderDetails);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async openUserInfo(value) {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/User/userDetails/All/${value}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.userInfo = res.data.data;
+        this.address.city = res.data.data.address.city;
+        this.address.street = res.data.data.address.street;
+        this.address.district = res.data.data.address.district;
+        console.log(this.userInfo);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    convertDateTime(value) {
+      const result = new Date(value.dateCreate);
+      var year = result.getFullYear();
+      var month = ("0" + (result.getMonth() + 1)).slice(-2);
+      var day = ("0" + result.getDate()).slice(-2);
+      value.dateCreate = day + "-" + month + "-" + year;
+    },
+    async getOrders() {
+      let res;
+      if (this.features.process == "") {
+        try {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(
+            `api/Order`,
+            {
+              params: {
+                kindOf: this.features.kindOf,
+                search: this.features.search,
+                status: this.features.status,
+                sortName: this.features.sortName,
+              },
+            },
+            this.$axios.defaults.headers["Authorization"]
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (this.features.process != "") {
+        try {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(
+            `api/Order`,
+            {
+              params: {
+                kindOf: this.features.kindOf,
+                search: this.features.search,
+                status: this.features.status,
+                sortName: this.features.sortName,
+                process: this.features.process,
+              },
+            },
+            this.$axios.defaults.headers["Authorization"]
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      this.orderList = res.data.data;
+      this.pageTotals = res.data.pageTotals;
+      this.orderList.forEach((item) => this.convertDateTime(item));
+    },
+    openRemoveModal(id) {
+      this.removeId = id;
+    },
+    async deleteConfirm() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.delete(
+          `api/Order/${this.removeId}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.getOrders();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    pageChange(current) {
+      this.currentPage = current;
+      this.getOrders();
+      console.log(current);
+    },
+    submitFeatures() {
+      this.getOrders();
+    },
+    resetFeatures() {
+      this.features = {};
+    },
+  },
+  watch: {
+    totalOrders() {
+      console.log(this.totalOrders);
+      this.$emit("total-products", this.totalOrders);
+    },
+    // payStatus() {
+    //   this.updateOrders();
+    // },
+  },
+  mounted() {
+    // this.getOrders();
   },
 };
 </script>
 
 <style scoped>
+.empty-content-message {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  transform: translateX(400px);
+  color: rgb(125, 122, 122);
+  font-style: italic;
+}
 /* --- feature --- */
+.features {
+  margin-top: 10px;
+  border-top: solid 1px rgb(228, 228, 228);
+  /* border-bottom: solid 1px rgb(228, 228, 228); */
+  padding: 30px 10px;
+}
 .features-bar {
   display: flex;
   justify-content: space-between;
@@ -234,7 +543,7 @@ export default {
   width: 26%;
 }
 .search-bar input {
-  background: #f9f5f4;
+  background: #faf8f8;
 }
 .filter-sort {
   display: flex;
@@ -250,7 +559,7 @@ export default {
 select {
   font-weight: 500;
   font-size: 15px;
-  background: #f9f5f4;
+  background: #faf8f8;
 }
 .features-bar label {
   font-size: 14px;
@@ -258,9 +567,30 @@ select {
   color: rgb(105, 102, 102);
 }
 
+.btn-features {
+  margin-top: 5%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.btn-submit-features {
+  color: white;
+  background: #aa40e3;
+  width: 10%;
+  font-weight: 500;
+}
+.btn-submit-features:hover {
+  color: white;
+}
+.btn-reset-features {
+  background: rgb(218, 218, 218);
+  width: 10%;
+  font-weight: 500;
+}
 /* --- table --- */
 .table-responsive {
   margin-top: 20px;
+  /* height: 200px; */
 }
 table {
   width: 100%;
@@ -274,15 +604,15 @@ thead tr th {
 }
 tbody tr td {
   font-size: 15px;
-  padding: 25px;
+  padding: 25px 0;
   color: rgb(108, 106, 106);
   text-align: center;
 }
 
 /* --- order-id --- */
 .order-id {
-  font-weight: 700;
-  text-align: left;
+  font-weight: 600;
+  color: #a65de7;
 }
 .order-id:hover {
   text-decoration: underline;
@@ -295,13 +625,19 @@ tbody tr td {
 }
 .order-customer:hover {
   cursor: pointer;
-  font-weight: 500;
 }
 /* --- status order --- */
 .status-order {
   font-weight: 500;
 }
 
+/* -- payStatus -- */
+span select {
+  padding: 5px 8px;
+  border: none;
+  background: white;
+  font-weight: 500;
+}
 /* --- shopping -list --- */
 .shopping-list:hover {
   cursor: pointer;
@@ -314,8 +650,8 @@ tbody tr td {
   position: relative;
 }
 .process-order .process-content {
-  color: #f4511e;
-  text-shadow: 0 0 7px #ff7043;
+  /* color: #f4511e; */
+  /* text-shadow: 0 0 7px #ff7043; */
   font-weight: 500;
   cursor: pointer;
 }
@@ -323,7 +659,7 @@ tbody tr td {
 .modify-process {
   /* border: solid rgb(205, 205, 205) 1px; */
   position: absolute;
-  z-index: 1;
+  z-index: 4;
   top: 20px;
   right: -100px;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
@@ -332,14 +668,14 @@ tbody tr td {
   border-radius: 4px;
   transition: all 0.8s;
 }
-i {
-  position: absolute;
+.item_remove-bin i {
+  /* position: absolute; */
   right: 10px;
   cursor: pointer;
 }
 .modify-process .process-check {
   /* border-top: solid rgb(220, 217, 217); */
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 10px 20px;
 }
 .modify-process .process-check div {

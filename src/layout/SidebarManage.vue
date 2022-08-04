@@ -24,7 +24,7 @@
         <span>Storage</span>
         <span class="tooltiptext">Storage</span>
       </li>
-      <li class="nav-item" @click="Route('deliveryView')">
+      <li class="nav-item" @click="Route('deliveryView', 'all')">
         <i class="bx bx-spreadsheet bx-sm bx-fw" />
         <span>Order's delivery</span>
         <span class="tooltiptext">Order's delivery</span>
@@ -59,11 +59,15 @@
 <script>
 export default {
   methods: {
-    Route(value) {
-      this.$router.push({ name: value });
+    Route(value, id) {
+      this.$router.push({ name: value, params: { id: id } });
     },
     manageRoute(value) {
       this.$router.push({ name: value, params: { id: "user" } });
+    },
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.push({ name: "home" });
     },
   },
 };

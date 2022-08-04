@@ -5,7 +5,7 @@
       @cate-title-id="getCateId"
       @cate-title-all="getCateAll"
     />
-    <ProductList :cateId="cateId" :cateProductList="cateProductList" />
+    <ProductList :cateId="cateId" />
   </div>
 </template>
 
@@ -17,8 +17,6 @@ export default {
   components: { CategoryListBar, ProductList },
   data() {
     return {
-      categoryDetails: {},
-      cateProductList: [],
       cateId: this.$route.params.id,
       test: "",
     };
@@ -35,14 +33,9 @@ export default {
           console.log(this.$route.params.id);
           this.$store.dispatch("accessToken");
           const res = await this.$axios.get(
-            `api/Category/cateDetails/${this.$route.params.id}`,
-            this.$axios.defaults.headers["Authorization"]
+            `api/Category/cateDetails/${this.$route.params.id}`
           );
           this.test = res.data.data.content.name;
-          console.log(this.test);
-          this.cateProductList = res.data.data.content.productList;
-          console.log(this.cateProductList);
-          console.log(res);
         }
         // console.log(this.categoryDetails);
       } catch (error) {

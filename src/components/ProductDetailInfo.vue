@@ -10,7 +10,11 @@
         <div class="color-check">
           <div v-for="color in productDetails.color" :key="color">
             <label class="color">
-              <input type="checkbox" @click="getColor(color)" />
+              <input
+                type="radio"
+                @click="getColor(color)"
+                name="productColor"
+              />
               <span
                 class="checkmark"
                 :style="{ backgroundColor: color }"
@@ -27,25 +31,89 @@
             </li>
           </ul>
         </div> -->
-      <div class="btn btn_add-cart" @click="openWaitingList()">Add to Cart</div>
+      <div class="error-message" v-if="showError">
+        <p style="color: red">Please ensure the color has been chosen</p>
+      </div>
+      <div class="btn btn_add-cart" v-if="displayBtnCart()">Add to Cart</div>
+      <div
+        class="btn btn_add-cart"
+        @click="getProductToCart(productDetails)"
+        v-else
+      >
+        Add to Cart
+      </div>
     </div>
   </div>
+  <component
+    :is="'notifi-modal'"
+    @close-modal="closeWarning"
+    :openModal="displayWarning"
+  ></component>
 </template>
 
 <script>
 export default {
   name: "ProductDetailsInfo",
   data() {
-    return {};
+    return {
+      displayWarning: false,
+      tempShoppingList: [],
+      checkedColor: "",
+      checkStatus: true,
+      showError: false,
+    };
   },
   props: {
     productDetails: Object,
   },
   methods: {
-    openWaitingList() {
-      this.$emit("open-waiting-list", true);
+    displayBtnCart() {
+      if (this.checkedColor == "") {
+        this.showError = true;
+        return true;
+      } else {
+        this.showError = false;
+        return false;
+      }
+    },
+    closeWarning() {
+      this.displayWarning = false;
+      this.$router.go();
+    },
+    getColor(value) {
+      this.checkedColor = value;
+    },
+    getProductToCart(value) {
+      if (this.$store.state.user == null) {
+        this.displayWarning = true;
+      } else {
+        this.$store.dispatch("getShoppingList");
+        let storeShoppping = JSON.parse(this.$store.state.shoppingList);
+        const product = {
+          id: value._id,
+          name: value.name,
+          img: value.productImg,
+          price: value.price,
+          color: this.checkedColor,
+          quantityProduct: 1,
+          product_id: "",
+        };
+        if (storeShoppping == null) {
+          this.tempShoppingList.push(product);
+          this.tempShoppingList[0].product_id = "101";
+          this.$store.dispatch("storeShoppingList", this.tempShoppingList);
+        } else {
+          storeShoppping.push(product);
+          storeShoppping.forEach((item, index) => {
+            item.product_id = "1" + index;
+          });
+          this.$store.dispatch("storeShoppingList", storeShoppping);
+        }
+        this.$emit("open-waiting-list", true);
+      }
     },
   },
+  watch: {},
   mounted() {
     console.log(this.productDetails);
   },
@@ -82,7 +150,7 @@ h4 {
 .color-check {
   margin-left: 10px;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(8, 1fr);
 }
 
 .color {
@@ -102,7 +170,7 @@ h4 {
   left: 0;
   height: 25px;
   width: 25px;
-  border: solid 1px grey;
+  border-radius: 30px;
 }
 
 /* On mouse-over, add a grey background color */

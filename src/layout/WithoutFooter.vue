@@ -56,35 +56,6 @@
   <div class="router-view">
     <slot />
   </div>
-  <footer>
-    <div class="furniture-slogan">
-      <h1>TMCi</h1>
-      <p>For Trending, Modern and Comfortable life</p>
-    </div>
-    <div class="furniture-about">
-      <h5>Company</h5>
-      <p @click="Route('companyView')">About Us</p>
-    </div>
-    <div class="furniture-stores">
-      <h5>Stores</h5>
-      <ul>
-        <li style="font-weight: 600">Ha Noi:</li>
-        <li>12 Cau Giay, Cau Giay District, Quan Hoa Ward</li>
-      </ul>
-      <ul>
-        <li style="font-weight: 600">TP.HCM:</li>
-        <li>44 Vo Thi Sau, District 3, Ward 1</li>
-      </ul>
-    </div>
-    <div class="furniture-contact">
-      <h5>Contact Us</h5>
-      <p>
-        <span style="font-weight: 600">Email: </span>
-        furniTMCoffical@hotmail.com
-      </p>
-      <p><span style="font-weight: 600">Phone:</span> +12679453</p>
-    </div>
-  </footer>
 </template>
 
 <script>
@@ -120,11 +91,11 @@ export default {
     },
   },
   methods: {
-    Route(value) {
-      this.$router.push({ name: value });
-    },
     RouteId(value, id) {
       this.$router.push({ name: value, params: { id: id } });
+    },
+    Route(value) {
+      this.$router.push({ name: value });
     },
     loginVerified(val) {
       this.login = val;
@@ -311,36 +282,5 @@ export default {
 .cart-icon .num-item-cart:hover {
   cursor: pointer;
   bottom: 10px;
-}
-footer {
-  /* margin-top: 50px; */
-  display: flex;
-  padding: 50px;
-  gap: 120px;
-  flex-wrap: wrap;
-  background: #ffc5e6;
-}
-.furniture-slogan h1 {
-  color: #b767ff;
-  font-size: 60px;
-  font-family: "Dancing Script", cursive;
-  font-weight: 600;
-}
-.furniture-slogan p {
-  font-weight: 500;
-}
-h5 {
-  font-weight: 600;
-}
-.furniture-about,
-.furniture-stores {
-  text-align: center;
-}
-.furniture-about p:hover {
-  cursor: pointer;
-}
-.furniture-stores ul li {
-  list-style: none;
-  text-align: left;
 }
 </style>

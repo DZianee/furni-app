@@ -8,14 +8,17 @@ import axios from "./plugins/axios";
 import DefaultLayout from "./layout/DefaultLayout.vue";
 import HomeHeaderLayout from "./layout/HomeHeaderLayout.vue";
 import EmptyLayout from "./layout/EmptyLayout.vue";
+import WithoutFooter from "./layout/WithoutFooter.vue";
 import SidebarManage from "./layout/SidebarManage.vue";
 import CreateModal from "./components/Modal/Modal.vue";
 import InfoModal from "./components/Modal/ModalInfo.vue";
 import RemoveModal from "./components/Modal/ModalRemove.vue";
 import WarningModal from "./components/Modal/ModalWarning.vue";
 import ImgModal from "./components/Modal/ModalImg.vue";
+import NotifiModal from "./components/Modal/ModalNotifi.vue";
 import CmtModal from "./components/Modal/ModalComment.vue";
 import Pagination from "./components/Pagination/PaginationBar.vue";
+import OrderCardSample from "./components/OrderCard/OrderCardSample.vue";
 import "@/assets/css/main.css";
 // import Vue from "vue";
 import VueObserveVisibility from "vue-observe-visibility";
@@ -68,11 +71,14 @@ app
   .component("home-header-layout", HomeHeaderLayout)
   .component("sidebar-manage-layout", SidebarManage)
   .component("empty-layout", EmptyLayout)
+  .component("without-footer-layout", WithoutFooter)
   .component("create-modal", CreateModal)
   .component("info-modal", InfoModal)
   .component("remove-modal", RemoveModal)
   .component("warning-modal", WarningModal)
   .component("img-modal", ImgModal)
   .component("comment-modal", CmtModal)
+  .component("notifi-modal", NotifiModal)
   .component("pagination-feature", Pagination)
+  .component("order-card-list", OrderCardSample)
   .mount("#app");

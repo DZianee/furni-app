@@ -104,8 +104,8 @@
 </template>
 
 <script>
+// import $ from "jquery";
 import Password from "../components/PasswordInput.vue";
-
 export default {
   name: "LoginForm",
   components: {
@@ -144,7 +144,6 @@ export default {
           this.$store.dispatch("login", res);
           this.errorMessage = false;
         }
-        console.log(res);
       } catch (error) {
         this.loadingIcon = false;
         this.errorMessage = true;
@@ -152,6 +151,7 @@ export default {
       }
     },
   },
+  mounted() {},
 };
 </script>
 

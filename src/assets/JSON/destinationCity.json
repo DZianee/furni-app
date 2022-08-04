@@ -5,118 +5,118 @@
     {
       "id": 1,
       "code": "Q1",
-      "name": "1"
+      "name": "District 1"
     },
     {
       "id": 2,
       "code": "Q2",
-      "name": "2"
+      "name": " District2"
     },
     {
       "id": 3,
       "code": "Q3",
-      "name": "3"
+      "name": "District 3"
     },
     {
       "id": 4,
       "code": "Q4",
-      "name": "4"
+      "name": " District 4"
     },
     {
       "id": 5,
       "code": "Q5",
-      "name": "5"
+      "name": "District 5"
     },
     {
       "id": 6,
       "code": "Q6",
-      "name": "6"
+      "name": "District 6"
     },
     {
       "id": 7,
       "code": "Q7",
-      "name": "7"
+      "name": "District 7"
     },
     {
       "id": 8,
       "code": "Q8",
-      "name": "8"
+      "name": "District 8"
     },
     {
       "id": 9,
       "code": "Q9",
-      "name": "9"
+      "name": "District 9"
     },
     {
       "id": 10,
       "code": "Q10",
-      "name": "10"
+      "name": "District 10"
     },
     {
       "id": 11,
       "code": "Q11",
-      "name": "11"
+      "name": "District 11"
     },
     {
       "id": 12,
       "code": "Q12",
-      "name": "12"
+      "name": "District 12"
     },
     {
       "id": 13,
       "code": "QTP",
-      "name": "Tan Phu"
+      "name": "Tan Phu District"
     },
-    { "id": 14, "code": "QBT", "name": "Binh Thanh" },
+    { "id": 14, "code": "QBT", "name": "Binh Thanh District" },
     {
       "id": 15,
       "code": "QGV",
-      "name": "Go Vap"
+      "name": "Go Vap District"
     },
     {
       "id": 16,
       "code": "QTB",
-      "name": "Tan Binh"
+      "name": "Tan Binh District"
     },
     {
       "id": 17,
       "code": "QPN",
-      "name": "Phu Nhuan"
+      "name": "Phu Nhuan District"
     },
     {
       "id": 18,
       "code": "QBT",
-      "name": "Binh Tan"
+      "name": "Binh Tan District"
     },
     {
       "id": 19,
       "code": "QTD",
-      "name": "Thu Duc"
+      "name": "Thu Duc District"
     },
     {
       "id": 20,
       "code": "HNB",
-      "name": "Nha Be"
+      "name": "Nha Be District"
     },
     {
       "id": 21,
       "code": "HHM",
-      "name": "Hoc Mon"
+      "name": "Hoc Mon District"
     },
     {
       "id": 22,
       "code": "HBC",
-      "name": "Binh Chanh"
+      "name": "Binh Chanh District"
     },
     {
       "id": 23,
       "code": "HCG",
-      "name": "Can Gio"
+      "name": "Can Gio District"
     },
     {
       "id": 24,
       "code": "HCC",
-      "name": "Cu Chi"
+      "name": "Cu Chi District"
     }
   ]
 }

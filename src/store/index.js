@@ -9,6 +9,8 @@ export default createStore({
     user: null,
     avatar: null,
     cateId: null,
+    activateCateDetails: false,
+    shoppingList: [],
   },
   mutations: {
     setAuth: (state, auth) => (state.authenticated = auth),
@@ -18,6 +20,9 @@ export default createStore({
     setRefreshToken: (state, refreshToken) =>
       (state.refreshToken = refreshToken),
     setCateId: (state, cate) => (state.cateId = cate),
+    setActivateCateDetails: (state, activateCate) =>
+      (state.activateCateDetails = activateCate),
+    setShoppingList: (state, shopList) => (state.shoppingList = shopList),
   },
   actions: {
     login({ commit }, res) {
@@ -38,6 +43,14 @@ export default createStore({
     storeCateId({ commit }, res) {
       commit("setCateId", res);
       sessionStorage.setItem("CateId", res);
+    },
+    storeActivateCateDetails({ commit }, res) {
+      commit("setActivateCateDetails", res);
+      sessionStorage.setItem("ActivateCateDetails", res);
+    },
+    storeShoppingList({ commit }, res) {
+      commit("setShoppingList", res);
+      sessionStorage.setItem("shoppingList", JSON.stringify(res));
     },
     logout({ commit }) {
       commit("setAuth", false);
@@ -68,6 +81,15 @@ export default createStore({
     },
     getCateId({ commit }) {
       commit("setCateId", sessionStorage.getItem("CateId"));
+    },
+    getShoppingList({ commit }) {
+      commit("setShoppingList", sessionStorage.getItem("shoppingList"));
+    },
+    getActivateCateDetails({ commit }) {
+      commit(
+        "setActivateCateDetails",
+        sessionStorage.getItem("ActivateCateDetails")
+      );
     },
   },
 });

@@ -1,82 +1,97 @@
 <template>
   <div class="product-list-feature">
-    <div class="product-features">
-      <div class="table-search-box">
-        <input
-          type="text"
-          class="form-control form-input"
-          placeholder="Search anything..."
-        />
-      </div>
-      <div class="filter">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingThree">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseThree"
-              aria-expanded="false"
+    <div class="product-list container" v-if="cateId === 'all' || cateId == ''">
+      <div class="product-features">
+        <div class="table-search-box">
+          <input
+            type="text"
+            class="form-control form-input"
+            placeholder="Search name, status, price here..."
+            v-model="search"
+          />
+        </div>
+        <div class="filter">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseThree"
+                aria-expanded="false"
+              >
+                <i class="bx bx-filter bx-md"></i>
+              </button>
+            </h2>
+            <div
+              id="collapseThree"
+              class="accordion-collapse collapse"
+              aria-labelledby="headingThree"
             >
-              <i class="bx bx-filter bx-md"></i>
-            </button>
-          </h2>
-          <div
-            id="collapseThree"
-            class="accordion-collapse collapse"
-            aria-labelledby="headingThree"
-          >
-            <div class="accordion-body">
-              <div class="sort-bar">
-                <select class="form-select">
-                  <option value="descending" style="font-weight: 700">
-                    Descending
-                  </option>
-                  <option value="ascending">Ascending</option>
-                </select>
-                <select class="form-select">
-                  <option value="all">All</option>
-                  <option value="<200">lower than 200K VND</option>
-                  <option value="200-1000">200K - 1 Million VND</option>
-                  <option value=">1000">above 1 Million VND</option>
-                </select>
+              <div class="accordion-body">
+                <div class="sort-bar">
+                  <select class="form-select" v-model="kindOf" name="sort">
+                    <option value="-1" style="font-weight: 600">
+                      Descending
+                    </option>
+                    <option value="1">Ascending</option>
+                  </select>
+                  <select
+                    class="form-select"
+                    v-model="sortName"
+                    name="sortName"
+                  >
+                    <option value="" disabled>Select type to sort</option>
+                    <option value="createdAt">None</option>
+                    <option value="price" style="font-weight: 600">
+                      Price
+                    </option>
+                    <option value="name">Name</option>
+                  </select>
+                  <select class="form-select" name="price" v-model="price">
+                    <option value="all">All</option>
+                    <option value="1">Lower than 200.000</option>
+                    <option value="2">200.000 - 1 Million</option>
+                    <option value="3">Above 1 Million</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="product-list container" v-if="cateId === 'all' || cateId == ''">
-      <div
-        class="card product-item"
-        v-for="product in productList"
-        :key="product.index"
-        @click="Route('productDetailsView', 'all', product._id)"
-      >
-        <img
-          :src="`http://localhost:2371/${product.productImg}`"
-          alt="product-img"
-        />
-        <div class="item-info">
-          <div class="item-name">
-            <h6>{{ product.name }}</h6>
-          </div>
-          <div
-            class="item-status"
-            :style="[
-              status == product.status
-                ? {
-                    color: '#e040fb',
-                    fontWeight: '600',
-                    textShadow: ' 0 0 10px #ff8a80',
-                  }
-                : { color: 'red', fontWeight: '600' },
-            ]"
-          >
-            <p>{{ product.status }}</p>
-          </div>
-          <div class="item-price">
-            <p>{{ product.price }} VND</p>
+      <div class="product-content-list">
+        <div
+          class="card product-item"
+          v-for="product in productList"
+          :key="product.index"
+          @click="Route('productDetailsView', 'all', product._id)"
+        >
+          <img
+            :src="`http://localhost:2371/${product.productImg}`"
+            alt="product-img"
+          />
+          <div class="item-info">
+            <div class="item-name">
+              <h6>{{ product.name }}</h6>
+            </div>
+            <div
+              class="item-status"
+              :style="[
+                status == product.status
+                  ? {
+                      color: '#e040fb',
+                      fontWeight: '600',
+                      textShadow: ' 0 0 10px #ff8a80',
+                    }
+                  : { color: 'red', fontWeight: '600' },
+              ]"
+            >
+              <p>{{ product.status }}</p>
+            </div>
+            <div class="item-price">
+              <p>{{ product.price }} VND</p>
+            </div>
           </div>
         </div>
       </div>
@@ -89,46 +104,100 @@
       </div>
     </div>
     <!-- <div v-observe-visibility="visibilityChanged"></div> -->
-    <div class="product-list container" v-if="cateId != 'all'">
-      <div
-        class="card product-item"
-        v-for="product in cateProductList"
-        :key="product.index"
-        @click="Route('productDetailsView', product.category, product._id)"
-      >
-        <img
-          :src="`http://localhost:2371/${product.productImg}`"
-          alt="product-img"
-        />
-        <div class="item-info">
-          <div class="item-name">
-            <h6>{{ product.name }}</h6>
-          </div>
-          <div
-            class="item-status"
-            :style="[
-              status == product.status
-                ? {
-                    color: '#e040fb',
-                    fontWeight: '600',
-                    textShadow: ' 0 0 10px #ff8a80',
-                  }
-                : { color: 'red', fontWeight: '600' },
-            ]"
-          >
-            <p>{{ product.status }}</p>
-          </div>
-          <div class="item-price">
-            <p>{{ product.price }} VND</p>
+    <div class="product-list container" v-else>
+      <div class="product-features">
+        <div class="table-search-box">
+          <input
+            type="text"
+            class="form-control form-input"
+            placeholder="Search anything..."
+            v-model="search"
+          />
+        </div>
+        <div class="filter">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseThree"
+                aria-expanded="false"
+              >
+                <i class="bx bx-filter bx-md"></i>
+              </button>
+            </h2>
+            <div
+              id="collapseThree"
+              class="accordion-collapse collapse"
+              aria-labelledby="headingThree"
+            >
+              <div class="accordion-body">
+                <div class="sort-bar">
+                  <select class="form-select" v-model="kindOf" name="sort">
+                    <option value="-1" style="font-weight: 600">
+                      Descending
+                    </option>
+                    <option value="1">Ascending</option>
+                  </select>
+                  <select
+                    class="form-select"
+                    v-model="sortName"
+                    name="sortName"
+                  >
+                    <option value="" disabled>Select type to sort</option>
+                    <option value="createdAt">None</option>
+                    <option value="price" style="font-weight: 600">
+                      Price
+                    </option>
+                    <option value="name">Name</option>
+                  </select>
+                  <select class="form-select" name="price" v-model="price">
+                    <option value="all">All</option>
+                    <option value="1">Lower than 200.000</option>
+                    <option value="2">200.000 - 1 Million</option>
+                    <option value="3">Above 1 Million</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div
-        class="btn btn_load-more"
-        @click="loadMore"
-        v-if="displayLoadMoreBtn"
-      >
-        Load more
+      <div class="product-content-list">
+        <div
+          class="card product-item"
+          v-for="product in cateProductList"
+          :key="product.index"
+          @click="Route('productDetailsView', product.category, product._id)"
+        >
+          <img
+            :src="`http://localhost:2371/${product.productImg}`"
+            alt="product-img"
+          />
+          <div class="item-info">
+            <div class="item-name">
+              <h6>{{ product.name }}</h6>
+            </div>
+            <div
+              class="item-status"
+              :style="[
+                status == product.status
+                  ? {
+                      color: '#e040fb',
+                      fontWeight: '600',
+                      textShadow: ' 0 0 10px #ff8a80',
+                    }
+                  : { color: 'red', fontWeight: '600' },
+              ]"
+            >
+              <p>{{ product.status }}</p>
+            </div>
+            <div class="item-price">
+              <p>{{ product.price }} VND</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -145,52 +214,126 @@ export default {
       status: "IN STOCK",
       currentPage: 1,
       pageTotals: 0,
+      cateProductList: [],
+      kindOf: "1",
+      price: "all",
+      sortName: "createdAt",
+      search: "",
       // page: 0,
     };
   },
   props: {
     cateId: String,
-    cateProductList: Array,
   },
-  async created() {
-    try {
-      this.$store.dispatch("accessToken");
-      const res = await this.$axios.get(
-        `api/Product`,
-        {
-          params: {
-            page: this.currentPage,
-          },
-        },
-        this.$axios.defaults.headers["Authorization"]
-      );
-      this.productList = res.data.data;
-      this.tempProductList = this.productList;
-      this.pageTotals = res.data.pageTotals;
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  // computed: {
+  //   cateId() {
+  //     return this.$route.params.id;
+  //   },
+  // },
+  // async created() {
+  //   try {
+  //     this.$store.dispatch("accessToken");
+  //     const res = await this.$axios.get(
+  //       `api/Product`,
+  //       {
+  //         params: {
+  //           page: this.currentPage,
+  //         },
+  //       },
+  //       this.$axios.defaults.headers["Authorization"]
+  //     );
+  //     this.productList = res.data.data;
+  //     this.tempProductList = this.productList;
+  //     this.pageTotals = res.data.pageTotals;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
   methods: {
     Route(value, cateId, id) {
       this.$router.push({ name: value, params: { cateType: cateId, id: id } });
-      console.log(cateId);
     },
     async getProduct() {
-      try {
-        this.$store.dispatch("accessToken");
-        const res = await this.$axios.get(
-          `api/Product`,
-          {
+      let res;
+      if (this.price == "") {
+        try {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(`api/Product`, {
             params: {
               page: this.currentPage,
+              kindOf: this.kindOf,
+              sortName: this.sortName,
+              search: this.search,
             },
-          },
-          this.$axios.defaults.headers["Authorization"]
-        );
-        this.pageTotals = res.data.pageTotals;
-        this.productList = this.tempProductList.concat(res.data.data);
-        this.tempProductList = this.productList;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else if (this.price != "") {
+        try {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(`api/Product`, {
+            params: {
+              page: this.currentPage,
+              kindOf: this.kindOf,
+              price: this.price,
+              sortName: this.sortName,
+              search: this.search,
+            },
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      this.pageTotals = res.data.pageTotals;
+      this.productList = res.data.data;
+      console.log(this.pageTotals);
+    },
+    async getProductPagination() {
+      let res;
+      if (this.price == "") {
+        try {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(`api/Product`, {
+            params: {
+              page: this.currentPage,
+              kindOf: this.kindOf,
+              sortName: this.sortName,
+              search: this.search,
+            },
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else if (this.price != "") {
+        try {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(`api/Product`, {
+            params: {
+              page: this.currentPage,
+              kindOf: this.kindOf,
+              price: this.price,
+              sortName: this.sortName,
+              search: this.search,
+            },
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      this.pageTotals = res.data.pageTotals;
+      this.productList = this.productList.concat(res.data.data);
+    },
+    async getCateDetails() {
+      try {
+        if (this.cateId != "all") {
+          this.$store.dispatch("accessToken");
+          const res = await this.$axios.get(
+            `api/Category/cateDetails/${this.cateId}`
+          );
+          this.cateProductList = res.data.data.content.productList;
+        }
+        // console.log(this.categoryDetails);
       } catch (error) {
         console.log(error);
       }
@@ -200,7 +343,7 @@ export default {
         return;
       } else {
         this.currentPage = this.currentPage + 1;
-        this.getProduct();
+        this.getProductPagination();
       }
     },
   },
@@ -211,6 +354,32 @@ export default {
       } else {
         this.displayLoadMoreBtn = true;
       }
+    },
+    pageTotals() {
+      if (this.pageTotals == 1) {
+        this.displayLoadMoreBtn = false;
+      } else {
+        this.displayLoadMoreBtn = true;
+      }
+    },
+    cateId() {
+      if (this.cateId != "all") {
+        this.getCateDetails();
+      } else {
+        this.getProduct();
+      }
+    },
+    kindOf() {
+      this.getProduct();
+    },
+    sortName() {
+      this.getProduct();
+    },
+    price() {
+      this.getProduct();
+    },
+    search() {
+      this.getProduct();
     },
   },
   // mounted() {
@@ -229,7 +398,11 @@ export default {
   //   }
   // },
   mounted() {
-    console.log(this.cateId);
+    if (this.cateId === "all") {
+      this.getProduct();
+    } else {
+      this.getCateDetails();
+    }
   },
 };
 </script>
@@ -245,6 +418,8 @@ export default {
 .table-search-box input {
   height: 60px;
   border-radius: 5px;
+  font-size: 14px;
+  letter-spacing: 0.4px;
 }
 .filter {
   margin-top: 20px;
@@ -262,7 +437,7 @@ export default {
   width: 400px;
   font-weight: 500;
 }
-.product-list {
+.product-content-list {
   margin-top: 40px;
   display: flex;
   gap: 60px;
@@ -289,5 +464,32 @@ export default {
   color: rgb(98, 95, 95);
   float: right;
   letter-spacing: 0.2px;
+}
+
+.btn_load-more {
+  border: 3px solid #aa00ff;
+  border-radius: 10px;
+  margin-top: 3%;
+  font-weight: 500;
+}
+/* -- btn-reset ---*/
+.btn-to-reset {
+  border: solid;
+  position: relative;
+}
+.btn-reset {
+  position: absolute;
+  right: -47%;
+  width: 5%;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  background: #aa00ff;
+  border-radius: 7px;
+  border: none;
+}
+.tooltips {
+  position: relative;
+  left: 100px;
 }
 </style>

@@ -6,47 +6,66 @@
         <option value="createdAt">Newest comment</option>
       </select>
     </div>
-    <div class="review-comment">
-      <div class="card comment" v-for="cmt in reviewList" :key="cmt.index">
-        <div class="comment-card-header">
-          <div class="user-info">
-            <div class="user-avatar">
-              <img :src="`${cmt.avatar}`" alt="user-avatar" />
-            </div>
-            <div class="user_fullname-date">
-              <div class="user-fullname">
-                <h6>{{ cmt.firstname }} {{ cmt.lastname }}</h6>
+    <div class="review-container">
+      <div class="review-comment">
+        <div class="card comment" v-for="cmt in reviewList" :key="cmt.index">
+          <div class="comment-card-header">
+            <div class="user-info">
+              <div class="user-avatar">
+                <img :src="`${cmt.avatar}`" alt="user-avatar" />
               </div>
-              <div class="user-date">
-                <p style="font-size: 14px">
-                  {{ convertDateTime() }}
-                </p>
+              <div class="user_fullname-date">
+                <div class="user-fullname">
+                  <h6>{{ cmt.firstname }} {{ cmt.lastname }}</h6>
+                </div>
+                <div class="user-date">
+                  <p style="font-size: 14px">
+                    {{ convertDateTime() }}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="user-criticise-react">
-            <div class="user-criticise" :style="checkColor(cmt.rating)">
-              {{ cmt.rating }}
-            </div>
-            <div class="users-reacts"><i class="bx bx-heart"></i> 400</div>
-            <div class="more-option" v-if="cmt.user === userId">
-              <i
-                class="bx bx-dots-horizontal-rounded"
-                data-bs-target="#cmtModal"
-                data-bs-toggle="modal"
-                @click="openEditModal(cmt._id)"
-              ></i>
-              <!-- <div class="features_edit-remove">
+            <div class="user-criticise-react">
+              <div class="user-criticise" :style="checkColor(cmt.rating)">
+                {{ cmt.rating }}
+              </div>
+              <div class="users-reacts">
+                <div class="react">
+                  <i
+                    class="bx bx-heart"
+                    style="color: red"
+                    @click="getReact(cmt._id)"
+                  ></i>
+                  {{ cmt.countReacts }}
+                </div>
+                <!-- <div class="unreact">
+                <i
+                  class="bx bxs-heart"
+                  style="color: red"
+                  @click="removeReact(cmt._id)"
+                ></i>
+                {{ cmt.countReacts }}
+              </div> -->
+              </div>
+              <div class="more-option" v-if="cmt.user === userId">
+                <i
+                  class="bx bx-dots-horizontal-rounded"
+                  data-bs-target="#cmtModal"
+                  data-bs-toggle="modal"
+                  @click="openEditModal(cmt._id)"
+                ></i>
+                <!-- <div class="features_edit-remove">
                 <i class="bx bx-trash bx-fw"></i>
                 <i class="bx bx-edit-alt bx-fw"></i>
               </div> -->
+              </div>
             </div>
           </div>
-        </div>
-        <div class="comment-card-body">
-          <p>
-            {{ cmt.comment }}
-          </p>
+          <div class="comment-card-body">
+            <p>
+              {{ cmt.comment }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -91,36 +110,46 @@
     </div>
   </component>
   <component :is="'remove-modal'" @delete-confirm="deleteConfirm"></component>
+  <component
+    :is="'notifi-modal'"
+    @close-modal="closeWarning"
+    :openModal="displayWarning"
+  ></component>
 </template>
 
 <script>
 export default {
   name: "UserComment",
   props: {
-    reviewList: Array,
     productId: String,
   },
   data() {
     return {
+      test: true,
+      reviewList: [],
       btnProperty: {
         color: "",
         backColor: "",
       },
       confirmText: "",
       detailsReview: {},
+      detailsReview4React: {},
       reviewId: "",
-      //   updateReview:{
-
-      //   }
+      reviewReactId: "",
+      totalLikes: 0,
+      commentReact: {
+        like: 1,
+        user: "",
+      },
     };
   },
-  computed: {
-    userId() {
-      this.$store.dispatch("getUser");
-      const x = JSON.parse(this.$store.state.user);
-      return x.id;
-    },
-  },
+  // computed: {
+  //   userId() {
+  //     const x = JSON.parse(this.$store.state.user);
+  //     console.log(x.id);
+  //     return x.id;
+  //   },
+  // },
   methods: {
     checkColor(value) {
       if (value === "EXCELLENT") {
@@ -147,22 +176,12 @@ export default {
       });
       return day + "-" + month + "-" + year;
     },
-    async openEditModal(value) {
+    openEditModal(value) {
       this.confirmText = "Submit changes";
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#aa40e3";
       this.reviewId = value;
-      console.log(value);
-      try {
-        this.$store.dispatch("accessToken");
-        const res = await this.$axios.get(
-          `api/Product/productDetails/${this.productId}/Review/${value}`,
-          this.$axios.defaults.headers["Authorization"]
-        );
-        this.detailsReview = res.data.data;
-      } catch (error) {
-        console.log(error);
-      }
+      this.getReviewDetails(value);
     },
     async updateChange() {
       try {
@@ -198,12 +217,100 @@ export default {
         console.log(error);
       }
     },
-    // loadReview() {
-    //   this.$emit("load-data", true);
+    async getProductDetails() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Product/productDetails/${this.productId}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.reviewList = res.data.data.review;
+
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getReviewDetails(value) {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Product/productDetails/${this.productId}/Review/${value}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.detailsReview = res.data.data;
+        // this.executeReactUser();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // executeReactUser() {
+    //   let user = JSON.parse(this.$store.state.user);
+    //   console.log(this.detailsReview4React);
+    //   let reactArr = this.detailsReview4React.like;
+    //   console.log(reactArr);
+
+    //   const userFilter = reactArr.filter((item) => item.user === user.id);
+    //   console.log(userFilter.length);
+    //   if (userFilter.length > 0) {
+    //     this.colorReact = "red";
+    //   } else {
+    //     this.colorReact = "";
+    //   }
     // },
+    async addReact(value) {
+      try {
+        this.$store.dispatch("accessToken");
+        // this.$store.dispatch("getUser");
+        const user = JSON.parse(this.$store.state.user);
+        this.commentReact.user = user.id;
+        const res = await this.$axios.post(
+          `api/Product/productDetails/${this.productId}/Review/${value}/React`,
+          this.commentReact,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.getProductDetails();
+          this.test = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async removeReact(value) {
+      try {
+        this.$store.dispatch("accessToken");
+        const user = JSON.parse(this.$store.state.user);
+        const res = await this.$axios.delete(
+          `api/Product/productDetails/${this.productId}/Review/${value}/React/${user.id}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.getProductDetails();
+          this.test = true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    getReact(value) {
+      if (this.test == true) {
+        this.addReact(value);
+      } else if (this.test == false) {
+        this.removeReact(value);
+      }
+    },
+  },
+  watch: {
+    numOfReacts() {
+      console.log(this.numOfReacts);
+      this.colorReact = "red";
+    },
   },
   mounted() {
     console.log(this.reviewList);
+    this.getProductDetails();
   },
 };
 </script>
@@ -212,6 +319,7 @@ export default {
 /* .user-comment {
   border: solid;
 } */
+
 /* --- features --- */
 .review-features {
   border-top: solid 1px rgb(231, 223, 223);
@@ -249,6 +357,10 @@ textarea {
   font-size: 14px;
 }
 /* --- comment --- */
+.review-container {
+  height: 480px;
+  overflow-y: auto;
+}
 .review-comment {
   margin-top: 7%;
   display: flex;

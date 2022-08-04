@@ -70,10 +70,8 @@
               </span>
             </td>
             <td class="process-order">
-              <label @click="openCheck(order._id)" class="process-content">{{
-                order.process
-              }}</label>
-              <div class="modify-process" v-if="showCheckProcess == order._id">
+              <label class="process-content">{{ order.process }}</label>
+              <!-- <div class="modify-process" v-if="showCheckProcess == order._id">
                 <i class="bx bx-x bx-sm" @click="closeCheck"></i>
                 <div class="process-check">
                   <div class="check-checked">
@@ -131,7 +129,7 @@
                 >
                   Save
                 </div>
-              </div>
+              </div> -->
             </td>
             <td
               class="status-order"
@@ -195,7 +193,7 @@ export default {
         city: "",
         district: "",
       },
-      totalNewOrders: 0,
+      totalCancelledOrders: 0,
     };
   },
   components: {
@@ -221,11 +219,11 @@ export default {
         console.log(error);
       }
     },
-    async getNewOrders() {
+    async getCancelledOrders() {
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/Order/newOrders`,
+          `api/Order/cancelledOrders`,
           {
             params: {
               kindOf: this.kindOf,
@@ -235,8 +233,7 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.orderList = res.data.data;
-        this.totalNewOrders = res.data.totalOrders;
-        this.$emit("count-new-order", this.totalNewOrders);
+        this.totalCancelledOrders = res.data.totalOrders;
         this.orderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
         console.log(error);
@@ -268,7 +265,8 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         if (res.status == 200) {
-          this.getNewOrders();
+          this.getCancelledOrders();
+          this.showCheckProcess = false;
         }
       } catch (error) {
         console.log(error);
@@ -312,12 +310,12 @@ export default {
       var day = ("0" + result.getDate()).slice(-2);
       value.dateCreate = day + "-" + month + "-" + year;
     },
-    openCheck(value) {
-      this.showCheckProcess = value;
-    },
-    closeCheck() {
-      this.showCheckProcess = false;
-    },
+    // openCheck(value) {
+    //   this.showCheckProcess = value;
+    // },
+    // closeCheck() {
+    //   this.showCheckProcess = false;
+    // },
     openRemoveModal(id) {
       this.removeId = id;
     },
@@ -329,7 +327,7 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         if (res.status == 200) {
-          this.getNewOrders();
+          this.getCancelledOrders();
         }
       } catch (error) {
         console.log(error);
@@ -337,16 +335,16 @@ export default {
     },
   },
   watch: {
-    totalNewOrders() {
-      console.log(this.totalNewOrders);
-      this.$emit("total-new-orders", this.totalNewOrders, "new");
+    totalCancelledOrders() {
+      console.log(this.totalCancelledOrders);
+      this.$emit("total-cancelled-orders", this.totalCancelledOrders);
     },
     kindOf() {
-      this.getNewOrders();
+      this.getCancelledOrders();
     },
   },
   mounted() {
-    this.getNewOrders();
+    this.getCancelledOrders();
   },
 };
 </script>
@@ -429,29 +427,11 @@ span select {
   position: relative;
 }
 .process-order .process-content {
-  color: #f4511e;
-  text-shadow: 0 0 7px #ff7043;
+  color: #ff5252;
+  text-shadow: 0 0 7px #ff867f;
   font-weight: 500;
-  cursor: pointer;
 }
 
-.modify-process {
-  /* border: solid rgb(205, 205, 205) 1px; */
-  position: absolute;
-  z-index: 1;
-  top: 20px;
-  right: -100px;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
-    rgba(17, 17, 26, 0.05) 0px 8px 32px;
-  background: white;
-  border-radius: 4px;
-  transition: all 0.8s;
-}
-i {
-  position: absolute;
-  right: 10px;
-  cursor: pointer;
-}
 .modify-process .process-check {
   /* border-top: solid rgb(220, 217, 217); */
   margin-top: 20px;
@@ -462,37 +442,7 @@ i {
   font-weight: 600;
   font-size: 14px;
 }
-.check-checked label {
-  color: #ff4081;
-  text-shadow: 0 0 5px #ef68fc;
-}
-.check-delivered label {
-  color: #00ad48;
-  text-shadow: 0 0 6px #64dd17;
-}
-.check-cancelled label {
-  color: #ff5252;
-  text-shadow: 0 0 6px #ff867f;
-}
-.check-completed label {
-  color: #2962ff;
-  text-shadow: 0 0 6px #73e8ff;
-}
-.btn-submit-check {
-  background: #c261f7;
-  width: 80%;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 2px;
-  border: none;
-  margin-bottom: 5px;
-  border-radius: 5px;
-}
-.btn-submit-check:hover {
-  background: #be4dfa;
-  color: white;
-}
+
 /* - - -  remove btn - - - */
 .item_remove-bin i:hover {
   color: red;

@@ -2,13 +2,21 @@
   <div class="delivery-route-bar">
     <nav>
       <ul>
-        <li @click="openOrderRoute('all')" class="bar active">All</li>
-        <li @click="openOrderRoute('new')" class="bar">New orders</li>
+        <li @click="openOrderRoute('all')" class="bar active">
+          All ({{ totalOrders }})
+        </li>
+        <li @click="openOrderRoute('new')" class="bar">
+          New orders
+          <span>{{ totalNewOrders }}</span>
+        </li>
+        <li @click="openOrderRoute('checked')" class="bar">
+          Checked orders <span>{{ totalCheckedOrders }}</span>
+        </li>
         <li @click="openOrderRoute('delivering')" class="bar">
-          Delivering orders
+          Delivering orders <span>{{ totalDeliveryOrders }}</span>
         </li>
         <li @click="openOrderRoute('cancelled')" class="bar">
-          Cancelled orders
+          Cancelled orders <span>{{ totalCancelledOrders }}</span>
         </li>
       </ul>
     </nav>
@@ -17,12 +25,120 @@
 
 <script>
 export default {
+  name: "DeliveryRouteBar",
+  data() {
+    return {
+      totalOrders: 0,
+      totalNewOrders: 0,
+      totalCheckedOrders: 0,
+      totalDeliveryOrders: 0,
+      totalCancelledOrders: 0,
+    };
+  },
+  props: {
+    allOrders: Number,
+    newOrders: Number,
+    checkedOrders: Number,
+    deliveryOrders: Number,
+    cancelledOrders: Number,
+  },
   methods: {
     openOrderRoute(value) {
+      this.$router.push({ name: "deliveryView", params: { id: value } });
       this.$emit("open-orders-tab", value);
+    },
+    async getNewOrders() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order/newOrders`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        console.log(res);
+        this.totalNewOrders = res.data.totalOrders;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCheckedOrders() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order/checkedOrders`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        console.log(res);
+        this.totalCheckedOrders = res.data.totalOrders;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAllOrders() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order`,
+          { params: { page: this.currentPage } },
+          this.$axios.defaults.headers["Authorization"]
+        );
+        console.log(res);
+        this.totalOrders = res.data.totalOrders;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getDeliveryOrders() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order/deliveryOrders`,
+          { params: { page: this.currentPage } },
+          this.$axios.defaults.headers["Authorization"]
+        );
+        console.log(res);
+        this.totalDeliveryOrders = res.data.totalOrders;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCancelledOrders() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order/cancelledOrders`,
+          { params: { page: this.currentPage } },
+          this.$axios.defaults.headers["Authorization"]
+        );
+        console.log(res);
+        this.totalCancelledOrders = res.data.totalOrders;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    allOrders() {
+      this.totalOrders = this.allOrders;
+    },
+    newOrders() {
+      this.totalNewOrders = this.newOrders;
+    },
+    checkedOrders() {
+      this.totalCheckedOrders = this.checkedOrders;
+    },
+    deliveryOrders() {
+      this.totalDeliveryOrders = this.deliveryOrders;
+    },
+    cancelledOrders() {
+      this.totalCancelledOrders = this.cancelledOrders;
     },
   },
   mounted() {
+    this.getNewOrders();
+    this.getAllOrders();
+    this.getCheckedOrders();
+    this.getDeliveryOrders();
+    this.getCancelledOrders();
     const navItems = document.querySelectorAll(".bar");
 
     for (var i = 0; i < navItems.length; i++) {
@@ -68,5 +184,14 @@ ul {
   font-size: 15px;
   padding: 10px;
   transition: all 0.2s;
+}
+span {
+  border: solid;
+  padding: 5px 9px;
+  border-radius: 30px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="user-review">
     <div class="title">
-      <h4>Reviews</h4>
+      <h4>Reviews ({{ countReviews }})</h4>
       <hr />
     </div>
     <div class="criticise-option">
@@ -35,9 +35,17 @@
     <div class="error-message">
       <p v-if="displayErrorLength">Comment must be at least 30 characters</p>
       <p v-if="displayErrorMissing">Rating or Comment field is missing</p>
+      <p v-if="displayErrorOverwrite">
+        You have crossed the limition of comment (one per user)
+      </p>
     </div>
-    <UserComment :reviewList="reviewList" :productId="productId" />
+    <UserComment :productId="productId" />
   </div>
+  <component
+    :is="'notifi-modal'"
+    @close-modal="closeWarning"
+    :openModal="displayWarning"
+  ></component>
 </template>
 
 <script>
@@ -48,11 +56,14 @@ export default {
   props: {
     productId: String,
     reviewList: Array,
+    countReviews: Number,
   },
   data() {
     return {
+      displayWarning: false,
       displayErrorMissing: false,
       displayErrorLength: false,
+      displayErrorOverwrite: false,
       productComment: {
         comment: "",
         user: "",
@@ -64,47 +75,72 @@ export default {
     };
   },
   methods: {
+    closeWarning() {
+      this.displayWarning = false;
+    },
     async newComment() {
-      try {
-        if (
-          this.productComment.comment == "" ||
-          this.productComment.rating == ""
-        ) {
-          this.displayErrorMissing = true;
-        } else {
-          this.displayErrorMissing = false;
-        }
-        if (this.productComment.comment < 30) {
-          this.displayErrorLength = true;
-        } else {
-          this.displayErrorLength = false;
-        }
-        if (
-          this.productComment.comment != "" &&
-          this.productComment.rating != "" &&
-          this.productComment.comment >= 30
-        ) {
-          this.$store.dispatch("accessToken");
-          this.$store.dispatch("getUser");
+      if (this.$store.state.user == null) {
+        this.displayWarning = true;
+      } else {
+        try {
+          this.errorHandling();
           const user = JSON.parse(this.$store.state.user);
-          this.productComment.user = user.id;
-          console.log(user);
-          console.log(user.avatar);
-          this.productComment.firstname = user.firstname;
-          this.productComment.lastname = user.lastname;
-          this.productComment.avatar = user.avatar;
-
-          const res = await this.$axios.post(
-            `api/Product/productDetails/${this.productId}/Review`,
-            this.productComment,
-            this.$axios.defaults.headers["Authorization"]
+          const findUser = this.reviewList.filter(
+            (item) => item.user === user.id
           );
-          if (res.status == 200) {
-            this.$router.go();
+          if (
+            this.productComment.comment != "" &&
+            this.productComment.rating != "" &&
+            this.productComment.comment.length >= 30 &&
+            findUser.length == 0
+          ) {
+            console.log("loding in here");
+            this.$store.dispatch("accessToken");
+            this.$store.dispatch("getUser");
+            const user = JSON.parse(this.$store.state.user);
+            this.productComment.user = user.id;
+            this.productComment.firstname = user.firstname;
+            this.productComment.lastname = user.lastname;
+            this.productComment.avatar = user.avatar;
+
+            const res = await this.$axios.post(
+              `api/Product/productDetails/${this.productId}/Review`,
+              this.productComment,
+              this.$axios.defaults.headers["Authorization"]
+            );
+            if (res.status == 200) {
+              this.$router.go();
+            }
           }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
+      }
+    },
+    errorHandling() {
+      const user = JSON.parse(this.$store.state.user);
+      console.log(this.reviewList);
+      const findUser = this.reviewList.filter((item) => item.user === user.id);
+      if (
+        (this.productComment.comment == "" ||
+          this.productComment.rating == "") &&
+        this.productComment.comment.length < 30
+      ) {
+        this.displayErrorMissing = true;
+        this.displayErrorLength = true;
+      } else if (
+        this.productComment.comment == "" ||
+        this.productComment.rating == ""
+      ) {
+        this.displayErrorMissing = true;
+      } else if (this.productComment.comment.length < 30) {
+        this.displayErrorLength = true;
+      } else if (findUser.length > 0) {
+        this.displayErrorOverwrite = true;
+      } else {
+        this.displayErrorLength = false;
+        this.displayErrorMissing = false;
+        this.displayErrorOverwrite = false;
       }
     },
     resetInput() {

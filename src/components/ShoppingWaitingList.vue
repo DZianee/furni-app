@@ -9,29 +9,16 @@
       </div>
       <hr />
       <div class="item-current-container">
-        <div class="item_current">
-          <img
-            src="https://deba.vn/wp-content/uploads/2017/05/shop-15.jpg"
-            alt="product-item"
-          />
-          <p class="item-name">testing 01 the thhu hfgsg yudgsdfg</p>
-        </div>
-        <div class="item_current">
-          <img
-            src="https://deba.vn/wp-content/uploads/2017/05/shop-15.jpg"
-            alt="product-item"
-          />
-          <p class="item-name">testing 01 the thhu hfgsg yudgsdfg</p>
-        </div>
-        <div class="item_current">
-          <img
-            src="https://deba.vn/wp-content/uploads/2017/05/shop-15.jpg"
-            alt="product-item"
-          />
-          <p class="item-name">testing 01 the thhu hfgsg yudgsdfg</p>
+        <div
+          class="item_current"
+          v-for="item in productInList"
+          :key="item.index"
+        >
+          <img :src="`http://localhost:2371/${item.img}`" :alt="item.name" />
+          <p class="item-name" style="font-weight: 500">{{ item.name }}</p>
         </div>
       </div>
-      <div class="total-item">Total items: 3</div>
+      <div class="total-item">Total items: {{ countProductInList }}</div>
     </div>
   </div>
 </template>
@@ -45,6 +32,17 @@ export default {
     };
   },
   props: { open: Boolean },
+  computed: {
+    productInList() {
+      const result = JSON.parse(this.$store.state.shoppingList);
+      console.log(result);
+      return result;
+    },
+    countProductInList() {
+      const result = JSON.parse(this.$store.state.shoppingList).length || 0;
+      return result;
+    },
+  },
   methods: {
     close() {
       this.$emit("close", false);
@@ -76,7 +74,7 @@ export default {
   transition: all 0.5s;
 }
 .waiting-list_sidebar {
-  width: 270px;
+  width: 300px;
   z-index: 210;
   background: #fff0f0;
   top: -1px;

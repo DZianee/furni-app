@@ -39,12 +39,8 @@ export default {
   async created() {
     try {
       this.$store.dispatch("accessToken");
-      const res = await this.$axios.get(
-        `api/Category/`,
-        this.$axios.defaults.headers["Authorization"]
-      );
+      const res = await this.$axios.get(`api/Category/`);
       this.categoryList = res.data.data.content;
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,5 @@
 <template>
   <div class="empty-layout">
-    <span class="route-home" @click="Route('home')">Back to Home</span>
     <div class="router-view">
       <slot />
     </div>

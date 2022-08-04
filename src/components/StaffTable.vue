@@ -630,7 +630,7 @@ export default {
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/User/userDetails/Staff/${value}`,
+          `api/User/userDetails/All/${value}`,
           this.$axios.defaults.headers["Authorization"]
         );
         console.log(res);

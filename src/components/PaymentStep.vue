@@ -1,16 +1,35 @@
 <template>
   <div class="payment-step">
     <div class="item-in-cart icon">
-      <i class="bx bx-cart-alt bx-lg" style="background-color: #fff395"></i>
+      <i
+        class="bx bx-cart-alt bx-lg"
+        :style="[
+          successCart
+            ? { backgroundColor: '#ffffa8' }
+            : { backgroundColor: '' },
+        ]"
+      ></i>
       <h6>Your cart item</h6>
       <p class="line" id="test"></p>
     </div>
     <div class="order-info icon">
-      <i class="bx bx-user-pin bx-lg"></i>
+      <i
+        class="bx bx-user-pin bx-lg"
+        :style="[
+          successInfo
+            ? { backgroundColor: '#ffffa8' }
+            : { backgroundColor: '' },
+        ]"
+      ></i>
       <h6>Order's information</h6>
     </div>
     <div class="payment-method icon">
-      <i class="bx bx-credit-card-alt bx-lg"></i>
+      <i
+        class="bx bx-credit-card-alt bx-lg"
+        :style="[
+          successPay ? { backgroundColor: '#ffffa8' } : { backgroundColor: '' },
+        ]"
+      ></i>
       <h6>Payment method</h6>
     </div>
   </div>
@@ -20,7 +39,9 @@
 export default {
   name: "PaymentStep",
   props: {
-    success: String,
+    successInfo: Boolean,
+    successCart: Boolean,
+    successPay: Boolean,
   },
   methods: {},
 };
@@ -49,7 +70,7 @@ export default {
   background: #ffff;
 }
 .payment-step .icon h6 {
-  font-weight: 600;
+  font-weight: 500;
   margin-top: 15px;
 }
 </style>

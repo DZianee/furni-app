@@ -1,14 +1,15 @@
 <template>
   <div class="shopping-list-view">
-    <PaymentStep :success="successStep" />
+    <PaymentStep
+      :successPay="successPay"
+      :successCart="successCart"
+      :successInfo="successInfo"
+    />
     <!-- <div class="cart-list-component"></div> -->
     <div>
-      <CartItem @to-order-info="toNextStep" :showCartItem="showCartItem" />
-      <FillOrderInfo />
+      <CartItem :showCartItem="showCartItem" @fill-color="fillColor" />
+      <FillOrderInfo @fill-color="fillColor" />
       <PaymentMethod />
-      <button type="submit" class="btn" @click="Route('successOrderView')">
-        Complete the Order
-      </button>
     </div>
   </div>
 </template>
@@ -26,7 +27,9 @@ export default {
       showCartItem: true,
       showOrderInfo: false,
       showPayment: false,
-      successStep: "",
+      successCart: false,
+      successPay: false,
+      successInfo: false,
     };
   },
   methods: {
@@ -37,6 +40,17 @@ export default {
     // },
     Route(value) {
       this.$router.push({ name: value });
+    },
+    fillColor(text, val) {
+      console.log(text);
+      console.log(val);
+      if (text === "info") {
+        this.successInfo = val;
+      } else if (text === "cart") {
+        this.successCart = val;
+      } else {
+        this.successPay = val;
+      }
     },
   },
 };
