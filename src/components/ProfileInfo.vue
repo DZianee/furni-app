@@ -128,9 +128,10 @@
               Oops! Your old password is wrong, please check it again
             </p>
           </div>
-          <div class="password">
+          <div class="password btn-form">
             <!-- <label for="password">Password</label>
           <input type="text" readonly value="5454354365" /> -->
+            <button class="btn-cancel" @click="cancelChangePass">Cancel</button>
             <button class="btn-update-pass" @click="updateAccount">
               Change Password
             </button>
@@ -182,6 +183,10 @@ export default {
     updatePassForm() {
       this.displayChangePassword = true;
       this.displayBtnUpdatePass = false;
+    },
+    cancelChangePass() {
+      this.displayChangePassword = false;
+      this.displayBtnUpdatePass = true;
     },
     checkError() {
       if (this.newPassword != this.updatePass) {
@@ -451,8 +456,9 @@ button {
 }
 .password {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 }
+
 .btn-update-pass {
   background: #ff6d00;
   width: 60%;

@@ -29,6 +29,7 @@
               <button
                 type="submit"
                 class="btn"
+                data-bs-dismiss="modal"
                 :style="{
                   backgroundColor: btnProperty.backColor,
                   color: btnProperty.color,

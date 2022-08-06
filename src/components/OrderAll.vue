@@ -1,5 +1,9 @@
 <template>
-  <component :is="'order-card-list'" :orderUserList="userOrderList"></component>
+  <component
+    :is="'order-card-list'"
+    :orderUserList="userOrderList"
+    @load-page="loadPage"
+  ></component>
 </template>
 
 <script>
@@ -25,15 +29,23 @@ export default {
         const user = JSON.parse(this.$store.state.user);
         const res = await this.$axios.get(
           `api/Order/allOrderPerUser/${user.id}`,
+          {
+            params: {
+              kindOf: "-1",
+              sortName: "dateCreate",
+            },
+          },
           this.$axios.defaults.headers["Authorization"]
         );
         this.userOrderList = res.data.data;
         this.totalList = this.userOrderList.length;
-        console.log(this.totalList);
         this.userOrderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
         console.log(error);
       }
+    },
+    loadPage() {
+      this.getAllUserOrders();
     },
   },
   mounted() {

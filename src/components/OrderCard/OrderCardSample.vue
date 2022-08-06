@@ -32,7 +32,7 @@
                 >
               </div>
               <div class="estimate_delivery-time">
-                Estimated delivery date <span>13/05/2022</span>
+                Estimated delivery date <span>Within a week</span>
               </div>
             </div>
           </div>
@@ -44,7 +44,7 @@
             >
               <div class="item-img">
                 <img
-                  src="https://www.ikea.com/nl/en/images/products/gladstad-upholstered-bed-2-storage-boxes-kabusa-light-grey__1012080_pe828858_s5.jpg?f=xl"
+                  :src="`http://localhost:2371/${product.productImg}`"
                   alt="product-img"
                 />
               </div>
@@ -70,13 +70,27 @@
               <span style="color: red">{{ item.totalBill }} VND</span>
             </div>
             <div class="cancel-order">
-              <button v-if="hiddenBtn(item.process)">Cancel order</button>
+              <button
+                v-if="hiddenBtn(item.process, item.dateClose)"
+                @click="cancelOpen(item._id)"
+                data-bs-target="#removeModal"
+                data-bs-toggle="modal"
+              >
+                Cancel order
+              </button>
+              <p
+                style="color: red; font-size: 14px; padding: 10px"
+                v-if="hiddenBtn(item.process, item.dateClose)"
+              >
+                Within 24 hours, Cancel Order will be closed
+              </p>
             </div>
           </div>
         </div>
       </div>
-    </div></transition
-  >
+    </div>
+  </transition>
+  <component :is="'remove-modal'" @delete-confirm="deleteConfirm"></component>
 </template>
 
 <script>
@@ -85,17 +99,34 @@ export default {
   data() {
     return {
       newOrderUserList: [],
+      removeId: "",
     };
   },
   props: {
     orderUserList: Array,
   },
   methods: {
-    hiddenBtn(value) {
-      if (value != "New") {
-        return false;
-      } else {
+    hiddenBtn(value, dateCloseCancel) {
+      let currentDate = new Date(Date.now());
+      let dayCurrent = currentDate.getDate();
+      let hourCurrent = currentDate.getHours();
+      let minCurrent = currentDate.getMinutes();
+
+      let dateClose = new Date(dateCloseCancel);
+      let dayClose = dateClose.getDate();
+      let hourClose = dateClose.getHours();
+      let minClose = dateClose.getMinutes();
+
+      const dayResult = dayClose - dayCurrent;
+      const hourResult = hourClose - hourCurrent;
+      const minResult = minClose - minCurrent;
+      if (value === "New") {
         return true;
+      } else if (
+        value != "New" ||
+        (dayResult == 0 && hourResult == 0 && minResult == 0)
+      ) {
+        return false;
       }
     },
     orderStatusColor(value) {
@@ -124,6 +155,28 @@ export default {
         return "Cancelled";
       }
     },
+    cancelOpen(value) {
+      this.removeId = value;
+    },
+    async deleteConfirm() {
+      try {
+        const order = {
+          status: "Unactive",
+          process: "Cancelled",
+        };
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.put(
+          `api/Order/updateOrder/${this.removeId}`,
+          order,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.$emit("load-page");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {},
 };
@@ -139,7 +192,7 @@ export default {
   text-align: center;
 }
 .empty-order-list p {
-  font-size: 20px;
+  font-size: 18px;
   padding: 10px;
   font-style: italic;
 }

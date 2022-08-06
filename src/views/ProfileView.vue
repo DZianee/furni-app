@@ -46,11 +46,13 @@
 <script>
 import ProfileInfo from "../components/ProfileInfo.vue";
 import OrderActivities from "../components/OrderActivities.vue";
+import PostedComment from "../components/PostedComment.vue";
 export default {
   name: "ProfileView",
   components: {
     ProfileInfo,
     OrderActivities,
+    PostedComment,
   },
   data() {
     return {
@@ -94,23 +96,9 @@ export default {
       });
     },
     convertDateTime(value) {
-      const dateTime = new Date(value);
-      let hour;
-      let min = dateTime.getMinutes();
-      var year = dateTime.getFullYear();
-      var month = ("0" + (dateTime.getMonth() + 1)).slice(-2);
-      var day = ("0" + dateTime.getDate()).slice(-2);
-      if (parseInt(dateTime.getHours()) < 10) {
-        hour = "0" + dateTime.getHours();
-      } else {
-        hour = parseInt(dateTime.getHours()).toString();
-      }
-      if (parseInt(min) < 10) {
-        min = "0" + (parseInt(min) + 1).toString();
-      } else {
-        min = (parseInt(min) + 1).toString();
-      }
-      this.lastLogin = day + "/" + month + "/" + year + " " + hour + ":" + min;
+      console.log(value);
+      let date = new Date(value);
+      this.lastLogin = date.toLocaleString();
     },
   },
   mounted() {

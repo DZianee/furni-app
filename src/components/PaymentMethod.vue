@@ -135,6 +135,7 @@ export default {
           paymentMethod: "Cash",
           user: user.id,
           orderId: orderID,
+          dateCreate: new Date(Date.now()),
           cart: [],
         };
         shopList.forEach((item) => {
