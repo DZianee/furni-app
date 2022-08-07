@@ -1,11 +1,13 @@
 <template>
-  <div class="furniture-view container">
-    <CategoryListBar
-      :test="test"
-      @cate-title-id="getCateId"
-      @cate-title-all="getCateAll"
-    />
-    <ProductList :cateId="cateId" />
+  <div class="wrapper">
+    <div class="furniture-view container">
+      <CategoryListBar
+        :test="test"
+        @cate-title-id="getCateId"
+        @cate-title-all="getCateAll"
+      />
+      <ProductList :cateId="cateId" />
+    </div>
   </div>
 </template>
 
@@ -59,10 +61,14 @@ export default {
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
 
+.wrapper {
+  background: rgb(239, 239, 239);
+}
 .container {
-  margin-top: 60px;
+  padding-top: 6%;
+  background: white;
   text-align: center;
   font-family: "Poppins", sans-serif;
-  margin-bottom: 50px;
+  padding-bottom: 50px;
 }
 </style>

@@ -225,34 +225,11 @@ export default {
   props: {
     cateId: String,
   },
-  // computed: {
-  //   cateId() {
-  //     return this.$route.params.id;
-  //   },
-  // },
-  // async created() {
-  //   try {
-  //     this.$store.dispatch("accessToken");
-  //     const res = await this.$axios.get(
-  //       `api/Product`,
-  //       {
-  //         params: {
-  //           page: this.currentPage,
-  //         },
-  //       },
-  //       this.$axios.defaults.headers["Authorization"]
-  //     );
-  //     this.productList = res.data.data;
-  //     this.tempProductList = this.productList;
-  //     this.pageTotals = res.data.pageTotals;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
   methods: {
     Route(value, cateId, id) {
       this.$router.push({ name: value, params: { cateType: cateId, id: id } });
     },
+    // get alll products
     async getProduct() {
       let res;
       if (this.price == "") {
@@ -287,8 +264,8 @@ export default {
       }
       this.pageTotals = res.data.pageTotals;
       this.productList = res.data.data;
-      console.log(this.pageTotals);
     },
+    // pagination for all products
     async getProductPagination() {
       let res;
       if (this.price == "") {
@@ -324,19 +301,44 @@ export default {
       this.pageTotals = res.data.pageTotals;
       this.productList = this.productList.concat(res.data.data);
     },
+    // get product by category
     async getCateDetails() {
-      try {
-        if (this.cateId != "all") {
+      let res;
+      if (this.price == "") {
+        try {
           this.$store.dispatch("accessToken");
-          const res = await this.$axios.get(
-            `api/Category/cateDetails/${this.cateId}`
+          res = await this.$axios.get(
+            `api/Product/getProductCate/${this.cateId}`,
+            {
+              params: {
+                kindOf: this.kindOf,
+                sortName: this.sortName,
+                search: this.search,
+              },
+            }
           );
-          this.cateProductList = res.data.data.content.productList;
+        } catch (error) {
+          console.log(error);
         }
-        // console.log(this.categoryDetails);
-      } catch (error) {
-        console.log(error);
+      } else if (this.price != "") {
+        try {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(
+            `api/Product/getProductCate/${this.cateId}`,
+            {
+              params: {
+                kindOf: this.kindOf,
+                price: this.price,
+                sortName: this.sortName,
+                search: this.search,
+              },
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        }
       }
+      this.cateProductList = res.data.data;
     },
     loadMore() {
       if (this.currentPage == this.pageTotals) {
@@ -371,15 +373,19 @@ export default {
     },
     kindOf() {
       this.getProduct();
+      this.getCateDetails();
     },
     sortName() {
       this.getProduct();
+      this.getCateDetails();
     },
     price() {
       this.getProduct();
+      this.getCateDetails();
     },
     search() {
       this.getProduct();
+      this.getCateDetails();
     },
   },
   // mounted() {
