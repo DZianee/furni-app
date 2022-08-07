@@ -8,7 +8,7 @@
     <div class="header-content">
       <ul>
         <li class="item" @click="Route('home')">Home</li>
-        <li class="item" @click="Route('furnitureView')">Furniture</li>
+        <li class="item" @click="RouteFurni('furnitureView')">Furniture</li>
         <li class="item" @click="Route('servicesView')">Services</li>
         <li class="item" @click="Route('companyView')">Company</li>
         <li class="item" @click="Route('dashboardView')">Management</li>
@@ -27,7 +27,7 @@
             </div>
             <span class="text-welcome">
               Hello
-              <span @click="RouteId('profileView', user.id)">
+              <span @click="Route('profileView', user.id, 'profile')">
                 {{ user.email }}</span
               >
             </span>
@@ -85,6 +85,13 @@
       <p><span style="font-weight: 600">Phone:</span> +12679453</p>
     </div>
   </footer>
+  <component
+    :is="'notifi-modal'"
+    @close-modal="closeWarning"
+    :openModal="displayWarning"
+  >
+    There is no product in your cart yet
+  </component>
 </template>
 
 <script>
@@ -96,6 +103,7 @@ export default {
   },
   data() {
     return {
+      displayWarning: false,
       login: false,
       user: {},
       showLogout: false,
@@ -120,38 +128,46 @@ export default {
     },
   },
   methods: {
-    Route(value) {
-      this.$router.push({ name: value });
+    closeWarning() {
+      this.displayWarning = false;
     },
-    RouteId(value, id) {
-      this.$router.push({ name: value, params: { id: id } });
+    Route(value, id, name) {
+      if (value == "profileView") {
+        this.$router.push({ name: value, params: { id: id, name: name } });
+      } else if (value == "shoppingListView") {
+        if (this.totalProductsInCart == 0) {
+          this.displayWarning = true;
+        } else {
+          this.displayWarning = false;
+          this.$router.push({ name: value });
+        }
+      } else {
+        this.$router.push({ name: value });
+      }
     },
+    RouteFurni(value) {
+      this.$router.push({ name: value, params: { id: "all" } });
+    },
+    // RouteShopping(value) {},
+    // RouteId(value, id) {},
     loginVerified(val) {
       this.login = val;
-      // console.log(this.login);
     },
     getUser() {
       this.$store.dispatch("getUser");
       const data = JSON.parse(this.$store.state.user);
       this.user = data;
-      // console.log(this.user);
     },
     logout() {
       this.$store.dispatch("logout");
       this.$router.go();
-      // this.logouts = true;
-      // this.$store.dispatch("getAuth");
-      // this.login = this.$store.state.authenticated;
     },
   },
   watch: {
     login() {
-      // console.log(this.login);
       this.getUser();
-      // this.$router.go();
     },
     logouts() {
-      // console.log(this.logouts);
       this.login = false;
       this.logouts = false;
       this.showLogout = false;

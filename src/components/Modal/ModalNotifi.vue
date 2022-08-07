@@ -8,7 +8,7 @@
             <!-- <i class="bx bx-error bx-lg" style="color: #ffd600"></i> -->
             <img src="./Monsters-Error404.png" alt="hgfh" />
           </div>
-          <p>Oops! Please Sign In to experience this</p>
+          <p><slot></slot></p>
         </div>
         <div class="cancel-btns">
           <button type="button" @click="close" class="btn_cancel btn-warning">
@@ -36,7 +36,7 @@ export default {
 
 <style scoped>
 .Confirm-Modal {
-  border-radius: 7px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;

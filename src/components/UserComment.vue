@@ -114,7 +114,8 @@
     :is="'notifi-modal'"
     @close-modal="closeWarning"
     :openModal="displayWarning"
-  ></component>
+    >Oops! Please Sign In to experience this</component
+  >
 </template>
 
 <script>

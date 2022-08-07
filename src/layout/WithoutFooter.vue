@@ -8,7 +8,7 @@
     <div class="header-content">
       <ul>
         <li class="item" @click="Route('home')">Home</li>
-        <li class="item" @click="Route('furnitureView')">Furniture</li>
+        <li class="item" @click="RouteFurni('furnitureView')">Furniture</li>
         <li class="item" @click="Route('servicesView')">Services</li>
         <li class="item" @click="Route('companyView')">Company</li>
         <li class="item" @click="Route('dashboardView')">Management</li>
@@ -27,7 +27,7 @@
             </div>
             <span class="text-welcome">
               Hello
-              <span @click="RouteId('profileView', user.id)">
+              <span @click="Route('profileView', user.id, 'profile')">
                 {{ user.email }}</span
               >
             </span>
@@ -56,6 +56,13 @@
   <div class="router-view">
     <slot />
   </div>
+  <component
+    :is="'notifi-modal'"
+    @close-modal="closeWarning"
+    :openModal="displayWarning"
+  >
+    There is no product in your cart yet
+  </component>
 </template>
 
 <script>
@@ -67,6 +74,7 @@ export default {
   },
   data() {
     return {
+      displayWarning: false,
       login: false,
       user: {},
       showLogout: false,
@@ -91,11 +99,25 @@ export default {
     },
   },
   methods: {
-    RouteId(value, id) {
-      this.$router.push({ name: value, params: { id: id } });
+    closeWarning() {
+      this.displayWarning = false;
     },
-    Route(value) {
-      this.$router.push({ name: value });
+    Route(value, id, name) {
+      if (value == "profileView") {
+        this.$router.push({ name: value, params: { id: id, name: name } });
+      } else if (value == "shoppingListView") {
+        if (this.totalProductsInCart == 0) {
+          this.displayWarning = true;
+        } else {
+          this.displayWarning = false;
+          this.$router.push({ name: value });
+        }
+      } else {
+        this.$router.push({ name: value });
+      }
+    },
+    RouteFurni(value) {
+      this.$router.push({ name: value, params: { id: "all" } });
     },
     loginVerified(val) {
       this.login = val;

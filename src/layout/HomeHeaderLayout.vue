@@ -27,7 +27,7 @@
             </div>
             <span class="text-welcome">
               Hello
-              <span @click="RouteId('profileView', user.id, 'profile')">
+              <span @click="Route('profileView', user.id, 'profile')">
                 {{ user.email }}</span
               >
             </span>
@@ -84,6 +84,13 @@
       <p><span style="font-weight: 600">Phone:</span> +12679453</p>
     </div>
   </footer>
+  <component
+    :is="'notifi-modal'"
+    @close-modal="closeWarning"
+    :openModal="displayWarning"
+  >
+    There is no product in your cart yet
+  </component>
 </template>
 
 <script>
@@ -94,6 +101,7 @@ export default {
   },
   data() {
     return {
+      displayWarning: false,
       login: false,
       user: {},
       showLogout: false,
@@ -118,11 +126,22 @@ export default {
     },
   },
   methods: {
-    Route(value) {
-      this.$router.push({ name: value });
+    closeWarning() {
+      this.displayWarning = false;
     },
-    RouteId(value, id, name) {
-      this.$router.push({ name: value, params: { id: id, name: name } });
+    Route(value, id, name) {
+      if (value == "profileView") {
+        this.$router.push({ name: value, params: { id: id, name: name } });
+      } else if (value == "shoppingListView") {
+        if (this.totalProductsInCart == 0) {
+          this.displayWarning = true;
+        } else {
+          this.displayWarning = false;
+          this.$router.push({ name: value });
+        }
+      } else {
+        this.$router.push({ name: value });
+      }
     },
     RouteFurni(value) {
       this.$router.push({ name: value, params: { id: "all" } });

@@ -6,11 +6,15 @@
     </div>
     <div class="user-shortcut">
       <div class="user-icon">
-        <i class="bx bx-user-circle bx-md"></i>
+        <img
+          class="header-user-image"
+          alt="user avatar"
+          :src="`${user.avatar}`"
+        />
       </div>
       <div class="user-info">
-        <h6 class="user-name">Panda Sweet</h6>
-        <p class="user-email">sweetPand@gmail.com</p>
+        <h6 class="user-name">{{ user.firstname }} {{ user.lastname }}</h6>
+        <p class="user-email">{{ user.email }}</p>
       </div>
     </div>
     <ul class="nav-items">
@@ -58,6 +62,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      user: {},
+    };
+  },
   methods: {
     Route(value, id) {
       this.$router.push({ name: value, params: { id: id } });
@@ -69,6 +78,14 @@ export default {
       this.$store.dispatch("logout");
       this.$router.push({ name: "home" });
     },
+    getUser() {
+      this.$store.dispatch("getUser");
+      const data = JSON.parse(this.$store.state.user);
+      this.user = data;
+    },
+  },
+  mounted() {
+    this.getUser();
   },
 };
 </script>
@@ -106,12 +123,19 @@ export default {
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
   gap: 7px;
   border-radius: 10px;
-  padding: 4px;
+  padding: 10px;
+  height: 15%;
   background: #fffdde;
 }
 .user-icon {
   display: flex;
   align-items: center;
+}
+.header-user-image {
+  max-width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  transform: translateY(-30%);
 }
 .user-info {
   width: 150px;

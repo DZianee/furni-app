@@ -48,7 +48,9 @@
     :is="'notifi-modal'"
     @close-modal="closeWarning"
     :openModal="displayWarning"
-  ></component>
+  >
+    Oops! Please Sign In to experience this</component
+  >
 </template>
 
 <script>
@@ -78,7 +80,7 @@ export default {
     },
     closeWarning() {
       this.displayWarning = false;
-      this.$router.go();
+      // this.$router.go();
     },
     getColor(value) {
       this.checkedColor = value;
