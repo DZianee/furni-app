@@ -55,7 +55,7 @@
             </td>
             <td></td>
             <td class="fee">
-              <p style="text-align: center; color: red">
+              <p style="text-align: center; color: blue">
                 + {{ shippingFee() }} VND
               </p>
             </td>
@@ -75,30 +75,60 @@
       </div>
     </div>
     <div class="payment-method-option">
-      <div class="card e-pay">
-        <h5>E-payment Momo</h5>
-        <p>Purchase the order before delivery</p>
-      </div>
-      <div class="card cash-pay">
-        <div style="display: flex; gap: 20px; align-items: center">
-          <input type="checkbox" style="width: 50px" />
-          <h5>Cash</h5>
-        </div>
-        <p>Purchase the order after delivery</p>
+      <h6>Payment method</h6>
+      <div class="chosen-method">
+        <p
+          data-bs-toggle="modal"
+          data-bs-target="#paymentModal"
+          v-if="displayPaymentLink"
+        >
+          Choose the payment method
+        </p>
+        <p v-if="displayChosenPayment">
+          You have chosen
+          <span :style="stylePaymentType(paymentType)"> {{ paymentType }}</span>
+        </p>
       </div>
     </div>
-    <button type="submit" class="btn" @click.prevent="sendOrder">
+    <p class="confirm-message">
+      By <span style="font-weight: 500">"Complete the order"</span>, you have
+      agreed our
+      <span style="color: blue; text-decoration: underline; cursor: pointer"
+        >Terms and Conditions</span
+      >
+      for the shopping online service.
+    </p>
+    <button type="submit" class="btn" @click="sendOrder">
       Complete the Order
     </button>
   </div>
+  <PaymentMethodModal
+    :transactionID="transactionID"
+    @chosen-payment="chosenPayment"
+  />
+  <component
+    :is="'notifi-modal'"
+    :openModal="displayWarning"
+    @close-modal="closeWarning"
+  >
+    Oops! It seems like the payment method has still been empty</component
+  >
 </template>
 
 <script>
+import PaymentMethodModal from "./PaymentMethodModal.vue";
 export default {
   name: "PaymentMethod",
+  components: {
+    PaymentMethodModal,
+  },
   data() {
     return {
       totalPriceList: [],
+      paymentType: "",
+      displayPaymentLink: true,
+      displayChosenPayment: false,
+      displayWarning: false,
     };
   },
   computed: {
@@ -106,10 +136,33 @@ export default {
       const result = JSON.parse(this.$store.state.shoppingList);
       return result;
     },
+    transactionID() {
+      const code =
+        this.getDateTime() +
+        "CZL" +
+        Math.floor(Math.random() * 10) +
+        (Math.floor(Math.random() * 99) + 10);
+      return code;
+    },
   },
   methods: {
+    closeWarning() {
+      this.displayWarning = false;
+    },
     Route(value) {
       this.$router.push({ name: value });
+    },
+    stylePaymentType(value) {
+      if (value == "MOMO") {
+        return "color: #ad1457; font-weight: 600; font-size: 17px";
+      } else if (value == "ZALO") {
+        return "color: #0091ea; font-weight: 600; font-size: 17px";
+      } else if (value == "CASH") {
+        return "color: #4caf50; font-weight: 600; font-size: 17px";
+      }
+    },
+    chosenPayment(value) {
+      this.paymentType = value;
     },
     getDateTime() {
       const result = new Date(Date.now());
@@ -119,55 +172,58 @@ export default {
       return month + day + year;
     },
     async sendOrder() {
-      try {
-        const shopList = JSON.parse(this.$store.state.shoppingList);
-        const orderID =
-          "DLFZ2" + this.getDateTime() + (Math.floor(Math.random() * 99) + 10);
-        const user = JSON.parse(this.$store.state.user);
-        const code =
-          this.getDateTime() +
-          "CSH" +
-          Math.floor(Math.random() * 10) +
-          (Math.floor(Math.random() * 99) + 10);
-        const tempOrder = {
-          totalBill: this.totalBill(),
-          transactionID: code,
-          paymentMethod: "Cash",
-          user: user.id,
-          orderId: orderID,
-          dateCreate: new Date(Date.now()),
-          cart: [],
-        };
-        shopList.forEach((item) => {
-          let cart = {
-            product: "",
-            quantity: 1,
-            amount: 0,
-            color: "",
-            productImg: "",
-            name: "",
+      if (this.paymentType == "") {
+        this.displayWarning = true;
+      } else {
+        try {
+          const shopList = JSON.parse(this.$store.state.shoppingList);
+          const orderID =
+            "DLFZ2" +
+            this.getDateTime() +
+            (Math.floor(Math.random() * 99) + 10) +
+            (Math.floor(Math.random() * 9) + 1);
+          const user = JSON.parse(this.$store.state.user);
+
+          const tempOrder = {
+            totalBill: this.totalBill(),
+            transactionID: this.transactionID,
+            paymentMethod: this.paymentType,
+            user: user.id,
+            orderId: orderID,
+            dateCreate: new Date(Date.now()),
+            cart: [],
           };
-          cart.product = item.id;
-          cart.quantity = item.quantityProduct;
-          cart.amount = item.price;
-          cart.color = item.color;
-          cart.productImg = item.img;
-          cart.name = item.name;
-          tempOrder.cart.push(cart);
-        });
-        this.$store.dispatch("accessToken");
-        const res = await this.$axios.post(
-          `api/Order/newOrder/`,
-          tempOrder,
-          this.$axios.defaults.headers["Authorization"]
-        );
-        if (res.status == 200) {
-          console.log(res);
+          shopList.forEach((item) => {
+            let cart = {
+              product: "",
+              quantity: 1,
+              amount: 0,
+              color: "",
+              productImg: "",
+              name: "",
+            };
+            cart.product = item.id;
+            cart.quantity = item.quantityProduct;
+            cart.amount = item.price;
+            cart.color = item.color;
+            cart.productImg = item.img;
+            cart.name = item.name;
+            tempOrder.cart.push(cart);
+          });
+          this.$store.dispatch("accessToken");
+          const res = await this.$axios.post(
+            `api/Order/newOrder/`,
+            tempOrder,
+            this.$axios.defaults.headers["Authorization"]
+          );
+          if (res.status == 200) {
+            console.log(res);
+            this.$router.push({ name: "successOrderView" });
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-      // this.$router.push({ name: "successOrderView" });
     },
     totalPrice(value, quantity) {
       let count = 0;
@@ -192,8 +248,28 @@ export default {
     },
     shippingFee() {
       let fee = 0;
-      fee = 20000;
-      return fee;
+      if (this.productInList.length < 1) {
+        return fee;
+      } else {
+        fee = 200000;
+        return fee;
+      }
+    },
+  },
+  watch: {
+    productInList() {
+      this.shippingFee();
+    },
+    paymentType() {
+      if (this.paymentType != "") {
+        this.displayPaymentLink = false;
+        this.displayChosenPayment = true;
+        this.$emit("fill-color", "pay", true);
+      } else {
+        this.displayPaymentLink = true;
+        this.displayChosenPayment = false;
+        this.$emit("fill-color", "pay", false);
+      }
     },
   },
 };
@@ -243,27 +319,32 @@ export default {
   letter-spacing: 0.7px;
 }
 .payment-method-option {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
+  /* padding: 15px; */
   margin-top: 2%;
+  border-top: solid 1px silver;
+  border-bottom: solid 1px silver;
+  display: flex;
+  justify-content: space-between;
 }
-.e-pay {
-  padding: 20px 40px;
-  margin: auto;
-  color: white;
-  background: #fa26a0;
-  border-radius: 10px;
+
+.payment-method-option h6 {
+  padding: 10px;
 }
-.e-pay:hover {
+.chosen-method {
+  padding: 10px;
   cursor: pointer;
-  background: #d527b7;
+  /* color: blue; */
+  padding-right: 10%;
 }
-.cash-pay {
-  padding: 20px 40px;
-  margin: auto;
-  border-radius: 10px;
-  background: #28df99;
+.chosen-method:hover {
+  /* color: #d500f9; */
+  color: blue;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.confirm-message {
+  padding: 20px 0;
 }
 /* -- custom radio */
 .color {

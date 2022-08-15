@@ -302,24 +302,41 @@ export default {
     CustomerInfoModal,
     ShoppingListModal,
   },
-  async created() {
-    try {
-      this.$store.dispatch("accessToken");
-      const res = await this.$axios.get(
-        `api/Order`,
-        { params: { page: this.currentPage } },
-        this.$axios.defaults.headers["Authorization"]
-      );
-      console.log(res);
-      this.orderList = res.data.data;
-      this.pageTotals = res.data.pageTotals;
-      this.totalOrders = res.data.totalOrders;
-      this.orderList.forEach((item) => this.convertDateTime(item));
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  // async created() {
+  //   try {
+  //     this.$store.dispatch("accessToken");
+  //     const res = await this.$axios.get(
+  //       `api/Order`,
+  //       { params: { page: this.currentPage } },
+  //       this.$axios.defaults.headers["Authorization"]
+  //     );
+  //     console.log(res);
+  //     this.orderList = res.data.data;
+  //     this.pageTotals = res.data.pageTotals;
+  //     this.totalOrders = res.data.totalOrders;
+  //     this.orderList.forEach((item) => this.convertDateTime(item));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
   methods: {
+    async getAllOrders() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Order`,
+          { params: { page: this.currentPage } },
+          this.$axios.defaults.headers["Authorization"]
+        );
+        console.log(res);
+        this.orderList = res.data.data;
+        this.pageTotals = res.data.pageTotals;
+        this.totalOrders = res.data.totalOrders;
+        this.orderList.forEach((item) => this.convertDateTime(item));
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getValue(value, id) {
       this.updateOrder.payStatus = value;
       await this.getOrderDetails(id);
@@ -440,6 +457,7 @@ export default {
                 kindOf: this.features.kindOf,
                 search: this.features.search,
                 status: this.features.status,
+                page: this.currentPage,
                 sortName: this.features.sortName,
               },
             },
@@ -456,6 +474,7 @@ export default {
             `api/Order`,
             {
               params: {
+                page: this.currentPage,
                 kindOf: this.features.kindOf,
                 search: this.features.search,
                 status: this.features.status,
@@ -512,7 +531,7 @@ export default {
     // },
   },
   mounted() {
-    // this.getOrders();
+    this.getAllOrders();
   },
 };
 </script>

@@ -67,7 +67,7 @@
             <th class="user-address">Address</th>
             <th class="user-login">Last login</th>
             <th class="user-status">Status</th>
-            <th></th>
+            <!-- <th></th> -->
           </tr>
         </thead>
         <tbody>
@@ -80,8 +80,10 @@
               <p>{{ cus.phone }}</p>
             </td>
             <td class="address">
-              <p>123 CMT8, Hoa Thanh, Tan Binh</p>
-              <!-- <p>{{ cus.address.street }}</p> -->
+              <p>
+                {{ cus.address.street }}, {{ cus.address.district }},
+                {{ cus.address.city }}
+              </p>
             </td>
             <td class="last-login">
               <p>{{ cus.lastLogin }}</p>
@@ -90,11 +92,34 @@
               class="status"
               :style="[
                 choice == cus.status
-                  ? { color: 'green', fontWeight: '600' }
-                  : { color: 'red', fontWeight: '600' },
+                  ? { color: 'green', fontWeight: '600', cursor: 'pointer' }
+                  : { color: 'red', fontWeight: '600', cursor: 'pointer' },
               ]"
             >
-              <p>{{ cus.status }}</p>
+              <p @click="editStatus" v-if="hiddenEditStatus">
+                {{ cus.status }}
+              </p>
+              <select
+                v-else
+                name="status"
+                v-model="cus.status"
+                @change="
+                  getValue(
+                    cus.status,
+                    cus._id,
+                    cus.address.city,
+                    cus.address.district,
+                    cus.address.street
+                  )
+                "
+              >
+                <option value="Active" :selected="cus.status == 'Active'">
+                  Active
+                </option>
+                <option value="Unactive" :selected="cus.status == 'Unactive'">
+                  Unactive
+                </option>
+              </select>
             </td>
             <!-- <td class="adjust-remove">
               <i
@@ -104,15 +129,15 @@
                 @click="openRemoveModal()"
               ></i>
             </td> -->
-            <td class="adjust-edit">
+            <!-- <td class="adjust-edit">
               <i
                 class="bx bx-edit-alt bx-fw"
+                style="color: darkblue"
                 data-bs-target="#infoModal"
                 data-bs-toggle="modal"
-                style="color: darkblue"
-                @click="openEditModal(cus._id)"
+                @click="openEditModal()"
               ></i>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>
@@ -124,17 +149,8 @@
         :currentPage="currentPage"
       ></component>
     </div>
-    <component :is="'remove-modal'" @delete-confirm="removeConfirm">
-    </component>
-    <component
-      :is="'info-modal'"
-      @submit="updateInfo"
-      :title="modalTitle"
-      :confirmText="confirmText"
-      :btnProperty="btnProperty"
-      :headerPosition="headerPosition"
-    >
-    </component>
+    <!-- <component :is="'remove-modal'" @delete-confirm="removeConfirm">
+    </component> -->
   </div>
 </template>
 
@@ -152,6 +168,7 @@ export default {
       confirmText: "",
       headerPosition: "",
       customerList: [],
+      address: {},
       features: {
         kindOf: 1,
         sortName: "",
@@ -162,6 +179,7 @@ export default {
       totalPages: 0,
       currentPage: 1,
       displayPreBtn: false,
+      hiddenEditStatus: true,
     };
   },
   async created() {
@@ -177,71 +195,42 @@ export default {
         this.$axios.defaults.headers["Authorization"]
       );
       this.customerList = res.data.data;
-      this.customerList.forEach(dateLogin);
+      this.customerList.forEach((item) => this.convertDateTime(item));
       this.totalPages = res.data.pageTotals;
     } catch (error) {
       console.log(error);
     }
-    function dateLogin(cus, index, arr) {
-      const time = cus.lastLogin.toString();
-      const loginDateTime = new Date(time);
-      let day = loginDateTime.getDate();
-      let month = loginDateTime.getMonth();
-      let year = loginDateTime.getFullYear();
-      let hour;
-      let min = loginDateTime.getMinutes();
-
-      if (parseInt(month) < 9) {
-        month = "0" + (parseInt(month) + 1).toString();
-      } else {
-        month = (parseInt(month) + 1).toString();
-      }
-      if (parseInt(day) < 10) {
-        day = "0" + day;
-      } else {
-        day = loginDateTime.getDate();
-      }
-      if (parseInt(loginDateTime.getHours()) < 10) {
-        hour = "0" + loginDateTime.getHours();
-      } else {
-        hour = parseInt(loginDateTime.getHours()).toString();
-      }
-      if (parseInt(min) < 10) {
-        min = "0" + (parseInt(min) + 1).toString();
-      } else {
-        min = (parseInt(min) + 1).toString();
-      }
-      arr[index].lastLogin =
-        day + "-" + month + "-" + year + " " + hour + ":" + min;
-    }
   },
   methods: {
     removeConfim() {},
-    // updateInfo() {},
-    // async openEditModal(value) {
-    //   this.modalTitle = "Customer's Status";
-    //   this.confirmText = "Submit changes";
-    //   this.btnProperty.color = "white";
-    //   this.btnProperty.backColor = "#aa40e3";
-    //   this.headerPosition = "flex-start";
-
-    //   try {
-    //     this.$store.dispatch("accessToken");
-    //     const res = await this.$axios.get(
-    //       `api/User/userDetails/Customer/${value}`,
-    //       this.$axios.defaults.headers["Authorization"]
-    //     );
-    //     console.log(res);
-    //     this.staffDetails = res.data.data;
-    //     console.log(this.staffDetails);
-    //     this.address.street = res.data.data.address.street;
-    //     this.address.city = res.data.data.address.city;
-    //     this.address.district = res.data.data.address.district;
-    //     this.role = res.data.data.role._id;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
+    convertDateTime(value) {
+      let date = new Date(value.lastLogin);
+      value.lastLogin = date.toLocaleString();
+    },
+    async getValue(value, id, city, district, street) {
+      const updateStatus = {
+        status: value,
+        city: city,
+        district: district,
+        street: street,
+      };
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.put(
+          `api/User/updateUser/${id}`,
+          updateStatus,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.$router.go();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    editStatus() {
+      this.hiddenEditStatus = false;
+    },
     async getCus() {
       try {
         this.$store.dispatch("accessToken");
@@ -259,6 +248,7 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.customerList = res.data.data;
+        this.customerList.forEach((item) => this.convertDateTime(item));
         this.totalPages = res.data.pageTotals;
       } catch (error) {
         console.log(error);
@@ -338,7 +328,14 @@ td.cus-name h6 {
 .last-login p {
   transform: translateY(55%);
 }
-/* .adjust-remove .bx {
+
+.status select {
+  border: none;
+  font-weight: 500;
+  padding: 7px;
+  transform: translateY(20%);
+}
+/* .adjust-remove .bx{
   transform: translateY(80%);
 } */
 .adjust-edit .bx {

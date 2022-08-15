@@ -20,7 +20,7 @@
                 </div>
                 <div class="user-date">
                   <p style="font-size: 14px">
-                    {{ convertDateTime() }}
+                    {{ convertDateTime(cmt.dateCreated) }}
                   </p>
                 </div>
               </div>
@@ -30,22 +30,30 @@
                 {{ cmt.rating }}
               </div>
               <div class="users-reacts">
-                <div class="react">
+                <div class="unreact" v-if="cmt._id === examineUserInReactIf()">
                   <i
-                    class="bx bx-heart"
+                    class="bx bxs-heart"
                     style="color: red"
-                    @click="getReact(cmt._id)"
+                    @click="removeReact(cmt._id)"
                   ></i>
                   {{ cmt.countReacts }}
                 </div>
-                <!-- <div class="unreact">
-                <i
-                  class="bx bxs-heart"
-                  style="color: red"
-                  @click="removeReact(cmt._id)"
-                ></i>
-                {{ cmt.countReacts }}
-              </div> -->
+                <div class="react" v-else>
+                  <i
+                    class="bx bx-heart"
+                    style="color: red"
+                    @click="addReact(cmt._id)"
+                  ></i>
+                  {{ cmt.countReacts }}
+                </div>
+                <!-- <div class="unreact" v-if="cmt._id === examineUserInReact()">
+                  <i
+                    class="bx bxs-heart"
+                    style="color: red"
+                    @click="test ? addReact(cmt._id) : removeReact(cmt._id)"
+                  ></i>
+                  {{ cmt.countReacts }}
+                </div> -->
               </div>
               <div class="more-option" v-if="cmt.user === userId">
                 <i
@@ -126,7 +134,7 @@ export default {
   },
   data() {
     return {
-      test: true,
+      displayWarning: false,
       reviewList: [],
       btnProperty: {
         color: "",
@@ -142,16 +150,90 @@ export default {
         like: 1,
         user: "",
       },
+      examineValue: [],
+      commentId: "",
+      test: [],
+      x: "",
+      matchUser: false,
     };
   },
-  // computed: {
-  //   userId() {
-  //     const x = JSON.parse(this.$store.state.user);
-  //     console.log(x.id);
-  //     return x.id;
-  //   },
-  // },
+  computed: {
+    userId() {
+      let result;
+      const x = JSON.parse(this.$store.state.user);
+      if (x == null) {
+        result = "";
+      } else {
+        result = x.id;
+      }
+      return result;
+    },
+  },
   methods: {
+    examineUserInReactIf() {
+      let result;
+      let finalResult;
+
+      result = this.examineValue.some(({ user }) => user == this.userId);
+      if (result == true) {
+        finalResult = this.commentId;
+      } else {
+        finalResult = this.userId;
+      }
+      return finalResult;
+    },
+    async examineUserInLikeList(value) {
+      let result;
+      let finalResult;
+
+      await this.getReviewDetailsForReact(value);
+      result = this.test.some(({ user }) => user == this.userId);
+
+      if (result == true) {
+        finalResult = this.userId;
+      } else {
+        finalResult = false;
+      }
+      return finalResult;
+    },
+    async getReviewDetailsForReact(value) {
+      try {
+        console.log(value);
+
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Product/productDetails/${this.productId}/Review/${value}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.test = res.data.data.like;
+      } catch (error) {
+        console.log(error);
+      }
+      //   console.log(value);
+      //   // let likeArr = [];
+      //   let result;
+      //   let finalResult;
+      // value.forEach((item) => {
+      //   likeArr.push(item.like);
+      // });
+      // console.log(likeArr);
+      // likeArr.forEach((item) => {
+      //   result = item.some(({ user }) => user == this.userId);
+      //   console.log(result);
+      // if(result)
+      // });
+      // try {
+      //   this.$store.dispatch("accessToken");
+      //   const res = await this.$axios.get(
+      //     `api/Product/productDetails/${this.productId}/Review/${value}`,
+      //     this.$axios.defaults.headers["Authorization"]
+      //   );
+      //   this.detailsReview = res.data.data;
+      //   this.examineValue = res.data.data.like;
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    },
     checkColor(value) {
       if (value === "EXCELLENT") {
         return "color: green; text-shadow: 0 0 7px #76ff03; font-weight: 500";
@@ -163,18 +245,14 @@ export default {
         return "color: red; text-shadow: 0 0 7px #ff8a80; font-weight: 500";
       }
     },
-    convertDateTime() {
-      let day;
-      let month;
-      let year;
-      this.reviewList.forEach((item) => {
-        let value = item.dateCreated;
-
-        const result = new Date(value);
-        year = result.getFullYear();
-        month = ("0" + (result.getMonth() + 1)).slice(-2);
-        day = ("0" + result.getDate()).slice(-2);
-      });
+    closeWarning() {
+      this.displayWarning = false;
+    },
+    convertDateTime(value) {
+      const result = new Date(value);
+      let year = result.getFullYear();
+      let month = ("0" + (result.getMonth() + 1)).slice(-2);
+      let day = ("0" + result.getDate()).slice(-2);
       return day + "-" + month + "-" + year;
     },
     openEditModal(value) {
@@ -222,12 +300,11 @@ export default {
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/Product/productDetails/${this.productId}`,
-          this.$axios.defaults.headers["Authorization"]
+          `api/Product/productDetails/${this.productId}`
         );
         this.reviewList = res.data.data.review;
-
-        console.log(res);
+        console.log(this.reviewList);
+        // this.getReviewDetailsForReact(this.reviewList);
       } catch (error) {
         console.log(error);
       }
@@ -241,42 +318,33 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.detailsReview = res.data.data;
-        // this.executeReactUser();
+        this.examineValue = res.data.data.like;
       } catch (error) {
         console.log(error);
       }
     },
-    // executeReactUser() {
-    //   let user = JSON.parse(this.$store.state.user);
-    //   console.log(this.detailsReview4React);
-    //   let reactArr = this.detailsReview4React.like;
-    //   console.log(reactArr);
 
-    //   const userFilter = reactArr.filter((item) => item.user === user.id);
-    //   console.log(userFilter.length);
-    //   if (userFilter.length > 0) {
-    //     this.colorReact = "red";
-    //   } else {
-    //     this.colorReact = "";
-    //   }
-    // },
     async addReact(value) {
-      try {
-        this.$store.dispatch("accessToken");
-        // this.$store.dispatch("getUser");
-        const user = JSON.parse(this.$store.state.user);
-        this.commentReact.user = user.id;
-        const res = await this.$axios.post(
-          `api/Product/productDetails/${this.productId}/Review/${value}/React`,
-          this.commentReact,
-          this.$axios.defaults.headers["Authorization"]
-        );
-        if (res.status == 200) {
-          this.getProductDetails();
-          this.test = false;
+      if (this.userId != "") {
+        try {
+          this.$store.dispatch("accessToken");
+          this.commentReact.user = this.userId;
+          const res = await this.$axios.post(
+            `api/Product/productDetails/${this.productId}/Review/${value}/React`,
+            this.commentReact,
+            this.$axios.defaults.headers["Authorization"]
+          );
+
+          if (res.status == 200) {
+            this.getProductDetails();
+            this.getReviewDetails(value);
+            this.commentId = value;
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        this.displayWarning = true;
       }
     },
     async removeReact(value) {
@@ -289,24 +357,27 @@ export default {
         );
         if (res.status == 200) {
           this.getProductDetails();
-          this.test = true;
+          this.getReviewDetails(value);
         }
       } catch (error) {
         console.log(error);
       }
     },
-    getReact(value) {
-      if (this.test == true) {
-        this.addReact(value);
-      } else if (this.test == false) {
-        this.removeReact(value);
-      }
-    },
+    // getReact(value) {
+    //   if (this.test == true) {
+    //     this.addReact(value);
+    //   } else if (this.test == false) {
+    //     this.removeReact(value);
+    //   }
+    // },
   },
   watch: {
     numOfReacts() {
       console.log(this.numOfReacts);
       this.colorReact = "red";
+    },
+    x() {
+      console.log(this.x);
     },
   },
   mounted() {
@@ -367,7 +438,7 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  /* gap: 30px; */
 }
 
 .card {
@@ -375,7 +446,9 @@ textarea {
   padding-top: 10px;
   width: 85%;
   border-radius: 20px;
-  border: solid #e040fb;
+  /* border: solid #e040fb; */
+  border: none;
+  border-bottom: solid 1px #e040fb;
 }
 
 .comment-card-header {

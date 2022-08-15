@@ -420,11 +420,7 @@ export default {
       roleList: [],
       staff: [],
       staffDetails: {},
-      address: {
-        street: "",
-        district: "",
-        city: "",
-      },
+      address: {},
       role: "",
       removeId: "",
       newStaff: {
@@ -636,10 +632,8 @@ export default {
         console.log(res);
         this.staffDetails = res.data.data;
         console.log(this.staffDetails);
-        this.address.street = res.data.data.address.street;
-        this.address.city = res.data.data.address.city;
-        this.address.district = res.data.data.address.district;
-        this.role = res.data.data.role._id;
+        this.address = res.data.data.address;
+        this.role = res.data.data.role;
       } catch (error) {
         console.log(error);
       }

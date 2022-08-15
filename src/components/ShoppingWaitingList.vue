@@ -46,6 +46,7 @@ export default {
   methods: {
     close() {
       this.$emit("close", false);
+      this.$router.go();
     },
   },
 };

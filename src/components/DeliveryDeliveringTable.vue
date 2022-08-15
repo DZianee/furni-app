@@ -479,6 +479,9 @@ export default {
   font-weight: 500;
 }
 /* --- table --- */
+.table-responsive {
+  height: 600px;
+}
 table {
   width: 100%;
 }

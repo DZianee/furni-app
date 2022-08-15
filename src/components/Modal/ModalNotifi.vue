@@ -60,8 +60,8 @@ export default {
 
 .Confirm-Modal-container {
   position: relative;
-  width: 470px;
-  max-width: calc(100% - 32px);
+  width: 450px;
+  max-width: calc(100% - 30px);
   min-height: 200px;
   background-color: white;
   border-radius: 5px;
@@ -78,7 +78,7 @@ export default {
   margin-top: 15px;
 }
 .Confirm-Modal-body p {
-  margin-top: 15px;
+  margin-top: 10px;
   text-align: center;
 }
 

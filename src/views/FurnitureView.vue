@@ -65,7 +65,7 @@ export default {
   background: rgb(239, 239, 239);
 }
 .container {
-  padding-top: 6%;
+  padding-top: 4%;
   background: white;
   text-align: center;
   font-family: "Poppins", sans-serif;

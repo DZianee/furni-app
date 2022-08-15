@@ -9,7 +9,7 @@
     <div>
       <CartItem :showCartItem="showCartItem" @fill-color="fillColor" />
       <FillOrderInfo @fill-color="fillColor" />
-      <PaymentMethod />
+      <PaymentMethod @fill-color="fillColor" />
     </div>
   </div>
 </template>
@@ -42,8 +42,6 @@ export default {
       this.$router.push({ name: value });
     },
     fillColor(text, val) {
-      console.log(text);
-      console.log(val);
       if (text === "info") {
         this.successInfo = val;
       } else if (text === "cart") {

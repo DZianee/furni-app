@@ -91,5 +91,9 @@ export default createStore({
         sessionStorage.getItem("ActivateCateDetails")
       );
     },
+    removeShoppingList({ commit }, res) {
+      commit("setShoppingList", res);
+      sessionStorage.setItem("shoppingList", res);
+    },
   },
 });

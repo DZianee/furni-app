@@ -42,13 +42,25 @@
               />
               <button
                 class="decrease"
-                @click="decreaseQuantity(item.quantityProduct, item.product_id)"
+                @click="
+                  decreaseQuantity(
+                    item.quantityProduct,
+                    item.product_id,
+                    item.id
+                  )
+                "
               >
                 -
               </button>
               <button
                 class="increase"
-                @click="increaseQuantity(item.quantityProduct, item.product_id)"
+                @click="
+                  increaseQuantity(
+                    item.quantityProduct,
+                    item.product_id,
+                    item.id
+                  )
+                "
               >
                 +
               </button>
@@ -62,7 +74,7 @@
               data-bs-toggle="modal"
               data-bs-target="#removeModal"
               class="icon icon_delete"
-              @click="openRemoveModal(item.product_id)"
+              @click="openRemoveModal(item.product_id, item.id)"
             >
               <i class="bx bx-md bx-x"></i>
             </button>
@@ -92,6 +104,7 @@ export default {
   data() {
     return {
       removeId: null,
+      updateQId: "",
     };
   },
   props: {
@@ -122,14 +135,26 @@ export default {
       count = value * quantity;
       return count;
     },
-    increaseQuantity(value, id) {
+    async increaseQuantity(value, id, _id) {
+      console.log(id);
       value += 1;
       const shopList = JSON.parse(this.$store.state.shoppingList);
       const product = shopList.find((item) => item.product_id == id);
       product.quantityProduct = value;
       this.$store.dispatch("storeShoppingList", shopList);
+
+      const exportQuantity = {
+        exportQuantity: 1,
+        type: "increase",
+      };
+      this.$store.dispatch("accessToken");
+      await this.$axios.put(
+        `api/Product/updateProductPrice/${_id}`,
+        exportQuantity,
+        this.$axios.defaults.headers["Authorization"]
+      );
     },
-    decreaseQuantity(value, id) {
+    async decreaseQuantity(value, id, _id) {
       if (value == 1) {
         value = 1;
       } else {
@@ -139,17 +164,40 @@ export default {
       const product = shopList.find((item) => item.product_id == id);
       product.quantityProduct = value;
       this.$store.dispatch("storeShoppingList", shopList);
+      if (value > 1) {
+        const exportQuantity = {
+          exportQuantity: 1,
+          type: "decrease",
+        };
+        this.$store.dispatch("accessToken");
+        await this.$axios.put(
+          `api/Product/updateProductPrice/${_id}`,
+          exportQuantity,
+          this.$axios.defaults.headers["Authorization"]
+        );
+      }
     },
-    openRemoveModal(value) {
+    openRemoveModal(value, _id) {
       this.removeId = value;
-      console.log(value);
+      this.updateQId = _id;
     },
-    deleteConfirm() {
+    async deleteConfirm() {
       const shoppingList = JSON.parse(this.$store.state.shoppingList);
       const result = shoppingList.filter(
         (item) => item.product_id != this.removeId
       );
       this.$store.dispatch("storeShoppingList", result);
+
+      const exportQuantity = {
+        exportQuantity: 1,
+        type: "decrease",
+      };
+      this.$store.dispatch("accessToken");
+      await this.$axios.put(
+        `api/Product/updateProductPrice/${this.updateQId}`,
+        exportQuantity,
+        this.$axios.defaults.headers["Authorization"]
+      );
     },
     activateFunc() {
       this.$emit("fill-color", "cart", false);

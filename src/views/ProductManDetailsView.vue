@@ -63,6 +63,8 @@
                 <input
                   type="number"
                   required
+                  min="1"
+                  step="any"
                   class="form-control"
                   v-model="productDetails.price"
                 />

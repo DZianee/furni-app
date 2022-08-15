@@ -8,7 +8,7 @@
         please update in
         <span
           style="color: #aa00ff; font-weight: 500; cursor: pointer"
-          @click="Route('profileView', user.id)"
+          @click="Route('profileView', user.id, 'profile')"
           >Your Profile</span
         >
         .
@@ -128,8 +128,8 @@ export default {
         console.log(error);
       }
     },
-    Route(value, id) {
-      this.$router.push({ name: value, params: { id: id } });
+    Route(value, id, name) {
+      this.$router.push({ name: value, params: { id: id, name: name } });
     },
   },
   watch: {

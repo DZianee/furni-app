@@ -369,6 +369,9 @@ export default {
   width: 12%;
 }
 /* --- table --- */
+.table-responsive {
+  height: 600px;
+}
 table {
   width: 100%;
 }

@@ -76,9 +76,10 @@
             <th>Code</th>
             <th>Name</th>
             <th>Type</th>
-            <th style="text-align: center">Price (per one)</th>
+            <th style="text-align: center">Price (VND per one)</th>
             <th style="text-align: center">Import quantity</th>
-            <th>Image</th>
+            <th style="text-align: center">Export quantity</th>
+            <th style="text-align: center">Image</th>
             <th>Date create</th>
             <th>Status</th>
             <th></th>
@@ -97,15 +98,17 @@
             </td>
             <td class="item-name">{{ item.name }}</td>
             <td class="item-type">{{ item.type }}</td>
-            <td class="item-price">{{ item.price }} VND</td>
+            <td class="item-price">{{ item.price }}</td>
             <td class="item-quantity">{{ item.importQuantity }}</td>
+            <td class="item-quantity">{{ item.exportQuantity }}</td>
             <td
               class="item-img"
               data-bs-target="#imgModal"
               data-bs-toggle="modal"
               @click="getImg(item.productImg)"
+              style="text-align: center"
             >
-              View image
+              View
             </td>
             <td>{{ item.createdAt }}</td>
             <td

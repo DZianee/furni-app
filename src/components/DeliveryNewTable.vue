@@ -371,6 +371,10 @@ export default {
   width: 12%;
 }
 /* --- table --- */
+.table-responsive {
+  height: 600px;
+}
+
 table {
   width: 100%;
 }
@@ -447,7 +451,7 @@ span select {
   border-radius: 4px;
   transition: all 0.8s;
 }
-i {
+.modify-process i {
   position: absolute;
   right: 10px;
   cursor: pointer;

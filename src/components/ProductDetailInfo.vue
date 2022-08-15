@@ -4,7 +4,9 @@
       <div class="product-name">
         <h4>{{ productDetails.name }}</h4>
       </div>
-      <div class="product-price">{{ productDetails.price }} VND</div>
+      <div class="product-price">
+        {{ productDetails.price }} VND - {{ productDetails.status }}
+      </div>
       <div class="product-color">
         <label for="productColor">Color:</label>
         <div class="color-check">
@@ -31,6 +33,9 @@
             </li>
           </ul>
         </div> -->
+      <div class="error-message" v-if="showOutStock">
+        <p style="color: red">PRODUCT is not available now</p>
+      </div>
       <div class="error-message" v-if="showError">
         <p style="color: red">Please ensure the color has been chosen</p>
       </div>
@@ -63,6 +68,7 @@ export default {
       checkedColor: "",
       checkStatus: true,
       showError: false,
+      showOutStock: false,
     };
   },
   props: {
@@ -70,12 +76,18 @@ export default {
   },
   methods: {
     displayBtnCart() {
-      if (this.checkedColor == "") {
-        this.showError = true;
+      if (this.productDetails.status === "OUT OF STOCK") {
+        this.showOutStock = true;
         return true;
       } else {
-        this.showError = false;
-        return false;
+        this.showOutStock = false;
+        if (this.checkedColor == "") {
+          this.showError = true;
+          return true;
+        } else {
+          this.showError = false;
+          return false;
+        }
       }
     },
     closeWarning() {
@@ -85,7 +97,7 @@ export default {
     getColor(value) {
       this.checkedColor = value;
     },
-    getProductToCart(value) {
+    async getProductToCart(value) {
       if (this.$store.state.user == null) {
         this.displayWarning = true;
       } else {
@@ -111,6 +123,16 @@ export default {
           });
           this.$store.dispatch("storeShoppingList", storeShoppping);
         }
+        const exportQuantity = {
+          exportQuantity: 1,
+          type: "increase",
+        };
+        this.$store.dispatch("accessToken");
+        await this.$axios.put(
+          `api/Product/updateProductPrice/${product.id}`,
+          exportQuantity,
+          this.$axios.defaults.headers["Authorization"]
+        );
         this.$emit("open-waiting-list", true);
       }
     },
