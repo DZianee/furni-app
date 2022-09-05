@@ -170,7 +170,7 @@ export default {
     };
   },
   props: {},
-  created() {},
+  async created() {},
   methods: {
     editInfo() {
       this.displayEditInput = true;

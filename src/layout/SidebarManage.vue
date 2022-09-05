@@ -9,12 +9,14 @@
         <img
           class="header-user-image"
           alt="user avatar"
-          :src="`${user.avatar}`"
+          :src="`${userDetails.avatar}`"
         />
       </div>
       <div class="user-info">
-        <h6 class="user-name">{{ user.firstname }} {{ user.lastname }}</h6>
-        <p class="user-email">{{ user.email }}</p>
+        <h6 class="user-name">
+          {{ userDetails.firstname }} {{ userDetails.lastname }}
+        </h6>
+        <p class="user-email">{{ userDetails.email }}</p>
       </div>
     </div>
     <ul class="nav-items">
@@ -65,6 +67,7 @@ export default {
   data() {
     return {
       user: {},
+      userDetails: {},
     };
   },
   methods: {
@@ -78,14 +81,28 @@ export default {
       this.$store.dispatch("logout");
       this.$router.push({ name: "home" });
     },
-    getUser() {
-      this.$store.dispatch("getUser");
-      const data = JSON.parse(this.$store.state.user);
-      this.user = data;
+    // getUser() {
+    //   this.$store.dispatch("getUser");
+    //   const data = JSON.parse(this.$store.state.user);
+    //   this.user = data;
+    // },
+    async getUserDetails() {
+      try {
+        this.$store.dispatch("accessToken");
+        const user = JSON.parse(this.$store.state.user);
+        const res = await this.$axios.get(
+          `api/User/userDetails/All/${user.id}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.userDetails = res.data.data;
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   mounted() {
-    this.getUser();
+    this.getUserDetails();
   },
 };
 </script>

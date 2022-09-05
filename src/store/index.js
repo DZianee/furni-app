@@ -4,21 +4,23 @@ import axios from "../plugins/axios";
 export default createStore({
   state: {
     token: null,
-    refreshToken: null,
+    // refreshToken: null,
     authenticated: false,
     user: null,
-    avatar: null,
+    // userInfo: null,
+    // avatar: null,
     cateId: null,
     activateCateDetails: false,
     shoppingList: [],
   },
   mutations: {
     setAuth: (state, auth) => (state.authenticated = auth),
-    setAvatar: (state, img) => (state.avatar = img),
+    // setAvatar: (state, img) => (state.avatar = img),
     setUser: (state, user) => (state.user = user),
+    // setUserInfo: (state, user) => (state.user = user),
     setToken: (state, accessToken) => (state.token = accessToken),
-    setRefreshToken: (state, refreshToken) =>
-      (state.refreshToken = refreshToken),
+    // setRefreshToken: (state, refreshToken) =>
+    //   (state.refreshToken = refreshToken),
     setCateId: (state, cate) => (state.cateId = cate),
     setActivateCateDetails: (state, activateCate) =>
       (state.activateCateDetails = activateCate),
@@ -26,24 +28,25 @@ export default createStore({
   },
   actions: {
     login({ commit }, res) {
-      commit("setUser", JSON.stringify(res.data.data));
-      sessionStorage.setItem("User", JSON.stringify(res.data.data));
-      sessionStorage.setItem("Token", res.data.data.token);
-      sessionStorage.setItem("refreshToken", res.data.data.refreshToken);
-      sessionStorage.setItem("Avatar", res.data.data.avatar);
+      commit("setUser", JSON.stringify(res));
+      localStorage.setItem("User", JSON.stringify(res));
+      localStorage.setItem("Token", res.token);
+      // localStorage.setItem("refreshToken", res.refreshToken);
+      localStorage.setItem("Avatar", res.avatar);
     },
     verifiedUser({ commit }, res) {
       commit("setAuth", res);
-      sessionStorage.setItem("Auth", res);
+      localStorage.setItem("Auth", res);
     },
-    storeAvatar({ commit }, res) {
-      commit("setAvatar", res);
-      sessionStorage.setItem("Avatar", res);
-    },
+    // storeAvatar({ commit }, res) {
+    //   commit("setAvatar", res);
+    //   localStorage.setItem("Avatar", res);
+    // },
     storeCateId({ commit }, res) {
       commit("setCateId", res);
       sessionStorage.setItem("CateId", res);
     },
+
     storeActivateCateDetails({ commit }, res) {
       commit("setActivateCateDetails", res);
       sessionStorage.setItem("ActivateCateDetails", res);
@@ -57,28 +60,31 @@ export default createStore({
       commit("setToken", null);
       commit("setRefreshToken", null);
       commit("setUser", null);
-      sessionStorage.clear();
+      localStorage.clear();
     },
 
     accessToken({ commit }) {
-      commit("setToken", sessionStorage.getItem("Token"));
-      axios.defaults.headers[
-        "Authorization"
-      ] = `Bearer ${sessionStorage.getItem("Token")}`;
+      commit("setToken", localStorage.getItem("Token"));
+      axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem(
+        "Token"
+      )}`;
     },
+    // getRefreshToken({ commit }) {
+    //   commit("setRefreshToken", localStorage.getItem("refreshToken"));
+    // },
     refreshToken({ commit }, res) {
-      sessionStorage.setItem("Token", res.data.token);
+      localStorage.setItem("Token", res.data.token);
       commit("setToken", res.data.token);
     },
     getUser({ commit }) {
-      commit("setUser", sessionStorage.getItem("User"));
+      commit("setUser", localStorage.getItem("User"));
     },
     getAuth({ commit }) {
-      commit("setAuth", sessionStorage.getItem("Auth"));
+      commit("setAuth", localStorage.getItem("Auth"));
     },
-    getAvatar({ commit }) {
-      commit("setAvatar", sessionStorage.getItem("Avatar"));
-    },
+    // getAvatar({ commit }) {
+    //   commit("setAvatar", localStorage.getItem("Avatar"));
+    // },
     getCateId({ commit }) {
       commit("setCateId", sessionStorage.getItem("CateId"));
     },

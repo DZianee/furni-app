@@ -1,143 +1,59 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import FurnitureView from "../views/FurnitureView.vue";
-import ServicesView from "../views/ServicesView.vue";
-import ProductDetailsView from "../views/ProductDetailsView.vue";
-import ShoppingListView from "../views/ShoppingListView.vue";
-import SuccessOrderView from "../views/SuccessOrderView.vue";
-import DashboardView from "../views/DashboardView.vue";
-import DeliveryView from "../views/DeliveryView.vue";
-import StorageView from "../views/StorageView.vue";
-import ManageView from "../views/ManageView.vue";
-import ProductCategoryView from "../views/ProductCategory.vue";
-import ProductManDetailsView from "../views/ProductManDetailsView.vue";
-import FinanceView from "../views/FinanceView.vue";
-import RegisterView from "../views/RegisterView.vue";
-import InputProfileView from "../views/InputProfileView.vue";
-import ProfileView from "../views/ProfileView.vue";
-/* children components */
-import ActivityAllOrders from "../components/OrderAll.vue";
-import ActivityNewOrders from "../components/OrderNew.vue";
-import ActivityCheckedOrders from "../components/OrderChecked.vue";
-import ActivityCompletedOrders from "../components/OrderCompleted.vue";
-import ActivityDeliveryOrders from "../components/OrderDelivery.vue";
-import ActivityCancelledOrders from "../components/OrderCancelled.vue";
 
-const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: HomeView,
-    meta: { layout: "home-header" },
-  },
-  {
-    path: "/about",
-    name: "companyView",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-  },
-  {
-    path: "/register-view",
-    name: "registerView",
-    component: RegisterView,
-    meta: { layout: "empty" },
-  },
-  {
-    path: "/profile-view/:id/:name",
-    name: "profileView",
-    component: ProfileView,
-    meta: { layout: "without-footer" },
-    children: [
-      { path: "allorders", component: ActivityAllOrders },
-      { path: "neworders", component: ActivityNewOrders },
-      { path: "receivedorders", component: ActivityCheckedOrders },
-      { path: "deliveryorders", component: ActivityDeliveryOrders },
-      { path: "completedorders", component: ActivityCompletedOrders },
-      { path: "cancelledorders", component: ActivityCancelledOrders },
-    ],
-  },
-  {
-    path: "/profile-input-view/:id",
-    name: "inputProfileView",
-    component: InputProfileView,
-    meta: { layout: "empty" },
-  },
-  {
-    path: "/furniture-view/:id",
-    name: "furnitureView",
-    component: FurnitureView,
-  },
-  {
-    path: "/services-view",
-    name: "servicesView",
-    component: ServicesView,
-  },
-  {
-    path: "/product-details-view/:cateType/:id",
-    name: "productDetailsView",
-    component: ProductDetailsView,
-  },
-  {
-    path: "/shopping-list-view",
-    name: "shoppingListView",
-    component: ShoppingListView,
-    meta: { layout: "without-footer" },
-  },
-  {
-    path: "/success-order-view",
-    name: "successOrderView",
-    component: SuccessOrderView,
-  },
-  {
-    path: "/dashboard-view",
-    name: "dashboardView",
-    component: DashboardView,
-    meta: { layout: "sidebar-manage" },
-  },
-  {
-    path: "/manage-view/:id",
-    name: "manageView",
-    component: ManageView,
-    meta: { layout: "sidebar-manage" },
-  },
-  {
-    path: "/storage-view",
-    name: "storageView",
-    component: StorageView,
-    meta: { layout: "sidebar-manage" },
-  },
-  {
-    path: "/delivery-view/:id",
-    name: "deliveryView",
-    component: DeliveryView,
-    meta: { layout: "sidebar-manage" },
-  },
-  {
-    path: "/finance-view",
-    name: "financeView",
-    component: FinanceView,
-    meta: { layout: "sidebar-manage" },
-  },
-  {
-    path: "/product-category-view/:id",
-    name: "productCategoryView",
-    component: ProductCategoryView,
-    meta: { layout: "sidebar-manage" },
-  },
-  {
-    path: "/product-manage-details-view/:id",
-    name: "productManDetailsView",
-    component: ProductManDetailsView,
-    meta: { layout: "sidebar-manage" },
-  },
-];
+import routes from "./routes";
+import store from "../store/index";
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+console.log("test");
+router.beforeEach((to, from, next) => {
+  var user = JSON.parse(store.state.user);
+  console.log(user);
+  if (user != null && user.role.name != "Admin") {
+    switch (to.name) {
+      case "home":
+      case "furnitureView":
+      case "productDetailsView":
+      case "servicesView":
+      case "companyView":
+      case "profileView":
+        next();
+        break;
+      case "shoppingListView":
+      case "successOrderView":
+        if (user.role.name == "Default User") {
+          next();
+        } else {
+          next("/");
+        }
+        break;
+      case "dashboardView":
+      case "storageView":
+      case "deliveryView":
+      case "productCategoryView":
+      case "productManDetailsView":
+        if (user.role.name == "Manager" || user.role.name == "Employee") {
+          next();
+        } else {
+          next("/");
+        }
+        break;
+      case "manageView":
+      case "financeView":
+        if (user.role.name == "Manager") {
+          next();
+        } else {
+          next("/");
+        }
+        break;
+    }
+  } else if (user != null && user.role.name == "Admin") {
+    next();
+  } else {
+    next();
+  }
 });
 
 export default router;

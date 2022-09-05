@@ -21,7 +21,7 @@ export default {
       var year = dateTime.getFullYear();
       var month = ("0" + (dateTime.getMonth() + 1)).slice(-2);
       var day = ("0" + dateTime.getDate()).slice(-2);
-      value.dateCreate = day + "/" + month + "/" + year;
+      value.dateCreate = month + "/" + day + "/" + year;
     },
     async getAllUserOrders() {
       try {

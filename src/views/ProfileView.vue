@@ -20,7 +20,7 @@
             <li @click="routeProfileBar('profile')" class="bar active">
               Profile
             </li>
-            <li @click="routeProfileBars('allorders')" class="bar">
+            <li @click="routeProfileBars('order', 'allorders')" class="bar">
               Order Activity
             </li>
             <li @click="routeProfileBar('post')" class="bar">Posted Comment</li>
@@ -90,10 +90,11 @@ export default {
         params: { id: this.$route.params.id, name: value },
       });
     },
-    routeProfileBars(value) {
+    routeProfileBars(name) {
       this.$router.push({
-        path: `/profile-view/${this.routeId}/order/${value}`,
+        path: `/profile-view/${this.routeId}/${name}`,
       });
+      console.log(name);
     },
     convertDateTime(value) {
       console.log(value);

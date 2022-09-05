@@ -51,7 +51,7 @@
                 <option value="New">New</option>
                 <option value="Checked">Checked</option>
                 <option value="Delivering">Delivering</option>
-                <option value="Complete">Closed</option>
+                <option value="Completed">Closed</option>
                 <option value="Cancel">Cancelled</option>
               </select>
             </div>
@@ -214,7 +214,9 @@
                 </div>
                 <div
                   class="btn btn-submit-check"
-                  @click="updateOrders(order._id)"
+                  @click="
+                    updateOrders(order._id, order, order.payment.paymentMethod)
+                  "
                 >
                   Save
                 </div>
@@ -361,12 +363,19 @@ export default {
         return "color: #ff5252; text-shadow: 0 0 7px #ff867f";
       }
     },
-    async updateOrders(value) {
+    async updateOrders(value, item, payment) {
       let order;
+      this.$store.dispatch("accessToken");
+
       try {
         if (this.updateOrder.process === "Cancelled") {
           order = {
             status: "Unactive",
+            process: this.updateOrder.process,
+          };
+        } else if (this.updateOrder.process != "Cancelled") {
+          order = {
+            status: "Active",
             process: this.updateOrder.process,
           };
         } else if (this.updateOrder.payStatus == "") {
@@ -380,16 +389,65 @@ export default {
             paymentMethod: this.updateOrder.paymentMethod,
           };
         }
-        this.$store.dispatch("accessToken");
+
         const res = await this.$axios.put(
           `api/Order/updateOrder/${value}`,
           order,
           this.$axios.defaults.headers["Authorization"]
         );
         if (res.status == 200) {
-          this.getOrders();
+          this.getAllOrders();
           this.showCheckProcess = false;
+          if (this.updateOrder.process === "Completed") {
+            this.newRowFinOrder(value, item, this.updateOrder.process, payment);
+          }
         }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async newRowFin() {
+      let yearNow = new Date(Date.now()).getFullYear();
+      try {
+        this.$store.dispatch("accessToken");
+
+        const res = await this.$axios.get(
+          `api/Fin`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        let result = res.data.data.some((item) => item.year == yearNow);
+
+        if (res.data.data == "" || result == false) {
+          let rowLine = {
+            year: yearNow,
+          };
+          await this.$axios.post(
+            `api/Fin/newRow`,
+            rowLine,
+            this.$axios.defaults.headers["Authorization"]
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async newRowFinOrder(value, item, process, payment) {
+      try {
+        console.log(item);
+        this.$store.dispatch("accessToken");
+        let newFinOrder = {
+          month: item.dateCreate,
+          order: value,
+          process: process,
+          totalBill: item.totalBill,
+          order_id: item.orderId,
+          paymentMethod: payment,
+        };
+        await this.$axios.post(
+          `api/Fin/finOrder/newFinOrder`,
+          newFinOrder,
+          this.$axios.defaults.headers["Authorization"]
+        );
       } catch (error) {
         console.log(error);
       }
@@ -443,7 +501,7 @@ export default {
       var year = result.getFullYear();
       var month = ("0" + (result.getMonth() + 1)).slice(-2);
       var day = ("0" + result.getDate()).slice(-2);
-      value.dateCreate = day + "-" + month + "-" + year;
+      value.dateCreate = month + "-" + day + "-" + year;
     },
     async getOrders() {
       let res;
@@ -488,6 +546,7 @@ export default {
           console.log(error);
         }
       }
+      console.log(res);
       this.orderList = res.data.data;
       this.pageTotals = res.data.pageTotals;
       this.orderList.forEach((item) => this.convertDateTime(item));
@@ -532,6 +591,7 @@ export default {
   },
   mounted() {
     this.getAllOrders();
+    this.newRowFin();
   },
 };
 </script>

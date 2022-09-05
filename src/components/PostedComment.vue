@@ -245,7 +245,7 @@ export default {
 .card {
   padding: 0 15px;
   padding-top: 20px;
-  width: 55%;
+  width: 90%;
   border-radius: 20px;
   border: solid #e040fb;
 }

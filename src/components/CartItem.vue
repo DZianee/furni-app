@@ -39,6 +39,7 @@
                 name="quantity"
                 :value="item.quantityProduct"
                 min="1"
+                readonly
               />
               <button
                 class="decrease"

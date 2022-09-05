@@ -140,8 +140,15 @@ export default {
           this.loadingIcon = false;
           this.succeed = true;
           this.$emit("login-verified", true);
-
-          this.$store.dispatch("login", res);
+          let user = {
+            id: res.data.data.id,
+            avatar: res.data.data.avatar,
+            email: res.data.data.email,
+            token: res.data.data.token,
+            refreshToken: res.data.data.refreshToken,
+            role: res.data.data.role,
+          };
+          this.$store.dispatch("login", user);
           this.errorMessage = false;
         }
       } catch (error) {

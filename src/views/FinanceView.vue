@@ -1,69 +1,80 @@
 <template>
   <div class="finance-view container">
     <div class="title">
-      <h3>Finance of TMCi HCM store</h3>
+      <h3>Summary statistic finance</h3>
     </div>
-    <div class="statistic"></div>
-    <div class="table-responsive"></div>
-    <!-- <div style="display: flex; justify-content: center">
-      <i class="bx bx-error bx-lg" style="color: #ffd600"></i>
+    <div class="year-option">
+      <select name="year" v-model="yearSelected">
+        <option value="">All</option>
+        <option v-for="y in finYearsList" :key="y.index" :value="y._id">
+          {{ y.year }}
+        </option>
+      </select>
     </div>
-    <p>You cannot remove this item since it's being used recently</p> -->
-    <div class="Confirm-Modal">
-      <span class="Confirm-Modal-backdrop" @click="closeModal"></span>
-      <div class="Confirm-Modal-container">
-        <!-- <div class="Confirm-Modal-close" @click="closeModal">
-          <i
-            class="bi form-control-feedback bi-x-lg"
-            style="font-size: 22px"
-          ></i>
-        </div> -->
-        <!-- <header class="Confirm-Modal-header">
-          <p>{{ title }}</p>
-        </header> -->
-        <div class="Confirm-Modal-body">
-          <div style="display: flex; justify-content: center">
-            <i class="bx bx-error bx-lg" style="color: #ffd600"></i>
-          </div>
-          <p>You cannot remove this item since it's being used recently</p>
-        </div>
-        <div class="cancel-btns">
-          <button
-            type="button"
-            @click="closeModal"
-            class="btn_cancel btn-warning"
-          >
-            Close
-          </button>
-        </div>
-        <!-- <slot></slot> -->
-        <!-- <div class="remove-btns">
-            <button type="button" class="btn btn_cancel" @click="closeModal">
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn_remove btn-success"
-              v-if="confirmText"
-              :disabled="!activeConfirmButton"
-              @click="submitModal"
-            >
-              {{ confirmText }}
-            </button> -->
-        <!-- <button type="button" class="btn btn_remove btn-success" v-if="CommentRejectButton" @click="CommentSubmit(false)">
-              {{ CommentRejectButton }}
-            </button>
-            <button type="button" class="btn btn_remove btn-success" v-if="CommentConfirmButton" @click="CommentSubmit(true)">
-              {{ CommentConfirmButton }}
-            </button> -->
-      </div>
+    <div class="content-container" v-if="yearSelected == ''">
+      <FinAllStatistic />
+    </div>
+    <div class="content-container" v-else>
+      <FinYearStatistic :yearSelected="yearSelected" />
     </div>
   </div>
 </template>
 
 <script>
+import FinAllStatistic from "../components/FinanceAllStatistic.vue";
+import FinYearStatistic from "../components/FinanceYearStatistic.vue";
 export default {
   name: "FinanceView",
+  components: {
+    FinAllStatistic,
+    FinYearStatistic,
+  },
+  data() {
+    return {
+      finYearsList: [],
+      yearSelected: "",
+    };
+  },
+  // async created() {
+  //   try {
+  //     this.$store.dispatch("accessToken");
+  //     const res = await this.$axios.get(
+  //       `api/Fin/detailsFinInYear/${value}`,
+  //       this.$axios.defaults.headers["Authorization"]
+  //     );
+  //     console.log(res);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
+  methods: {
+    async getFinYearList() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Fin/`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.finYearsList = res.data.data;
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  // watch: {
+  //   yearSelected() {
+  //     // if(this.yearSelected == ""){
+
+  //     // }
+  //     this.getFinRowList(this.yearSelected);
+  //     this.getRevenueChart(this.yearSelected);
+  //     this.getPaymentMethodChart(this.yearSelected);
+  //   },
+  // },
+  mounted() {
+    this.getFinYearList();
+  },
 };
 </script>
 
@@ -76,89 +87,82 @@ export default {
   width: calc(100% - 336px);
   top: 20px;
   letter-spacing: 0.3px;
-  border: solid;
+  /* border: solid; */
   font-family: "Roboto", sans-serif;
 }
-.Confirm-Modal {
+
+.summary-content {
+  padding-top: 2%;
+}
+/* -- year option -- */
+.year-option {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 99;
+  justify-content: flex-end;
+  padding-right: 6%;
 }
-
-.Confirm-Modal-backdrop {
-  background: rgba(0, 0, 0, 0.3);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-}
-
-.Confirm-Modal-container {
-  position: relative;
-  width: 470px;
-  max-width: calc(100% - 32px);
-  min-height: 200px;
-  background-color: white;
-  border-radius: 5px;
-  animation: modalfadein ease 0.3s;
-
-  font-family: Roboto;
-  font-weight: 500;
-  font-size: 16px;
-  z-index: 2;
-}
-
-/* .Confirm-Modal-header {
-  position: absolute;
-  width: 250px;
-  height: 30px;
-  left: calc(50% - 250px / 2);
-  top: 20px;
-  text-align: center;
-} */
-
-/* .Confirm-Modal-header p {
-  font-size: 20px;
-} */
-
-/* .Confirm-Modal-close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 12px;
-  cursor: pointer;
-  font-size: 20px;
-} */
-
-.Confirm-Modal-body {
-  padding: 16px;
-  margin-top: 15px;
-}
-.Confirm-Modal-body p {
-  margin-top: 15px;
-}
-
-.btn_cancel {
-  /* background-color: #b767ff; */
-  width: 25%;
-  padding: 7px 0;
+.year-option select {
+  padding: 5px;
+  width: 15%;
   border-radius: 7px;
+  border: 1px solid silver;
+}
+
+/* -- filter -- */
+.filter-features {
+  padding: 10px;
+  display: flex;
+  gap: 30px;
+}
+.filter-features select {
+  border: solid 1px silver;
+  padding: 5px;
+  width: 10%;
+  border-radius: 7px;
+  font-size: 15px;
+}
+
+/* -- summary-info -- */
+.summary-info {
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+}
+.summary-info label {
   font-weight: 500;
-  transform: translateX(170px);
+  letter-spacing: 0.3px;
+  font-size: 14px;
+  color: rgb(142, 121, 121);
 }
-.btn-mar-right {
-  margin-right: 10px;
+.summary-info span {
+  font-size: 15px;
 }
-.btn {
-  margin-left: 8px;
-  margin-right: 8px;
+
+/* -- table -- */
+.table-responsive {
+  height: 700px;
+  overflow-y: auto;
+}
+thead tr th {
+  font-weight: 500;
+  font-size: 14px;
+  background: #e0c2ff;
+  height: 50px;
+  /* text-align: center; */
+}
+tbody tr td {
+  font-size: 15px;
+  padding: 12px 0;
+  color: rgb(108, 106, 106);
+  /* text-align: center; */
+}
+
+/* -- chart -- */
+
+.chart-container {
+  padding-top: 2%;
+  display: grid;
+  grid-template-columns: 1fr 0.5fr;
+  column-gap: 20px;
 }
 </style>

@@ -368,6 +368,7 @@ export default {
       if (this.cateId != "all") {
         this.getCateDetails();
       } else {
+        this.currentPage = 1;
         this.getProduct();
       }
     },

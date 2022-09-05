@@ -72,6 +72,8 @@ export default {
     },
   },
   mounted() {
+    console.log(this.orderType);
+    console.log(this.routeName);
     const navItems = document.querySelectorAll(".bar");
 
     for (var i = 0; i < navItems.length; i++) {

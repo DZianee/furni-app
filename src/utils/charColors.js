@@ -1,0 +1,15 @@
+export const randomColors = [
+  "#f6d6ad",
+  "#3cba9f",
+  "#92a9bd",
+  "#d9d7f1",
+  "#d3E4Cd",
+  "#f6d7a7",
+  "#cab8ff",
+  "#f0d9ff",
+  "#b5eaea",
+  "#3a6351",
+  "#fbc6a4",
+  "#caf7e3",
+  "#de8971",
+];
