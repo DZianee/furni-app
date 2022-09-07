@@ -546,7 +546,6 @@ export default {
           console.log(error);
         }
       }
-      console.log(res);
       this.orderList = res.data.data;
       this.pageTotals = res.data.pageTotals;
       this.orderList.forEach((item) => this.convertDateTime(item));
@@ -582,7 +581,6 @@ export default {
   },
   watch: {
     totalOrders() {
-      console.log(this.totalOrders);
       this.$emit("total-products", this.totalOrders);
     },
     // payStatus() {

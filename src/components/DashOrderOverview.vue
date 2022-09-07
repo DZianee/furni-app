@@ -108,7 +108,7 @@ export default {
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
-          `api/Order`,
+          `api/Order/getAll`,
           this.$axios.defaults.headers["Authorization"]
         );
         this.countAllOrders = res.data.totalOrders;

@@ -11,7 +11,14 @@
         <li class="item" @click="RouteFurni('furnitureView')">Furniture</li>
         <li class="item" @click="Route('servicesView')">Services</li>
         <li class="item" @click="Route('companyView')">Company</li>
-        <li class="item" @click="Route('dashboardView')">Management</li>
+        <li v-if="user == null"></li>
+        <li
+          class="item"
+          v-if="user.role.name != 'Default User'"
+          @click="Route('dashboardView')"
+        >
+          Management
+        </li>
       </ul>
       <div class="header-user">
         <div>
@@ -48,6 +55,22 @@
             ({{ totalProductsInCart }})
           </div>
         </div>
+      </div>
+      <div class="menu-ham">
+        <i class="bx bx-menu bx-md" @click="showMenuHam = !showMenuHam"></i>
+        <ul v-if="showMenuHam">
+          <li @click="Route('home')">Home</li>
+          <li @click="RouteFurni('furnitureView')">Furniture</li>
+          <li @click="Route('servicesView')">Services</li>
+          <li @click="Route('companyView')">Company</li>
+          <li v-if="user == null"></li>
+          <li
+            v-if="user.role.name != 'Default User'"
+            @click="Route('dashboardView')"
+          >
+            Management
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -102,6 +125,7 @@ export default {
   data() {
     return {
       displayWarning: false,
+      showMenuHam: false,
       login: false,
       user: {},
       showLogout: false,
@@ -223,11 +247,11 @@ export default {
   background: white;
   z-index: 100;
   transition: all 0.7s;
-  letter-spacing: 0.7px;
+  letter-spacing: 0.3px;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
 }
 .logo-slogan {
-  padding: 0 40px;
+  padding: 0 2%;
 }
 .logo-slogan h1 {
   color: #b767ff;
@@ -238,22 +262,21 @@ export default {
 .logo-slogan P {
   font-weight: 500;
 }
-.header-logo-image {
+/* .header-logo-image {
   border: solid;
   width: 10%;
-}
+} */
 .header-content {
   position: absolute;
   width: fit-content;
   display: flex;
-  bottom: 15px;
-  right: 10px;
+  bottom: 18%;
+  right: 1%;
 }
 .header-content ul {
   display: flex;
   align-items: center;
-  margin: 15px 0;
-  margin-right: 20px;
+  margin: 1% 0 0 0;
   height: fit-content;
 }
 .item {
@@ -263,7 +286,6 @@ export default {
   text-align: center;
   font-weight: 500;
   font-size: 18px;
-  color: black;
 }
 .item.active {
   list-style-type: none;
@@ -274,7 +296,6 @@ export default {
   transition: all 0.7s;
   letter-spacing: 0.7px;
   font-size: 18px;
-  color: black;
 }
 .item:hover,
 .item.item.active:hover {
@@ -289,13 +310,11 @@ export default {
 }
 /* --- before login ---- */
 .bx-user-circle {
-  color: black;
   transform: translateY(50%);
   cursor: pointer;
   visibility: hidden;
 }
 .bx-user-circle.active {
-  color: black;
   cursor: pointer;
   transform: translateY(50%);
   visibility: visible;
@@ -305,7 +324,7 @@ export default {
 .avatar-user {
   border-right: solid rgb(164, 174, 184) 1px;
   position: relative;
-  top: 7px;
+  /* top: 7rem; */
 }
 .header-user-image {
   max-width: 40px;
@@ -316,11 +335,9 @@ export default {
 }
 .text-welcome {
   padding: 10px;
-  color: black;
 }
 .text-welcome.active {
   padding: 10px;
-  color: black;
 }
 .avatar-user .text-welcome span {
   padding: 10px 2px;
@@ -368,25 +385,53 @@ export default {
 }
 .cart-icon i {
   transform: translateY(12%);
-  margin-right: 20px;
+  margin-right: 2rem;
   color: #b767ff;
-  padding-right: 10px;
+  /* padding-right: 10px; */
 }
 .cart-icon .num-item-cart {
   position: absolute;
-  right: 5px;
-  bottom: 10px;
-  color: black;
+  right: 12%;
+  bottom: 0;
   cursor: pointer;
   visibility: hidden;
 }
 .cart-icon .num-item-cart.active {
   position: absolute;
-  right: 5px;
-  bottom: 10px;
-  color: black;
+  right: 12%;
+  bottom: 0;
   cursor: pointer;
   visibility: visible;
+}
+
+/* -- hamburger menu bar -- */
+.menu-ham {
+  display: none;
+  position: relative;
+}
+.menu-ham ul {
+  display: block;
+  position: fixed;
+  top: 7rem;
+  right: 0;
+  background: white;
+
+  height: fit-content;
+  border: solid 1px rgb(188, 183, 183);
+}
+.menu-ham i {
+  transform: translateY(9%);
+}
+.menu-ham ul li {
+  list-style: none;
+  padding: 20px;
+  margin-left: -30px;
+  font-size: 16px;
+}
+.menu-ham ul li:hover {
+  font-weight: 500;
+  cursor: pointer;
+  border-left: solid 6px rgb(174, 129, 221);
 }
 footer {
   display: flex;
@@ -417,5 +462,100 @@ h5 {
 .furniture-stores ul li {
   list-style: none;
   text-align: left;
+}
+
+/* ----- Responsive ---- */
+@media screen and (max-width: 1440px) {
+  .item {
+    padding: 0 15px;
+    margin: auto 20px;
+  }
+  .item.active {
+    padding: 0 15px;
+    margin: auto 20px;
+  }
+  .avatar-user {
+    border-right: none;
+  }
+  /* after login */
+  .text-welcome {
+    display: none;
+  }
+  .header-user-image {
+    transform: translateY(-6%);
+  }
+  .header-user {
+    margin-right: 10px;
+    display: grid;
+    grid-template-columns: 0.2fr 1fr;
+    column-gap: 12px;
+  }
+  .cart-icon i {
+    transform: translateY(3%);
+    margin-right: 2rem;
+  }
+  /* logout */
+  .logout {
+    width: 80px;
+    top: 57px;
+    padding: 8px;
+  }
+  .logout::after {
+    top: -23px;
+    right: 45px;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .header-content ul {
+    display: none;
+  }
+  .menu-ham,
+  .menu-ham ul {
+    display: block;
+  }
+  /* after login */
+}
+/* @media screen and (max-width: 800px) {
+  .menu-ham ul {
+    top: 23%;
+  }
+}
+@media screen and (max-width: 767px) {
+  .menu-ham ul {
+    top: 12%;
+  }
+}
+@media screen and (max-width: 697px) {
+  .menu-ham ul {
+    top: 19%;
+  }
+}
+@media screen and (max-width: 615px) {
+  .menu-ham ul {
+    top: 15%;
+  }
+} */
+/* @media screen and (max-width: 460px) {
+  .menu-ham ul {
+    top: 23%;
+  }
+} */
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .menu-ham ul {
+    top: 5.5rem;
+    width: 170px;
+  }
+  .logo-slogan P {
+    font-size: 8px;
+  }
+  .logo-slogan h1 {
+    font-size: 48px;
+  }
+  .header-user-image {
+    max-width: 30px;
+    height: 30px;
+    transform: translateY(21%);
+  }
 }
 </style>
