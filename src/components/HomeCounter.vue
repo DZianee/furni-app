@@ -135,7 +135,7 @@ export default {
 }
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .home-counter {
-    margin-top: 20vw;
+    margin-top: 25vw;
   }
   .counter.total h1 {
     font-size: 5rem;

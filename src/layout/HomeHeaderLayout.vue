@@ -261,7 +261,7 @@ export default {
 }
 .logo-slogan h1 {
   color: #b767ff;
-  font-size: 4vw;
+  font-size: 3.5vw;
   font-family: "Dancing Script", cursive;
   font-weight: 500;
 }
@@ -418,7 +418,7 @@ export default {
 .menu-ham ul {
   display: block;
   position: fixed;
-  top: 7.5vw;
+  top: 6.8vw;
   right: 0;
   background: white;
   width: 12rem;
@@ -458,7 +458,6 @@ footer {
   display: flex;
   padding: 20px 0;
   gap: 5vw;
-  /* justify-content: space-around; */
   flex-wrap: wrap;
 }
 .furniture-slogan p {
@@ -616,6 +615,15 @@ h6 {
   }
   .furniture-slogan h1 {
     font-size: 3rem;
+  }
+  .furniture-stores ul li {
+    list-style: none;
+    text-align: left;
+    font-size: 14px;
+  }
+  .furniture-about p,
+  .furniture-contact p {
+    font-size: 14px;
   }
 }
 </style>
