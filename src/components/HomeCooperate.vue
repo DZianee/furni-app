@@ -2,7 +2,7 @@
   <div class="home-cooperate">
     <div class="cooperate-body container">
       <div class="title">
-        <h1>Trustworthy Friends and Partners</h1>
+        <h1>Trustworthy Friends & Partners</h1>
       </div>
       <div class="cooperate-container">
         <img
@@ -33,35 +33,93 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&display=swap");
 
+/* * {
+  background: #000 !important;
+  color: #0f0 !important;
+  outline: solid #f00 1px !important;
+} */
 .home-cooperate {
-  margin-top: 150px;
+  margin-top: 15%;
   background: #f4eeff;
-  padding: 60px;
-  font-family: "Poppins", sans-serif;
+  padding: 5%;
 }
 .title {
   margin: auto;
 }
 .title h1 {
-  letter-spacing: 0.7px;
-  line-height: 60px;
-  font-size: 50px;
+  letter-spacing: 0.3px;
+  line-height: 6rem;
+  font-size: 4rem;
+  font-family: "Open Sans", sans-serif;
 }
 .cooperate-body {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  margin-top: 50px;
-  column-gap: 10px;
+  column-gap: 30px;
 }
 .cooperate-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 60px;
   row-gap: 100px;
 }
 img {
   width: 40%;
+}
+
+/* ----- Responsive ------ */
+@media screen and (max-width: 1400px) {
+  .title h1 {
+    font-size: 3.5rem;
+  }
+}
+@media screen and (max-width: 1250px) {
+  .title h1 {
+    font-size: 3rem;
+  }
+}
+/* @media screen and (max-width: 1025px) {
+  .title h1 {
+    font-size: 3rem;
+  }
+} */
+@media screen and (max-width: 993px) {
+  .title h1 {
+    /* font-size: 3.8rem; */
+  }
+  .home-cooperate {
+    padding: 5% 0;
+  }
+  .cooperate-body {
+    display: grid;
+    grid-template-columns: 100%;
+  }
+  .cooperate-container {
+    margin-top: 5%;
+    display: grid;
+    column-gap: 50px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  img {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .title h1 {
+    font-size: 2.5rem;
+  }
+  .cooperate-container {
+    column-gap: 20px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .title h1 {
+    font-size: 1.5rem;
+    line-height: 4rem;
+  }
 }
 </style>

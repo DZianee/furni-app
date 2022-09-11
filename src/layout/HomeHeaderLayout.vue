@@ -11,10 +11,10 @@
         <li class="item" @click="RouteFurni('furnitureView')">Furniture</li>
         <li class="item" @click="Route('servicesView')">Services</li>
         <li class="item" @click="Route('companyView')">Company</li>
-        <li v-if="user == null"></li>
+        <!-- <li class="item" v-if="user == null"></li> -->
         <li
           class="item"
-          v-if="user.role.name != 'Default User'"
+          v-if="user != null && user.role.name != 'Default User'"
           @click="Route('dashboardView')"
         >
           Management
@@ -41,7 +41,7 @@
           </div>
           <div class="icon-user" v-else>
             <i
-              class="bx bx-user-circle bx-md bx-fw"
+              class="bx bx-user-circle bx-sm"
               data-bs-target="#loginForm"
               data-bs-toggle="modal"
               alt="user avatar"
@@ -50,7 +50,7 @@
         </div>
 
         <div class="cart-icon">
-          <i class="bx bx-cart bx-md"></i>
+          <i class="bx bx-cart bx-sm"></i>
           <div class="num-item-cart" @click="Route('shoppingListView')">
             ({{ totalProductsInCart }})
           </div>
@@ -63,9 +63,8 @@
           <li @click="RouteFurni('furnitureView')">Furniture</li>
           <li @click="Route('servicesView')">Services</li>
           <li @click="Route('companyView')">Company</li>
-          <li v-if="user == null"></li>
           <li
-            v-if="user.role.name != 'Default User'"
+            v-if="user != null && user.role.name != 'Default User'"
             @click="Route('dashboardView')"
           >
             Management
@@ -83,28 +82,30 @@
       <h1>TMCi</h1>
       <p>For Trending, Modern and Comfortable life</p>
     </div>
-    <div class="furniture-about">
-      <h5>Company</h5>
-      <p @click="Route('companyView')">About Us</p>
-    </div>
-    <div class="furniture-stores">
-      <h5>Stores</h5>
-      <ul>
-        <li style="font-weight: 600">Ha Noi:</li>
-        <li>12 Cau Giay, Cau Giay District, Quan Hoa Ward</li>
-      </ul>
-      <ul>
-        <li style="font-weight: 600">TP.HCM:</li>
-        <li>44 Vo Thi Sau, District 3, Ward 1</li>
-      </ul>
-    </div>
-    <div class="furniture-contact">
-      <h5>Contact Us</h5>
-      <p>
-        <span style="font-weight: 600">Email: </span>
-        furniTMCoffical@hotmail.com
-      </p>
-      <p><span style="font-weight: 600">Phone:</span> +12679453</p>
+    <div class="footer-content">
+      <div class="furniture-about">
+        <h6>Company</h6>
+        <p @click="Route('companyView')">About Us</p>
+      </div>
+      <div class="furniture-stores">
+        <h6>Stores in Vietnam</h6>
+        <ul>
+          <li style="font-weight: 500">Ha Noi:</li>
+          <li>12 Cau Giay, Cau Giay District, Quan Hoa Ward</li>
+        </ul>
+        <ul>
+          <li style="font-weight: 500">TP.HCM:</li>
+          <li>44 Vo Thi Sau, District 3, Ward 1</li>
+        </ul>
+      </div>
+      <div class="furniture-contact">
+        <h6>Contact Us</h6>
+        <p>
+          <span style="font-weight: 500">Email: </span>
+          furniTMCoffical@hotmail.com
+        </p>
+        <p><span style="font-weight: 500">Phone:</span> +12679453</p>
+      </div>
     </div>
   </footer>
   <component
@@ -233,6 +234,11 @@ export default {
 </script>
 
 <style scoped>
+/* * {
+  background: #000 !important;
+  color: #0f0 !important;
+  outline: solid #f00 1px !important;
+} */
 .header {
   display: flex;
   position: fixed;
@@ -255,7 +261,7 @@ export default {
 }
 .logo-slogan h1 {
   color: #b767ff;
-  font-size: 60px;
+  font-size: 4vw;
   font-family: "Dancing Script", cursive;
   font-weight: 500;
 }
@@ -302,6 +308,7 @@ export default {
   cursor: pointer;
 }
 .header-user {
+  padding: 5px;
   width: fit-content;
   margin-right: 20px;
   display: grid;
@@ -310,13 +317,12 @@ export default {
 }
 /* --- before login ---- */
 .bx-user-circle {
-  transform: translateY(50%);
   cursor: pointer;
   visibility: hidden;
 }
 .bx-user-circle.active {
   cursor: pointer;
-  transform: translateY(50%);
+  transform: translateY(12%);
   visibility: visible;
 }
 /* --- after login ---- */
@@ -327,8 +333,8 @@ export default {
   /* top: 7rem; */
 }
 .header-user-image {
-  max-width: 40px;
-  height: 40px;
+  max-width: 2vw;
+  height: 2vw;
   border-radius: 30px;
   transform: translateY(5%);
   cursor: pointer;
@@ -412,10 +418,10 @@ export default {
 .menu-ham ul {
   display: block;
   position: fixed;
-  top: 7rem;
+  top: 7.5vw;
   right: 0;
   background: white;
-
+  width: 12rem;
   height: fit-content;
   border: solid 1px rgb(188, 183, 183);
 }
@@ -433,24 +439,33 @@ export default {
   cursor: pointer;
   border-left: solid 6px rgb(174, 129, 221);
 }
+
+/* -- footer -- */
 footer {
   display: flex;
   padding: 50px;
-  gap: 120px;
+  gap: 5vw;
   flex-wrap: wrap;
   background: #ffc5e6;
 }
 .furniture-slogan h1 {
   color: #b767ff;
-  font-size: 60px;
+  font-size: 4rem;
   font-family: "Dancing Script", cursive;
   font-weight: 600;
+}
+.footer-content {
+  display: flex;
+  padding: 20px 0;
+  gap: 5vw;
+  /* justify-content: space-around; */
+  flex-wrap: wrap;
 }
 .furniture-slogan p {
   font-weight: 500;
 }
-h5 {
-  font-weight: 600;
+h6 {
+  font-weight: 500;
 }
 .furniture-about,
 .furniture-stores {
@@ -504,6 +519,11 @@ h5 {
     top: -23px;
     right: 45px;
   }
+  /* footer */
+  .furniture-slogan p {
+    font-size: 14px;
+    font-weight: 500;
+  }
 }
 
 @media screen and (max-width: 1250px) {
@@ -514,23 +534,60 @@ h5 {
   .menu-ham ul {
     display: block;
   }
-  /* after login */
+  .logo-slogan P {
+    font-size: 1vw;
+  }
+  .footer-content {
+    gap: 10vw;
+    padding: 10px 0;
+  }
 }
-/* @media screen and (max-width: 800px) {
-  .menu-ham ul {
+@media screen and (max-width: 1240px) {
+}
+@media screen and (max-width: 1025px) {
+  /* .menu-ham ul {
     top: 23%;
+  } */
+  .header-user-image {
+    max-width: 3vw;
+    height: 3vw;
+    /* transform: translateY(5%); */
+  }
+  .footer-content {
+    gap: 5vw;
+    padding: 10px 0;
   }
 }
-@media screen and (max-width: 767px) {
+
+@media screen and (max-width: 769px) {
+  .header-user-image {
+    max-width: 3vw;
+    height: 3vw;
+    transform: translateY(6%);
+  }
   .menu-ham ul {
-    top: 12%;
+    top: 8vw;
+  }
+  .footer-content {
+    gap: 10vw;
+    padding: 10px 0;
   }
 }
-@media screen and (max-width: 697px) {
+
+@media screen and (max-width: 676px) {
+  .header-user-image {
+    max-width: 4vw;
+    height: 4vw;
+    transform: translateY(6%);
+  }
+  .logo-slogan h1 {
+    font-size: 9vw;
+  }
   .menu-ham ul {
-    top: 19%;
+    top: 14.5vw;
   }
 }
+/*
 @media screen and (max-width: 615px) {
   .menu-ham ul {
     top: 15%;
@@ -543,19 +600,22 @@ h5 {
 } */
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .menu-ham ul {
-    top: 5.5rem;
-    width: 170px;
+    top: 17vw;
+    /* width: 170px; */
   }
   .logo-slogan P {
-    font-size: 8px;
+    font-size: 2vw;
   }
   .logo-slogan h1 {
-    font-size: 48px;
+    font-size: 8vw;
   }
   .header-user-image {
-    max-width: 30px;
-    height: 30px;
-    transform: translateY(21%);
+    max-width: 4.5vw;
+    height: 4.5vw;
+    /* transform: translateY(18%); */
+  }
+  .furniture-slogan h1 {
+    font-size: 3rem;
   }
 }
 </style>

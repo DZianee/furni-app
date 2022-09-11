@@ -69,22 +69,21 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
-
 .home-counter {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  margin-top: 100px;
-  font-family: "Poppins", sans-serif;
+  margin-top: 10%;
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
 }
 .counter {
   text-align: center;
 }
 .counter.total h1 {
-  font-size: 170px;
+  font-size: 8rem;
 }
 .counter.total h3 {
-  font-size: 40px;
+  font-size: 2.8rem;
 }
 .counter.total div {
   transform: translateY(10px);
@@ -94,16 +93,61 @@ export default {
 }
 .content .counter div {
   display: flex;
-  /* justify-content: center; */
-  margin-left: 100px;
+  margin-left: 10%;
   padding: 10px;
 }
 .content .counter div h1 {
-  font-size: 90px;
+  font-size: 4rem;
 }
 .content .counter div h3 {
-  font-size: 28px;
-  padding-top: 25px;
-  margin-left: 30px;
+  font-size: 2rem;
+  padding-top: 5%;
+  margin-left: 3%;
+}
+
+/* ------ Responsive ----- */
+@media screen and (max-width: 1250px) {
+  .counter.total h3 {
+    font-size: 2rem;
+  }
+  .content .counter div h1 {
+    font-size: 4rem;
+  }
+  .content .counter div h3 {
+    font-size: 1.5rem;
+    margin-left: 5%;
+  }
+}
+@media screen and (max-width: 780px) {
+  .counter.total h1 {
+    font-size: 6rem;
+  }
+  .counter.total h3 {
+    font-size: 1.5rem;
+  }
+  .content .counter div h1 {
+    font-size: 3rem;
+  }
+  .content .counter div h3 {
+    font-size: 1.2rem;
+    margin-left: 5%;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .home-counter {
+    margin-top: 20vw;
+  }
+  .counter.total h1 {
+    font-size: 5rem;
+  }
+  .counter.total h3 {
+    font-size: 1.2rem;
+  }
+  .content .counter div h1 {
+    font-size: 2.2rem;
+  }
+  .content .counter div h3 {
+    font-size: 1rem;
+  }
 }
 </style>
