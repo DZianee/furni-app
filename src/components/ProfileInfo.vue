@@ -311,7 +311,7 @@ export default {
 }
 .profile-info-content {
   /* width: 80%; */
-  margin: 7% 0 0 0;
+  margin: 5% 0 0 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 100px;
@@ -319,7 +319,7 @@ export default {
 }
 /* -- personal info -- */
 .personal-info {
-  padding: 20px;
+  padding: 4%;
   border: solid 1px #aa00ff;
   box-shadow: 0 0 7px 2px #b388ff;
   border-top-right-radius: 25px;
@@ -332,7 +332,7 @@ export default {
 .personal-info .address input {
   border: none;
   padding-left: 20px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 .personal-info .firstname div,
 .personal-info .lastname div,
@@ -410,12 +410,12 @@ export default {
 .personal-account-info .email input {
   border: none;
   padding-left: 20px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .personal-account-info label {
   font-size: 14px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   font-weight: 500;
   color: rgb(112, 107, 107);
 }
@@ -463,5 +463,75 @@ button {
   background: #ff6d00;
   width: 60%;
   padding: 7px;
+}
+
+/* ---- Responsive ---- */
+@media screen and (max-width: 1440px) {
+  .profile-info-content {
+    /* width: 80%; */
+    padding-left: 0;
+    column-gap: 4%;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .profile-info-content {
+    /* width: 80%; */
+    margin: 5% 0 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 8%;
+    padding-left: 0;
+  }
+}
+@media screen and (max-width: 993px) {
+  .profile-info-content {
+    /* width: 80%; */
+    margin: 7% 0 0 0;
+    grid-template-columns: 100%;
+    row-gap: 10%;
+  }
+}
+@media screen and (max-width: 545px) {
+  .fullname .firstname,
+  .fullname .lastname,
+  .phone,
+  .address {
+    column-gap: 0;
+    row-gap: 10px;
+    grid-template-columns: 100%;
+  }
+  .personal-info .firstname input,
+  .personal-info .lastname input,
+  .personal-info .phone input,
+  .personal-info .address input {
+    padding-left: 0;
+  }
+  .fullname .firstname-edit,
+  .fullname .lastname-edit,
+  .phone-edit,
+  .address-edit {
+    column-gap: 0;
+    row-gap: 10px;
+    grid-template-columns: 100%;
+  }
+  .email,
+  .password-edit {
+    column-gap: 0;
+    row-gap: 10px;
+    grid-template-columns: 100%;
+  }
+  .personal-account-info,
+  .personal-account-info .email input {
+    border: none;
+    padding-left: 0;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-form {
+    margin-top: 5%;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
 }
 </style>

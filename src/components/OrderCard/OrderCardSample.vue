@@ -32,7 +32,7 @@
                 >
               </div>
               <div class="estimate_delivery-time">
-                Estimated delivery date <span>Within a week</span>
+                Delivery <span>Within a week</span>
               </div>
             </div>
           </div>
@@ -204,7 +204,16 @@ export default {
 .wrapper {
   height: 740px;
   overflow-y: auto;
+  overflow-x: hidden;
   /* background: rgb(212, 210, 210); */
+}
+.wrapper {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  /* margin: 0 auto; */
+}
+.wrapper::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 
 .card {
@@ -215,15 +224,17 @@ export default {
 /* -- header card info -- */
 .header-info {
   background: #fffde7;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  /* justify-content: space-between; */
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
 }
 
 .header-info .created-info div,
 .header-info .given-info div {
   padding: 10px;
   font-size: 14px;
-  width: 280px;
+  /* width: 280px; */
 }
 
 .header-info .created-info div span,
@@ -235,12 +246,12 @@ export default {
 
 /* -- item in order --- */
 .item-in-order {
-  height: 220px;
+  height: 260px;
   overflow-y: auto;
 }
 
 .product-in-cart {
-  padding: 0 50px;
+  padding: 0;
   /* border-top: 1px solid rgb(163, 161, 161); */
   display: grid;
   grid-template-columns: 0.6fr 1fr;
@@ -248,7 +259,8 @@ export default {
 }
 
 .item-img img {
-  width: 70%;
+  margin-top: 7%;
+  width: 100%;
   /* height: 100%; */
 }
 
@@ -270,16 +282,17 @@ export default {
 
 .item-total_price-cancel {
   border-top: 1px solid;
-  padding: 7px 50px;
+  padding: 15px 0;
   width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 20px;
 }
 
-.item-total_price-cancel span {
+.item-total_price {
   font-weight: 500;
 }
+
 /* cancel btn */
 .cancel-order button {
   color: white;
@@ -345,5 +358,24 @@ export default {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+/* ---- Responsive ---- */
+@media screen and (max-width: 1440px) {
+  .item-in-order {
+    height: 200px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .item-in-order {
+    height: 160px;
+  }
+  .order-card_sample {
+    padding: 2% 0;
+    padding-left: 0;
+  }
+  .item-overview .item-name {
+    font-size: 16px;
+  }
 }
 </style>

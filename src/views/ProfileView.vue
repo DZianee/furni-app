@@ -1,23 +1,31 @@
 <template>
   <div class="profile-view">
-    <div class="user-side">
-      <div class="side-container">
-        <div class="img"><img :src="userDetails.avatar" alt="avatar" /></div>
-        <div class="user-side-info">
-          <div class="user-name">
-            {{ userDetails.firstname }} {{ userDetails.lastname }}
-          </div>
-          <div class="last-login">
-            <label style="font-weight: 500">Last login:</label> {{ lastLogin }}
+    <div class="none-bg">
+      <div class="user-side">
+        <div class="side-container">
+          <div class="img"><img :src="userDetails.avatar" alt="avatar" /></div>
+          <div class="user-side-info">
+            <div class="user-name">
+              {{ userDetails.firstname }} {{ userDetails.lastname }}
+            </div>
+            <div class="last-login">
+              <label style="font-weight: 500">Last login:</label>
+              {{ lastLogin }}
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="none" style="color: white">hgfefdegfdegfd</div>
     <div class="user-overview-activities container">
       <div class="route-profile-bar">
         <nav>
           <ul>
-            <li @click="routeProfileBar('profile')" class="bar active">
+            <li
+              @click="routeProfileBar('profile')"
+              class="bar active"
+              style="text-align: center"
+            >
               Profile
             </li>
             <li @click="routeProfileBars('order', 'allorders')" class="bar">
@@ -120,17 +128,13 @@ export default {
 
 <style scoped>
 .profile-view {
-  /* display: grid;
-  grid-template-columns: 0.3fr 1fr; */
   margin-bottom: 100px;
-  /* background: #faf2fb; */
 }
 
 /* --- user side  --- */
 .user-side {
   position: fixed;
   background: #e1c8ff;
-  /* background: #ddb1ff; */
   height: 100%;
   width: 19%;
 }
@@ -158,30 +162,38 @@ export default {
 .user-side-info .user-name {
   padding: 10px 0;
   font-weight: 500;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.3px;
 }
 .user-side-info .last-login {
   padding: 10px 0;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.3px;
 }
 
 /* --- user overviee info + details activities  --- */
 .user-overview-activities {
-  /* border: solid blue; */
   height: fit-content;
   position: relative;
   right: -8.1%;
   width: calc(100% - 336px);
   top: 20px;
 }
-
-/* -- nav route --- */
-.route-profile-bar {
-  /* width: 80%; */
-  /* background: white; */
+.user-overview-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  height: 600px;
 }
+.user-overview-container {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  /* margin: 0 auto; */
+}
+.user-overview-container::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+/* -- nav route --- */
+
 nav {
-  padding: 10px;
+  padding: 1%;
 }
 ul {
   display: flex;
@@ -191,7 +203,7 @@ ul {
 }
 .bar {
   list-style: none;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   font-weight: 500;
   font-size: 15px;
   color: rgb(124, 121, 121);
@@ -210,5 +222,99 @@ ul {
   font-size: 15px;
   padding: 10px;
   transition: all 0.2s;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1250px) {
+  /* .user-side-info .last-login {
+    padding: 10px 7px;
+  } */
+  .user-side {
+    position: sticky;
+    z-index: 1;
+    height: 170px;
+    width: 100%;
+    top: 0;
+  }
+  .side-container {
+    padding: 20px;
+    display: flex;
+  }
+  .user-side .side-container img {
+    width: 34%;
+    height: 98%;
+    border: 2px solid #ffee63;
+  }
+  .user-side .side-container .img {
+    display: flex;
+    justify-content: center;
+  }
+  .user-side-info {
+    margin-top: 2%;
+    padding: 10px -20px;
+    text-align: left;
+    background: none;
+  }
+
+  /* --- user overviee info + details activities  --- */
+  .user-overview-activities {
+    height: fit-content;
+    position: relative;
+    right: 0;
+    width: 100%;
+    top: 2%;
+  }
+
+  /* -- nav route --- */
+  nav {
+    padding: 4% 0;
+  }
+}
+@media screen and (max-width: 767px) {
+  .side-container {
+    padding: 20px;
+    display: block;
+  }
+  .user-side-info {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+  }
+  .user-overview-activities {
+    top: 28vw;
+  }
+  .none-bg {
+    opacity: 0.9;
+  }
+}
+@media screen and (max-width: 520px) {
+  nav {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+  }
+  nav {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    /* margin: 0 auto; */
+  }
+  nav::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  ul {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 20px;
+  }
+  .bar,
+  .bar.active {
+    width: 125px;
+    padding: 12px 0;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .user-overview-activities {
+    top: 15vw;
+  }
 }
 </style>

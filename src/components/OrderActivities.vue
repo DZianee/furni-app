@@ -22,7 +22,9 @@
             <li @click="Route('receivedorders')" class="bar">
               Received orders
             </li>
-            <li @click="Route('deliveryorders')" class="bar">In delivery</li>
+            <li @click="Route('deliveryorders')" class="bar">
+              In delivery orders
+            </li>
             <li @click="Route('completedorders')" class="bar">
               Completed orders
             </li>
@@ -92,7 +94,7 @@ export default {
 <style scoped>
 .order-container-content {
   display: grid;
-  grid-template-columns: 1fr 0.2fr;
+  grid-template-columns: 1fr 0.3fr;
   column-gap: 20px;
 }
 .profile-message {
@@ -120,7 +122,7 @@ ul {
   list-style: none;
   letter-spacing: 0.5px;
   padding: 12px 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: #aa00ff;
 }
@@ -129,5 +131,43 @@ ul {
   font-weight: 500;
   font-size: 15px;
   cursor: pointer;
+}
+/* ---- Responsive ---- */
+@media screen and (max-width: 993px) {
+  .order-container-content {
+    grid-template-columns: 100%;
+    column-gap: 0;
+  }
+  .order-container-content .order-activity-bar {
+    grid-row: 1;
+  }
+
+  /* bar */
+  .order-activity-bar {
+    border-left: none;
+    height: fit-content;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+  }
+  .order-activity-bar {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    /* margin: 0 auto; */
+  }
+  .order-activity-bar::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    column-gap: 18px;
+  }
+  .bar.active {
+    color: #aa00ff;
+  }
+  .bar,
+  .bar.active {
+    width: 112px;
+  }
 }
 </style>

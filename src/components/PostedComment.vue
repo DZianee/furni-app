@@ -23,31 +23,33 @@
                 {{ productReview.name }}
               </h6>
             </div>
-            <div class="user-date">
-              <p style="font-size: 14px">
-                {{ convertDateTime() }}
-              </p>
+            <div class="date-react">
+              <div class="user-date">
+                <p style="font-size: 14px">
+                  {{ convertDateTime() }}
+                </p>
+              </div>
+              <div class="user-criticise-react">
+                <div class="user-criticise" :style="checkColor(post.rating)">
+                  {{ post.rating }}
+                </div>
+                <div class="users-reacts">
+                  <div class="react">
+                    <i class="bx bx-heart" style="color: red"></i>
+                    {{ post.countReacts }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="user-criticise-react">
-          <div class="user-criticise" :style="checkColor(post.rating)">
-            {{ post.rating }}
-          </div>
-          <div class="users-reacts">
-            <div class="react">
-              <i class="bx bx-heart" style="color: red"></i>
-              {{ post.countReacts }}
-            </div>
-          </div>
-          <div class="more-option" v-if="post.user === userId">
-            <i
-              class="bx bx-dots-horizontal-rounded"
-              data-bs-target="#cmtModal"
-              data-bs-toggle="modal"
-              @click="openEditModal(post._id)"
-            ></i>
-          </div>
+        <div class="more-option" v-if="post.user === userId">
+          <i
+            class="bx bx-dots-horizontal-rounded"
+            data-bs-target="#cmtModal"
+            data-bs-toggle="modal"
+            @click="openEditModal(post._id)"
+          ></i>
         </div>
       </div>
       <div class="comment-card-body">
@@ -225,7 +227,11 @@ export default {
 
 <style scoped>
 .posted-comment-view {
-  padding: 1% 0 0 10%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-flow: column;
+  padding: 1% 0;
   height: 600px;
   overflow-y: auto;
 }
@@ -235,7 +241,7 @@ export default {
 }
 .empty-order-list p {
   font-size: 18px;
-  padding: 10px;
+  padding: 1%;
   font-style: italic;
 }
 .empty-order-list img {
@@ -244,7 +250,7 @@ export default {
 /* -- list -- */
 .card {
   padding: 0 15px;
-  padding-top: 20px;
+  padding-top: 2%;
   width: 90%;
   border-radius: 20px;
   border: solid #e040fb;
@@ -255,11 +261,18 @@ export default {
   justify-content: space-between;
 }
 .comment-card-header .user-info,
-.comment-card-header .user-criticise-react {
+.comment-card-header .user-criticise-react,
+.date-react {
   display: flex;
   gap: 15px;
 }
-
+.user-criticise-react {
+  justify-content: flex-end;
+  font-size: 15px;
+}
+.date-react {
+  justify-content: space-between;
+}
 .user-avatar img {
   width: 40px;
   height: 40px;
@@ -269,7 +282,9 @@ export default {
 .user-fullname {
   display: flex;
   gap: 10px;
+  /* flex-flow: column; */
 }
+
 .user-fullname h6 {
   font-size: 15px;
 }
@@ -277,10 +292,7 @@ export default {
   cursor: pointer;
   text-decoration: underline;
 }
-.user-criticise-react {
-  padding-top: 2%;
-  font-size: 15px;
-}
+
 .comment-card-body {
   padding: 10px 25px;
 }
@@ -309,5 +321,15 @@ textarea {
   padding: 10px 18px;
   height: 120px;
   font-size: 14px;
+}
+
+/* --- Responsive --- */
+
+@media screen and (max-width: 993px) {
+  .card {
+    padding: 0 15px;
+    padding-top: 2%;
+    width: 100%;
+  }
 }
 </style>

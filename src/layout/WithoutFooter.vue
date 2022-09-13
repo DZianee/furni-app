@@ -11,7 +11,13 @@
         <li class="item" @click="RouteFurni('furnitureView')">Furniture</li>
         <li class="item" @click="Route('servicesView')">Services</li>
         <li class="item" @click="Route('companyView')">Company</li>
-        <li class="item" @click="Route('dashboardView')">Management</li>
+        <li
+          class="item"
+          v-if="user != null && user.role.name != 'Default User'"
+          @click="Route('dashboardView')"
+        >
+          Management
+        </li>
       </ul>
       <div class="header-user">
         <div>
@@ -23,6 +29,12 @@
               @click="showLogout = !showLogout"
             />
             <div class="logout" v-if="showLogout">
+              <p
+                @click="Route('profileView', user.id, 'profile')"
+                class="view-profile"
+              >
+                View profile
+              </p>
               <p @click="logout">Log-out</p>
             </div>
             <span class="text-welcome">
@@ -34,7 +46,7 @@
           </div>
           <div class="icon-user" v-else>
             <i
-              class="bx bx-user-circle bx-md bx-fw"
+              class="bx bx-user-circle bx-sm"
               data-bs-target="#loginForm"
               data-bs-toggle="modal"
               alt="user avatar"
@@ -43,11 +55,26 @@
         </div>
 
         <div class="cart-icon">
-          <i class="bx bx-cart bx-md"></i>
+          <i class="bx bx-cart bx-sm"></i>
           <div class="num-item-cart" @click="Route('shoppingListView')">
             ({{ totalProductsInCart }})
           </div>
         </div>
+      </div>
+      <div class="menu-ham">
+        <i class="bx bx-menu bx-md" @click="showMenuHam = !showMenuHam"></i>
+        <ul v-if="showMenuHam">
+          <li @click="Route('home')">Home</li>
+          <li @click="RouteFurni('furnitureView')">Furniture</li>
+          <li @click="Route('servicesView')">Services</li>
+          <li @click="Route('companyView')">Company</li>
+          <li
+            v-if="user != null && user.role.name != 'Default User'"
+            @click="Route('dashboardView')"
+          >
+            Management
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -75,6 +102,7 @@ export default {
   data() {
     return {
       displayWarning: false,
+      showMenuHam: false,
       login: false,
       user: {},
       showLogout: false,
@@ -167,34 +195,29 @@ export default {
   background: white;
 }
 .logo-slogan {
-  padding: 0 40px;
+  padding: 0 2%;
 }
 .logo-slogan h1 {
   color: #b767ff;
-  font-size: 60px;
+  font-size: 3.5vw;
   font-family: "Dancing Script", cursive;
   font-weight: 500;
 }
 .logo-slogan P {
   font-weight: 500;
-  letter-spacing: 0.7px;
 }
-.header-logo-image {
-  border: solid;
-  width: 10%;
-}
+
 .header-content {
   position: absolute;
   width: fit-content;
   display: flex;
-  bottom: 15px;
-  right: 10px;
+  bottom: 18%;
+  right: 1%;
 }
 .header-content ul {
   display: flex;
   align-items: center;
-  margin: 15px 0;
-  margin-right: 20px;
+  margin: 1% 0 0 0;
   height: fit-content;
 }
 .item {
@@ -205,12 +228,12 @@ export default {
   font-weight: 500;
   letter-spacing: 0.7px;
   font-size: 18px;
-  color: black;
 }
 .item:hover {
   cursor: pointer;
 }
 .header-user {
+  padding: 5px;
   width: fit-content;
   margin-right: 20px;
   display: grid;
@@ -220,7 +243,6 @@ export default {
 /* --- before login ---- */
 .bx-user-circle {
   color: black;
-  transform: translateY(50%);
   cursor: pointer;
 }
 /* --- after login ---- */
@@ -228,18 +250,16 @@ export default {
 .avatar-user {
   border-right: solid rgb(164, 174, 184) 1px;
   position: relative;
-  top: 7px;
 }
 .header-user-image {
-  max-width: 40px;
-  height: 40px;
+  max-width: 2vw;
+  height: 2vw;
   border-radius: 30px;
   transform: translateY(5%);
   cursor: pointer;
 }
 .text-welcome {
   padding: 10px;
-  color: black;
 }
 .avatar-user .text-welcome span {
   padding: 10px 2px;
@@ -281,9 +301,12 @@ export default {
   width: 20px;
   height: 20px;
 }
-.logout:hover {
+.logout p:hover {
   cursor: pointer;
   font-weight: 500;
+}
+.logout .view-profile {
+  display: none;
 }
 .cart-icon {
   position: relative;
@@ -292,17 +315,182 @@ export default {
 }
 .cart-icon i {
   transform: translateY(12%);
-  margin-right: 20px;
+  margin-right: 2rem;
   color: #b767ff;
-  padding-right: 10px;
 }
 .cart-icon .num-item-cart {
   position: absolute;
-  right: 5px;
-  bottom: 10px;
+  right: 12%;
+  bottom: 0;
 }
 .cart-icon .num-item-cart:hover {
   cursor: pointer;
   bottom: 10px;
+}
+/* -- hamburger menu bar -- */
+.menu-ham {
+  display: none;
+  position: relative;
+}
+.menu-ham ul {
+  display: block;
+  position: fixed;
+  top: 6.8vw;
+  right: 0;
+  background: white;
+  width: 12rem;
+  height: fit-content;
+  border: solid 1px rgb(188, 183, 183);
+}
+.menu-ham i {
+  transform: translateY(9%);
+}
+.menu-ham ul li {
+  list-style: none;
+  padding: 20px;
+  margin-left: -30px;
+  font-size: 16px;
+}
+.menu-ham ul li:hover {
+  font-weight: 500;
+  cursor: pointer;
+  border-left: solid 6px rgb(174, 129, 221);
+}
+
+/* ----- Responsive ---- */
+@media screen and (max-width: 1440px) {
+  .item {
+    padding: 0 15px;
+    margin: auto 20px;
+  }
+  .item.active {
+    padding: 0 15px;
+    margin: auto 20px;
+  }
+  .avatar-user {
+    border-right: none;
+  }
+  /* after login */
+  .text-welcome {
+    display: none;
+  }
+  .header-user-image {
+    transform: translateY(-6%);
+  }
+  .header-user {
+    margin-right: 10px;
+    display: grid;
+    grid-template-columns: 0.2fr 1fr;
+    column-gap: 12px;
+  }
+  .cart-icon i {
+    transform: translateY(3%);
+    margin-right: 2rem;
+  }
+  /* logout */
+  .logout {
+    width: 150px;
+    top: 57px;
+    left: -5vw;
+    padding: 8px;
+  }
+  .logout::after {
+    top: -21px;
+    left: 72px;
+  }
+  .logout .view-profile {
+    display: block;
+  }
+}
+@media screen and (max-width: 1250px) {
+  .header-content ul {
+    display: none;
+  }
+  .menu-ham,
+  .menu-ham ul {
+    display: block;
+  }
+  .logo-slogan P {
+    font-size: 1vw;
+  }
+  .logout::after {
+    top: -21px;
+    left: 62px;
+  }
+}
+@media screen and (max-width: 1240px) {
+}
+@media screen and (max-width: 1025px) {
+  .menu-ham ul {
+    top: 7vw;
+  }
+  .header-user-image {
+    max-width: 3vw;
+    height: 3vw;
+    /* transform: translateY(5%); */
+  }
+}
+@media screen and (max-width: 993px) {
+  .logout::after {
+    top: -21px;
+    left: 52px;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .header-user-image {
+    max-width: 3vw;
+    height: 3vw;
+    transform: translateY(6%);
+  }
+  .menu-ham ul {
+    top: 8vw;
+  }
+  .logout::after {
+    top: -21px;
+    left: 40px;
+  }
+}
+
+@media screen and (max-width: 676px) {
+  .header-user-image {
+    max-width: 4vw;
+    height: 4vw;
+    transform: translateY(6%);
+  }
+  .logo-slogan h1 {
+    font-size: 9vw;
+  }
+  .menu-ham ul {
+    top: 14.8vw;
+  }
+  .logout::after {
+    top: -21px;
+    left: 30px;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .menu-ham ul {
+    top: 17vw;
+    /* width: 170px; */
+  }
+  .logo-slogan P {
+    font-size: 2vw;
+  }
+  .logo-slogan h1 {
+    font-size: 8vw;
+  }
+  .header-user-image {
+    max-width: 4.5vw;
+    height: 4.5vw;
+    /* transform: translateY(18%); */
+  }
+  .logout::after {
+    top: -21px;
+    left: 20px;
+  }
+  .logout {
+    font-size: 15px;
+  }
 }
 </style>

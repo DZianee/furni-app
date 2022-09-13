@@ -30,6 +30,12 @@
               @click="showLogout = !showLogout"
             />
             <div class="logout" v-if="showLogout">
+              <p
+                @click="Route('profileView', user.id, 'profile')"
+                class="view-profile"
+              >
+                View profile
+              </p>
               <p @click="logout">Log-out</p>
             </div>
             <span class="text-welcome">
@@ -383,6 +389,9 @@ export default {
   cursor: pointer;
   font-weight: 500;
 }
+.logout .view-profile {
+  display: none;
+}
 
 .cart-icon {
   position: relative;
@@ -510,13 +519,17 @@ h6 {
   }
   /* logout */
   .logout {
-    width: 80px;
+    width: 150px;
     top: 57px;
+    left: -5vw;
     padding: 8px;
   }
   .logout::after {
-    top: -23px;
-    right: 45px;
+    top: -21px;
+    left: 72px;
+  }
+  .logout .view-profile {
+    display: block;
   }
   /* footer */
   .furniture-slogan p {
@@ -535,6 +548,10 @@ h6 {
   }
   .logo-slogan P {
     font-size: 1vw;
+  }
+  .logout::after {
+    top: -21px;
+    left: 62px;
   }
   .footer-content {
     gap: 10vw;
@@ -557,7 +574,12 @@ h6 {
     padding: 10px 0;
   }
 }
-
+@media screen and (max-width: 993px) {
+  .logout::after {
+    top: -21px;
+    left: 52px;
+  }
+}
 @media screen and (max-width: 769px) {
   .header-user-image {
     max-width: 3vw;
@@ -570,6 +592,10 @@ h6 {
   .footer-content {
     gap: 10vw;
     padding: 10px 0;
+  }
+  .logout::after {
+    top: -21px;
+    left: 40px;
   }
 }
 
@@ -584,6 +610,10 @@ h6 {
   }
   .menu-ham ul {
     top: 14.5vw;
+  }
+  .logout::after {
+    top: -21px;
+    left: 30px;
   }
 }
 /*
@@ -624,6 +654,13 @@ h6 {
   .furniture-about p,
   .furniture-contact p {
     font-size: 14px;
+  }
+  .logout::after {
+    top: -21px;
+    left: 20px;
+  }
+  .logout {
+    font-size: 15px;
   }
 }
 </style>
