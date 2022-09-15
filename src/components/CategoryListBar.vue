@@ -92,7 +92,13 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&display=swap");
+/* * {
+  background: #000 !important;
+  color: #0f0 !important;
+  outline: solid #f00 1px !important;
+} */
 
 #testing {
   position: fixed;
@@ -106,33 +112,74 @@ export default {
   padding: 10px;
   color: white;
   border-radius: 20px;
+  z-index: 3;
 }
 #testing:hover {
   cursor: pointer;
 }
 .category-title h1 {
   font-weight: 500;
-  font-size: 40px;
-  letter-spacing: 0.7px;
+  line-height: 40px;
+  font-size: 2.5rem;
+  letter-spacing: 0.3px;
+  /* font-family: "Open Sans", sans-serif; */
 }
 .list-categories {
-  margin-top: 30px;
-  padding: 20px;
-}
-ul {
+  margin-top: 2%;
+  max-height: 80px;
   display: flex;
   justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+}
+ul {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+}
+.list-categories {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.list-categories::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 ul li {
   list-style: none;
-  padding: 0 20px;
+  padding: 20px 0;
   margin: 0 20px;
   font-size: 18px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  width: 142px;
 }
 ul li:hover {
   font-weight: 500;
   cursor: pointer;
   color: rgb(174, 67, 255);
+}
+
+/* ---- Responsive --- */
+@media screen and (max-width: 1250px) {
+  .category-title h1 {
+    font-size: 2.2rem;
+  }
+}
+@media screen and (max-width: 993px) {
+  .category-title h1 {
+    font-size: 1.8rem;
+  }
+  ul {
+    padding-left: 0;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .category-title h1 {
+    font-size: 1.4rem;
+  }
+  ul li {
+    font-size: 16px;
+    margin: 0 5px;
+  }
 }
 </style>

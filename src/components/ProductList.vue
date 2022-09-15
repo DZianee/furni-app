@@ -416,7 +416,7 @@ export default {
 
 <style scoped>
 .product-features {
-  margin-top: 20px;
+  margin-top: 2%;
 }
 .table-search-box {
   width: 34%;
@@ -424,15 +424,17 @@ export default {
 }
 .table-search-box input {
   height: 60px;
-  border-radius: 5px;
-  font-size: 14px;
-  letter-spacing: 0.4px;
+  border-radius: 30px;
+  font-size: 15px;
+  padding: 0 18px;
+  letter-spacing: 0.3px;
 }
 .filter {
   margin-top: 20px;
 }
 .accordion-item button {
   height: 40px;
+  border-radius: 20px;
 }
 .sort-bar {
   padding: 10px;
@@ -440,21 +442,24 @@ export default {
   gap: 40px;
 }
 .sort-bar select {
-  padding: 10px;
+  padding: 12px;
   width: 400px;
   font-weight: 500;
+  border-radius: 30px;
 }
 .product-content-list {
-  margin-top: 40px;
-  display: flex;
-  gap: 60px;
-  flex-wrap: wrap;
+  margin-top: 4%;
+  grid-template-columns: 1fr 1fr 1fr;
+  display: grid;
+  column-gap: 60px;
+  /* flex-wrap: wrap; */
   row-gap: 70px;
-  justify-content: center;
+  /* justify-content: center; */
 }
 .card.product-item {
   /* border: solid; */
-  width: 30%;
+  /* width: 30%; */
+  border: none;
 }
 .card.product-item:hover {
   cursor: pointer;
@@ -465,7 +470,7 @@ export default {
 }
 .item-name h6 {
   line-height: 35px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 .item-price p {
   color: rgb(98, 95, 95);
@@ -498,5 +503,56 @@ export default {
 .tooltips {
   position: relative;
   left: 100px;
+}
+
+/* ---- Responsive --- */
+/* @media screen and (max-width: 1400px){
+
+} */
+@media screen and (max-width: 1025px) {
+  .table-search-box {
+    width: 40%;
+    margin: auto;
+  }
+  .product-content-list {
+    column-gap: 24px;
+    row-gap: 70px;
+  }
+}
+@media screen and (max-width: 993px) {
+  .item-name h6 {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .table-search-box {
+    width: 60%;
+    margin: auto;
+  }
+  .sort-bar select {
+    width: 127px;
+  }
+  .sort-bar {
+    gap: 25px;
+  }
+  .product-content-list {
+    margin-top: 10%;
+    row-gap: 50px;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .sort-bar select {
+    width: 82px;
+    font-size: 15px;
+  }
+  .sort-bar {
+    gap: 20px;
+    padding: 0;
+  }
+  .product-content-list {
+    row-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 </style>

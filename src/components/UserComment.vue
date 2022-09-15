@@ -7,7 +7,12 @@
       </select>
     </div>
     <div class="review-container">
-      <div class="review-comment">
+      <div class="review-comment" v-if="reviewList.length < 1">
+        <p style="text-align: center; color: grey; font-style: italic">
+          There is no review exist yet
+        </p>
+      </div>
+      <div class="review-comment" v-else>
         <div class="card comment" v-for="cmt in reviewList" :key="cmt.index">
           <div class="comment-card-header">
             <div class="user-info">
@@ -25,28 +30,33 @@
                 </div>
               </div>
             </div>
+
             <div class="user-criticise-react">
               <div class="user-criticise" :style="checkColor(cmt.rating)">
                 {{ cmt.rating }}
               </div>
-              <div class="users-reacts">
-                <div class="unreact" v-if="cmt._id === examineUserInReactIf()">
-                  <i
-                    class="bx bxs-heart"
-                    style="color: red"
-                    @click="removeReact(cmt._id)"
-                  ></i>
-                  {{ cmt.countReacts }}
-                </div>
-                <div class="react" v-else>
-                  <i
-                    class="bx bx-heart"
-                    style="color: red"
-                    @click="addReact(cmt._id)"
-                  ></i>
-                  {{ cmt.countReacts }}
-                </div>
-                <!-- <div class="unreact" v-if="cmt._id === examineUserInReact()">
+              <div class="criticise_react-option">
+                <div class="users-reacts">
+                  <div
+                    class="unreact"
+                    v-if="cmt._id === examineUserInReactIf()"
+                  >
+                    <i
+                      class="bx bxs-heart"
+                      style="color: red"
+                      @click="removeReact(cmt._id)"
+                    ></i>
+                    {{ cmt.countReacts }}
+                  </div>
+                  <div class="react" v-else>
+                    <i
+                      class="bx bx-heart"
+                      style="color: red"
+                      @click="addReact(cmt._id)"
+                    ></i>
+                    {{ cmt.countReacts }}
+                  </div>
+                  <!-- <div class="unreact" v-if="cmt._id === examineUserInReact()">
                   <i
                     class="bx bxs-heart"
                     style="color: red"
@@ -54,18 +64,19 @@
                   ></i>
                   {{ cmt.countReacts }}
                 </div> -->
-              </div>
-              <div class="more-option" v-if="cmt.user === userId">
-                <i
-                  class="bx bx-dots-horizontal-rounded"
-                  data-bs-target="#cmtModal"
-                  data-bs-toggle="modal"
-                  @click="openEditModal(cmt._id)"
-                ></i>
-                <!-- <div class="features_edit-remove">
+                </div>
+                <div class="more-option" v-if="cmt.user === userId">
+                  <i
+                    class="bx bx-dots-horizontal-rounded"
+                    data-bs-target="#cmtModal"
+                    data-bs-toggle="modal"
+                    @click="openEditModal(cmt._id)"
+                  ></i>
+                  <!-- <div class="features_edit-remove">
                 <i class="bx bx-trash bx-fw"></i>
                 <i class="bx bx-edit-alt bx-fw"></i>
               </div> -->
+                </div>
               </div>
             </div>
           </div>
@@ -394,7 +405,7 @@ export default {
 
 /* --- features --- */
 .review-features {
-  border-top: solid 1px rgb(231, 223, 223);
+  /* border-top: solid 1px rgb(231, 223, 223); */
   padding-top: 20px;
   display: flex;
   justify-content: flex-end;
@@ -430,25 +441,26 @@ textarea {
 }
 /* --- comment --- */
 .review-container {
-  height: 480px;
+  max-height: 450px;
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 .review-comment {
-  margin-top: 7%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* gap: 30px; */
+  margin-top: 2%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 20px;
+  row-gap: 50px;
 }
 
 .card {
   padding: 0 15px;
   padding-top: 10px;
-  width: 85%;
+  width: 100%;
   border-radius: 20px;
-  /* border: solid #e040fb; */
-  border: none;
-  border-bottom: solid 1px #e040fb;
+  border: solid #e040fb;
+  /* border: none; */
+  /* border-bottom: solid 3px #e040fb; */
 }
 
 .comment-card-header {
@@ -477,5 +489,25 @@ textarea {
 .comment-card-body p {
   line-height: 30px;
   font-size: 14px;
+}
+
+/* --- Responsive --- */
+/* @media screen and (max-width: 1400px) {
+  .criticise_react-option {
+    display: flex;
+    flex-flow: column;
+  }
+} */
+@media screen and (max-width: 993px) {
+  .review-comment {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 30px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .review-comment {
+    grid-template-columns: 100%;
+    row-gap: 30px;
+  }
 }
 </style>

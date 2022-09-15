@@ -146,17 +146,15 @@ export default {
 
 <style scoped>
 .product-info {
-  padding: 10px 20px;
+  padding: 2% 2%;
 }
 .product-name h4 {
-  font-size: 20px;
+  font-size: 1.3rem;
 }
-h4 {
-  font-size: 21px;
-}
+
 .product-price {
   padding: 10px 0;
-  font-size: 25px;
+  font-size: 1.7rem;
   color: red;
   font-weight: 500;
 }
@@ -165,7 +163,7 @@ h4 {
   width: 500px;
   grid-template-columns: 0.1fr 1fr;
   margin-bottom: 30px;
-  margin-top: 20px;
+  margin-top: 2%;
 }
 .product-color label {
   font-size: 16px;
@@ -195,6 +193,9 @@ h4 {
   height: 25px;
   width: 25px;
   border-radius: 30px;
+}
+.checkmark:hover {
+  border: solid 1px;
 }
 
 /* On mouse-over, add a grey background color */
@@ -236,8 +237,32 @@ h4 {
   color: white;
   width: 80%;
   font-weight: 500;
+  border-radius: 10px;
 }
 .btn_add-cart:hover {
   color: white;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .btn {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .color-check {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .product-color {
+    width: 250px;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .color-check {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .product-color {
+    width: 250px;
+  }
 }
 </style>

@@ -117,25 +117,38 @@ export default {
   color: rgb(174, 67, 255);
   font-weight: 500;
 }
-.container {
-  /* border: solid; */
+
+.product-img {
+  display: flex;
+  justify-content: center;
 }
 .product-img img {
-  width: 50%;
-  /* border: solid; */
-  padding: 30px 0;
-  transform: translateX(50%);
+  width: 70%;
+  padding-bottom: 3%;
 }
 .product-details-info {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
 }
 .product-des {
-  letter-spacing: 0.7px;
+  letter-spacing: 0.3px;
   line-height: 32px;
   padding: 0 12px;
 }
 .product-des h4 {
   font-size: 21px;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .product-details-info {
+    grid-template-columns: 100%;
+    row-gap: 10%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .product-img img {
+    width: 100%;
+  }
 }
 </style>

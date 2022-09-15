@@ -181,6 +181,9 @@ export default {
   .services-content.b :nth-child(2) {
     order: 1;
   }
+  .right {
+    transform: translateX(5px);
+  }
 }
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .service-title h1 {
@@ -202,7 +205,7 @@ export default {
     grid-template-columns: 100%;
   }
   .right {
-    transform: translateX(10px);
+    transform: translateX(5px);
   }
 }
 </style>

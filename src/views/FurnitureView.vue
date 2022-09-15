@@ -59,16 +59,14 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Space+Grotesk&display=swap");
-
-.wrapper {
+/* .wrapper {
   background: rgb(239, 239, 239);
-}
+} */
 .container {
   padding-top: 4%;
-  background: white;
+  /* background: white; */
   text-align: center;
-  font-family: "Poppins", sans-serif;
+  /* font-family: "Poppins", sans-serif; */
   padding-bottom: 50px;
 }
 </style>

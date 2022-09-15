@@ -4,41 +4,44 @@
       <h4>Reviews ({{ countReviews }})</h4>
       <hr />
     </div>
-    <div class="criticise-option">
-      <select name="criticise" v-model="productComment.rating" required>
-        <option value="" disabled>Select rating</option>
-        <option value="EXCELLENT">EXCELLENT</option>
-        <option value="GOOD">GOOD</option>
-        <option value="FAIR">FAIR</option>
-        <option value="POOR">POOR</option>
-      </select>
-    </div>
-    <div class="input-review">
-      <textarea
-        required
-        minlength="30"
-        name="review"
-        cols="30"
-        rows="10"
-        placeholder="Write your review here"
-        v-model="productComment.comment"
-      ></textarea>
-      <div class="btn_submit-reset">
-        <div class="btn btn-submit" @click="newComment">
-          <i class="bx bx-leaf bx-sm"></i>
-        </div>
-        <div class="btn btn-reset" @click="resetInput">
-          <i class="bx bx-reset bx-sm"></i>
+    <div class="wrapper">
+      <div class="criticise-option">
+        <select name="criticise" v-model="productComment.rating" required>
+          <option value="" disabled>Select rating</option>
+          <option value="EXCELLENT">EXCELLENT</option>
+          <option value="GOOD">GOOD</option>
+          <option value="FAIR">FAIR</option>
+          <option value="POOR">POOR</option>
+        </select>
+      </div>
+      <div class="input-review">
+        <textarea
+          required
+          minlength="30"
+          name="review"
+          cols="30"
+          rows="10"
+          placeholder="Write your review here"
+          v-model="productComment.comment"
+        ></textarea>
+        <div class="btn_submit-reset">
+          <div class="btn btn-submit" @click="newComment">
+            <i class="bx bx-leaf bx-sm"></i>
+          </div>
+          <div class="btn btn-reset" @click="resetInput">
+            <i class="bx bx-reset bx-sm"></i>
+          </div>
         </div>
       </div>
+      <div class="error-message">
+        <p v-if="displayErrorLength">Comment must be at least 30 characters</p>
+        <p v-if="displayErrorMissing">Rating or Comment field is missing</p>
+        <p v-if="displayErrorOverwrite">
+          You have crossed the limition of comment (one per user)
+        </p>
+      </div>
     </div>
-    <div class="error-message">
-      <p v-if="displayErrorLength">Comment must be at least 30 characters</p>
-      <p v-if="displayErrorMissing">Rating or Comment field is missing</p>
-      <p v-if="displayErrorOverwrite">
-        You have crossed the limition of comment (one per user)
-      </p>
-    </div>
+
     <UserComment :productId="productId" />
   </div>
   <component
@@ -72,6 +75,7 @@ export default {
         lastname: "",
         rating: "",
       },
+      userName: {},
     };
   },
   methods: {
@@ -83,8 +87,11 @@ export default {
         this.displayWarning = true;
       } else {
         try {
+          this.$store.dispatch("accessToken");
+          this.$store.dispatch("getUser");
           this.errorHandling();
           const user = JSON.parse(this.$store.state.user);
+          await this.getUser(user.id);
           const findUser = this.reviewList.filter(
             (item) => item.user === user.id
           );
@@ -94,13 +101,9 @@ export default {
             this.productComment.comment.length >= 30 &&
             findUser.length == 0
           ) {
-            console.log("loding in here");
-            this.$store.dispatch("accessToken");
-            this.$store.dispatch("getUser");
-            const user = JSON.parse(this.$store.state.user);
             this.productComment.user = user.id;
-            this.productComment.firstname = user.firstname;
-            this.productComment.lastname = user.lastname;
+            this.productComment.firstname = this.userName.firstname;
+            this.productComment.lastname = this.userName.lastname;
             this.productComment.avatar = user.avatar;
 
             const res = await this.$axios.post(
@@ -117,9 +120,19 @@ export default {
         }
       }
     },
+    async getUser(value) {
+      try {
+        const res = await this.$axios.get(
+          `api/User/userDetails/All/${value}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.userName = res.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     errorHandling() {
       const user = JSON.parse(this.$store.state.user);
-      console.log(this.reviewList);
       const findUser = this.reviewList.filter((item) => item.user === user.id);
       if (
         (this.productComment.comment == "" ||
@@ -152,7 +165,9 @@ export default {
   //     this.displayErrorMissing = false;
   //   },
   // },
-  mounted() {},
+  mounted() {
+    console.log(this.countReviews);
+  },
 };
 </script>
 
@@ -166,6 +181,11 @@ export default {
   color: red;
   font-size: 15px;
 }
+
+/* --- content --- */
+.wrapper {
+  width: 50%;
+}
 .criticise-option {
   padding-top: 10px;
   margin-bottom: 15px;
@@ -177,12 +197,15 @@ export default {
   margin-right: 12%;
   font-size: 14px;
 }
+.user-review {
+  margin-top: 7%;
+}
 .input-review {
   display: grid;
   grid-template-columns: 1fr 0.1fr;
 }
 .title h4 {
-  padding: 10px 20px;
+  padding: 1% 2%;
   font-size: 21px;
 }
 textarea {
@@ -211,4 +234,19 @@ textarea {
   background: #aa00ff;
   color: white;
 }
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .wrapper {
+    width: 100%;
+  }
+  .user-review {
+    margin-top: 15%;
+  }
+}
+/* @media screen and (min-width: 320px) and (max-width: 480px) {
+  .confirm-btn button {
+    width: 46%;
+  }
+} */
 </style>

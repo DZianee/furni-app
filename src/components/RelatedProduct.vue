@@ -9,28 +9,28 @@
           src="https://assets.pbimgs.com/pbimgs/ab/images/dp/wcm/202109/0682/cline-bistro-dining-chair-c.jpg"
           alt="related-product-img"
         />
-        <p class="product-related-name">testing product 0</p>
+        <!-- <p class="product-related-name">testing product 0</p> -->
       </div>
       <div class="product-item-related">
         <img
           src="https://cordlessphoneworld.2dimg.com/1/1491745437_0773.jpg"
           alt="related-product-img"
         />
-        <p class="product-related-name">testing product 1</p>
+        <!-- <p class="product-related-name">testing product 1</p> -->
       </div>
       <div class="product-item-related">
         <img
           src="https://www.ikea.com/qa/en/images/products/mammut-childrens-chair-in-outdoor-red__0727924_pe735940_s5.jpg?f=xs"
           alt="related-product-img"
         />
-        <p class="product-related-name">testing product 2</p>
+        <!-- <p class="product-related-name">testing product 2</p> -->
       </div>
       <div class="product-item-related">
         <img
           src="https://www.ikea.com/qa/en/images/products/mammut-childrens-stool-in-outdoor-yellow__0727954_pe735970_s5.jpg?f=xl"
           alt="related-product-img"
         />
-        <p class="product-related-name">testing product 3</p>
+        <!-- <p class="product-related-name">testing product 3</p> -->
       </div>
     </div>
   </div>
@@ -44,7 +44,8 @@ export default {
 
 <style scoped>
 .related-product {
-  margin-top: 70px;
+  margin-top: 7%;
+  margin-bottom: 7%;
 }
 .title h3 {
   text-align: center;
@@ -62,21 +63,32 @@ export default {
   padding: 10px 0;
 }
 .product-item-related {
-  width: fit-content;
+  width: 80%;
   height: fit-content;
-  padding: 10px 0;
+  /* padding: 10px 0; */
 }
 .product-item-related:hover {
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
 }
 .product-item-related img {
-  width: 60%;
-  transform: translateX(32%);
+  width: 100%;
+  /* transform: translateX(32%); */
 }
 .product-related-name {
   padding: 30px;
   text-align: center;
   font-weight: 500;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 768px) {
+  .product-item-related {
+    width: 100%;
+  }
+  .related-product {
+    margin-top: 10%;
+    margin-bottom: 7%;
+  }
 }
 </style>

@@ -73,7 +73,7 @@ export default {
 .confirm-btn {
   margin: 20px 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   gap: 12px;
   padding: 0 20px;
 }
@@ -86,5 +86,10 @@ export default {
 .reset-btn {
   background: rgb(183, 69, 69);
   color: white;
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .confirm-btn button {
+    width: 46%;
+  }
 }
 </style>

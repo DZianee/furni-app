@@ -433,6 +433,7 @@ export default {
   width: 12rem;
   height: fit-content;
   border: solid 1px rgb(188, 183, 183);
+  padding-left: 2rem;
 }
 .menu-ham i {
   transform: translateY(9%);
@@ -659,8 +660,18 @@ h6 {
     top: -21px;
     left: 20px;
   }
+  .furniture-stores ul {
+    padding-left: 0;
+  }
   .logout {
     font-size: 15px;
+  }
+  .footer-content {
+    gap: 5vw;
+  }
+  .furniture-about,
+  .furniture-stores {
+    text-align: left;
   }
 }
 </style>

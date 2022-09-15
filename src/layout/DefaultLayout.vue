@@ -88,28 +88,30 @@
       <h1>TMCi</h1>
       <p>For Trending, Modern and Comfortable life</p>
     </div>
-    <div class="furniture-about">
-      <h6>Company</h6>
-      <p @click="Route('companyView')">About Us</p>
-    </div>
-    <div class="furniture-stores">
-      <h6>Stores</h6>
-      <ul>
-        <li style="font-weight: 600">Ha Noi:</li>
-        <li>12 Cau Giay, Cau Giay District, Quan Hoa Ward</li>
-      </ul>
-      <ul>
-        <li style="font-weight: 600">TP.HCM:</li>
-        <li>44 Vo Thi Sau, District 3, Ward 1</li>
-      </ul>
-    </div>
-    <div class="furniture-contact">
-      <h6>Contact Us</h6>
-      <p>
-        <span style="font-weight: 600">Email: </span>
-        furniTMCoffical@hotmail.com
-      </p>
-      <p><span style="font-weight: 600">Phone:</span> +12679453</p>
+    <div class="footer-content">
+      <div class="furniture-about">
+        <h6>Company</h6>
+        <p @click="Route('companyView')">About Us</p>
+      </div>
+      <div class="furniture-stores">
+        <h6>Stores</h6>
+        <ul>
+          <li style="font-weight: 500">Ha Noi:</li>
+          <li>12 Cau Giay, Cau Giay District, Quan Hoa Ward</li>
+        </ul>
+        <ul>
+          <li style="font-weight: 500">TP.HCM:</li>
+          <li>44 Vo Thi Sau, District 3, Ward 1</li>
+        </ul>
+      </div>
+      <div class="furniture-contact">
+        <h6>Contact Us</h6>
+        <p>
+          <span style="font-weight: 500">Email: </span>
+          furniTMCoffical@hotmail.com
+        </p>
+        <p><span style="font-weight: 500">Phone:</span> +12679453</p>
+      </div>
     </div>
   </footer>
   <component
@@ -483,9 +485,12 @@ h6 {
   .logo-slogan P {
     font-size: 1vw;
   }
+  footer {
+    gap: 2vw;
+  }
   .footer-content {
     gap: 10vw;
-    padding: 10px 0;
+    padding: 2px 0;
   }
   .logout::after {
     top: -21px;
@@ -513,6 +518,10 @@ h6 {
     top: -21px;
     left: 52px;
   }
+  .footer-content {
+    gap: 3vw;
+    padding: 2px 0;
+  }
 }
 @media screen and (max-width: 769px) {
   .header-user-image {
@@ -525,7 +534,7 @@ h6 {
   }
   .footer-content {
     gap: 10vw;
-    padding: 10px 0;
+    /* padding: 10px 0; */
   }
   .logout::after {
     top: -21px;
@@ -595,6 +604,16 @@ h6 {
   }
   .logout {
     font-size: 15px;
+  }
+  .furniture-stores ul {
+    padding-left: 0;
+  }
+  .furniture-about,
+  .furniture-stores {
+    text-align: left;
+  }
+  .footer-content {
+    gap: 5vw;
   }
 }
 </style>
