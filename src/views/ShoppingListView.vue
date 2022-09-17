@@ -74,4 +74,10 @@ export default {
 .btn:hover {
   color: white;
 }
+@media screen and (max-width: 1250px) {
+  .shopping-list-view {
+    column-gap: 0;
+    grid-template-columns: 100%;
+  }
+}
 </style>

@@ -57,6 +57,7 @@ export default {
   position: relative;
 }
 .modal-header {
+  display: flex;
   justify-content: center;
   letter-spacing: 0.3px;
 }
@@ -92,19 +93,22 @@ button {
   .modal-dialog {
     padding: 0 70px 0 30px;
     border-radius: 7px;
-    left: 50%;
-    transform: translateX(-50%) !important;
+    /* left: 50%; */
+    display: flex;
+    justify-content: center;
+    /* transform: translateX(-50%) !important; */
   }
-  .modal-title {
+  /* .modal-title {
     margin-left: 120px;
-  }
+  } */
   input {
     width: 100%;
   }
 }
 @media screen and (max-width: 480px) {
   .modal-dialog {
-    padding: 0;
+    /* left: 40%; */
+    padding: 16px;
   }
   .modal-content {
     margin: 0;

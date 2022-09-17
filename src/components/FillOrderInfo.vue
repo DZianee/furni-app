@@ -189,4 +189,16 @@ label {
   font-weight: 500;
   letter-spacing: 0.8px;
 }
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .container {
+    margin-top: 10%;
+    width: 100%;
+    padding: 10px 20px;
+  }
+  .order-info-container {
+    width: 100%;
+  }
+}
 </style>

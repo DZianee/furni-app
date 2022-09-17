@@ -85,14 +85,16 @@ export default {
 img {
   height: 100px;
 }
-
+.cancel-btns {
+  display: flex;
+  justify-content: center;
+}
 .btn_cancel {
   /* background-color: #b767ff; */
   width: 25%;
   padding: 7px 0;
   border-radius: 7px;
   font-weight: 500;
-  transform: translateX(170px);
   margin-bottom: 20px;
 }
 .btn-mar-right {

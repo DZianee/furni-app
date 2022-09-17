@@ -10,14 +10,18 @@
       </div>
       <p>There is no content in the shopping list yet</p>
     </div>
-    <div class="table-responsive" v-else>
-      <table class="table">
-        <tr v-for="item in productInList" :key="item.index">
-          <td>
-            <img :src="`http://localhost:2371/${item.img}`" :alt="item.img" />
-          </td>
-          <td class="item-name">
-            <h6>{{ item.name }}</h6>
+    <div class="cart-list" v-else>
+      <div
+        class="card item-in-list"
+        v-for="item in productInList"
+        :key="item.index"
+      >
+        <div class="item-img">
+          <img :src="`http://localhost:2371/${item.img}`" :alt="item.img" />
+        </div>
+        <div class="item-info wrapper">
+          <h6>{{ item.name }}</h6>
+          <div class="color-quantity">
             <div class="item-color">
               <div class="color-check">
                 <div>
@@ -31,9 +35,7 @@
                 </div>
               </div>
             </div>
-          </td>
-          <td class="item-quantity">
-            <div>
+            <div class="item-quantity">
               <input
                 type="text"
                 name="quantity"
@@ -66,23 +68,24 @@
                 +
               </button>
             </div>
-          </td>
-          <td class="item-price">
+          </div>
+
+          <div class="item-price">
             {{ totalPrice(item.price, item.quantityProduct) }} VND
-          </td>
-          <td class="remove-item-icon">
-            <button
-              data-bs-toggle="modal"
-              data-bs-target="#removeModal"
-              class="icon icon_delete"
-              @click="openRemoveModal(item.product_id, item.id)"
-            >
-              <i class="bx bx-md bx-x"></i>
-            </button>
-          </td>
-        </tr>
-        <tr></tr>
-        <!-- <tr>
+          </div>
+        </div>
+        <div class="remove-item-icon">
+          <button
+            data-bs-toggle="modal"
+            data-bs-target="#removeModal"
+            class="icon icon_delete"
+            @click="openRemoveModal(item.product_id, item.id)"
+          >
+            <i class="bx bx-md bx-x"></i>
+          </button>
+        </div>
+      </div>
+      <!-- <tr>
           <td></td>
           <td></td>
           <td class="cart_stable-price-title">
@@ -90,7 +93,6 @@
           </td>
           <td class="shopping-cart_stable-price">{{ totalBillCart() }} VND</td>
         </tr> -->
-      </table>
     </div>
     <!-- <button type="submit" class="btn move-to-order_info" @click="toNextStep">
       Continue <i class="bx bx-right-arrow-alt bx-fw"></i>
@@ -217,7 +219,7 @@ export default {
 
 <style scoped>
 .cart-item {
-  margin-top: 40px;
+  margin-top: 4%;
   width: 90%;
 }
 /* .item-name,
@@ -226,26 +228,62 @@ export default {
   transform: translateY(35%);
 } */
 
-/* -- table -- */
+/* -- empty-list -- */
 .empty-content-message {
-  margin-top: 20px;
+  margin-top: 2%;
   text-align: center;
   /* transform: translateX(200px); */
   color: rgb(155, 151, 151);
   font-style: italic;
 }
-.table-responsive {
+
+/* --- limit cart list --- */
+.cart-list {
   height: 400px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.cart-list {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  /* margin: 0 auto; */
+}
+.cart-list::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+/* ---- card ---- */
+.card {
+  margin-bottom: 2%;
+  padding: 1% 0;
+  border: none;
+  border-bottom: solid 2px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.2fr;
+  column-gap: 40px;
+}
+.card .item-img img {
+  width: 80%;
+}
+.card .item-info div {
+  padding: 1%;
 }
 
-.table img {
-  width: 170px;
+/* -- quantity - price - color - name --- */
+h6 {
+  line-height: 32px;
 }
-/* -- quantity --- */
-.item-quantity div {
+.color-quantity {
   display: flex;
   justify-content: space-between;
-  width: 85%;
+}
+.item-price {
+  font-size: 1.2rem;
+  float: right;
+}
+.item-quantity {
+  display: flex;
+  justify-content: space-between;
+  width: 150px;
 }
 .decrease,
 .increase {
@@ -347,5 +385,66 @@ export default {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1410px) {
+  .cart-item {
+    margin-top: 10%;
+    width: 100%;
+  }
+}
+@media screen and (max-width: 993px) {
+  .item-quantity {
+    width: 40%;
+  }
+  .card .item-img img {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 768px) {
+  /* .item-quantity {
+    width: 63%;
+  } */
+  .card .item-img img {
+    width: 100%;
+  }
+  .card {
+    grid-template-columns: 1fr 1fr 0.2fr;
+    column-gap: 10px;
+  }
+  .item-price {
+    font-size: 1.1rem;
+  }
+  .item-quantity {
+    display: flex;
+    justify-content: space-between;
+    width: 136px;
+    margin: auto;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .item-quantity input {
+    width: 29px;
+    height: 29px;
+  }
+  .item-quantity {
+    display: flex;
+    justify-content: space-between;
+    width: 104px;
+    margin: auto;
+  }
+  .item-price {
+    border-top: solid 2px silver;
+  }
+  /* h4 {
+    font-size: 18px;
+  } */
+  /* .decrease,
+  .increase {
+    font-size: 16px;
+    height: 23px;
+    width: 25px;
+  } */
 }
 </style>

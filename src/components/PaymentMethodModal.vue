@@ -240,15 +240,24 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300&family=Roboto:wght@300&family=Space+Grotesk&display=swap");
-.payment-modal {
+/* @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300&family=Roboto:wght@300&family=Space+Grotesk&display=swap"); */
+/* .payment-modal {
   font-family: "Roboto", sans-serif;
-}
+} */
 .modal-content {
   border-radius: 10px;
   height: 500px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
-
+.modal-content {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  /* margin: 0 auto; */
+}
+.modal-content ::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
 .modal-body {
   display: grid;
   padding: 0;
@@ -374,5 +383,105 @@ export default {
   border: solid;
   border-radius: 50px;
   width: fit-content;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .modal-body {
+    grid-template-columns: 100%;
+    padding: 30px 0;
+  }
+  .card {
+    width: 80%;
+    height: 35%;
+  }
+  .momo-pay img {
+    width: 24%;
+  }
+  .zalo-pay img {
+    height: 72%;
+    width: 35%;
+  }
+  .cash-pay img {
+    width: 20%;
+  }
+  .option-list {
+    gap: 16px;
+  }
+  /* -- on the right of the modal -- */
+  .method-container {
+    padding: 20px;
+  }
+  .close-icon {
+    position: absolute;
+    top: 10px;
+    right: 7px;
+  }
+  .method-welcome p {
+    /* font-weight: 500; */
+    text-align: center;
+    margin-top: 10%;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+  }
+
+  /* method content */
+  .method-content {
+    margin-top: 10%;
+    padding: 10px 0;
+  }
+  .method-content p,
+  .method-content label {
+    font-size: 14px;
+    letter-spacing: 0.4px;
+  }
+  .method-content label {
+    font-size: 14px;
+  }
+  .method-content .scanner-img {
+    text-align: center;
+  }
+  .scanner-img img {
+    width: 60%;
+  }
+  .tick-paid {
+    padding: 20px 0;
+  }
+  .cash-method .scanner-img img {
+    border-radius: 90px;
+    width: 70%;
+  }
+  .method-content .btn-form {
+    width: 30%;
+    float: right;
+  }
+  .method-content button {
+    background: #ae51dd;
+    color: white;
+    font-weight: 500;
+    width: 12%;
+    border: none;
+    border-radius: 5px;
+    padding: 3px 0;
+    position: absolute;
+    right: 2%;
+    bottom: 2%;
+  }
+  .method-content button:hover {
+    background: #991ed7;
+  }
+  /* --- success message --- */
+  .success-message {
+    border: none;
+  }
+  .success-message p {
+    line-height: 40px;
+    font-weight: 500;
+  }
+  .success-message p i {
+    border: solid;
+    border-radius: 50px;
+    width: fit-content;
+  }
 }
 </style>

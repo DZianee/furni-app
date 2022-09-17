@@ -98,9 +98,11 @@
       >
       for the shopping online service.
     </p>
-    <button type="submit" class="btn" @click="sendOrder">
-      Complete the Order
-    </button>
+    <div class="btn-complete">
+      <button type="submit" class="btn" @click="sendOrder">
+        Complete the Order
+      </button>
+    </div>
   </div>
   <PaymentMethodModal
     :transactionID="transactionID"
@@ -402,18 +404,38 @@ export default {
   transform: rotate(45deg);
 }
 
+.btn-complete {
+  display: flex;
+  justify-content: center;
+}
 .btn {
   background: #cc6bfd;
   color: white;
   font-weight: 500;
   font-size: 18px;
   border-radius: 7px;
-  margin-left: 4%;
   width: 90%;
   padding: 12px;
   margin: 30px 0;
 }
 .btn:hover {
   color: white;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1400px) {
+  .bill-order {
+    width: 60%;
+  }
+}
+@media screen and (max-width: 993px) {
+  .bill-order {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .bill-order {
+    width: 100%;
+  }
 }
 </style>
