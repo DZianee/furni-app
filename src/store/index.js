@@ -4,23 +4,16 @@ import axios from "../plugins/axios";
 export default createStore({
   state: {
     token: null,
-    // refreshToken: null,
     authenticated: false,
     user: null,
-    // userInfo: null,
-    // avatar: null,
     cateId: null,
     activateCateDetails: false,
     shoppingList: [],
   },
   mutations: {
     setAuth: (state, auth) => (state.authenticated = auth),
-    // setAvatar: (state, img) => (state.avatar = img),
     setUser: (state, user) => (state.user = user),
-    // setUserInfo: (state, user) => (state.user = user),
     setToken: (state, accessToken) => (state.token = accessToken),
-    // setRefreshToken: (state, refreshToken) =>
-    //   (state.refreshToken = refreshToken),
     setCateId: (state, cate) => (state.cateId = cate),
     setActivateCateDetails: (state, activateCate) =>
       (state.activateCateDetails = activateCate),
@@ -31,17 +24,12 @@ export default createStore({
       commit("setUser", JSON.stringify(res));
       localStorage.setItem("User", JSON.stringify(res));
       localStorage.setItem("Token", res.token);
-      // localStorage.setItem("refreshToken", res.refreshToken);
       localStorage.setItem("Avatar", res.avatar);
     },
     verifiedUser({ commit }, res) {
       commit("setAuth", res);
       localStorage.setItem("Auth", res);
     },
-    // storeAvatar({ commit }, res) {
-    //   commit("setAvatar", res);
-    //   localStorage.setItem("Avatar", res);
-    // },
     storeCateId({ commit }, res) {
       commit("setCateId", res);
       sessionStorage.setItem("CateId", res);
@@ -69,9 +57,6 @@ export default createStore({
         "Token"
       )}`;
     },
-    // getRefreshToken({ commit }) {
-    //   commit("setRefreshToken", localStorage.getItem("refreshToken"));
-    // },
     refreshToken({ commit }, res) {
       localStorage.setItem("Token", res.data.token);
       commit("setToken", res.data.token);
@@ -82,9 +67,6 @@ export default createStore({
     getAuth({ commit }) {
       commit("setAuth", localStorage.getItem("Auth"));
     },
-    // getAvatar({ commit }) {
-    //   commit("setAvatar", localStorage.getItem("Avatar"));
-    // },
     getCateId({ commit }) {
       commit("setCateId", sessionStorage.getItem("CateId"));
     },

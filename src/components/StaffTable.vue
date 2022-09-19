@@ -664,7 +664,6 @@ export default {
   grid-template-columns: 0.4fr 1fr;
   column-gap: 20px;
   padding: 15px 0;
-  padding-left: 15px;
 }
 .table-title p {
   line-height: 30px;
@@ -679,6 +678,7 @@ export default {
   padding-right: 8%;
   justify-content: flex-end;
   margin-bottom: 12px;
+  margin-top: 2%;
 }
 .create-staff-btn button {
   background: #aa40e3;
@@ -686,15 +686,26 @@ export default {
   font-weight: 500;
   font-size: 15px;
   padding: 5px;
-  width: 20%;
+  width: 150px;
   border: none;
 }
 
 /* --- table --- */
 .table-responsive {
   padding: 25px 0;
-  padding-left: 10px;
-  height: 400px;
+  /* padding-left: 10px; */
+  max-height: 400px;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+.table-responsive {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  /* margin: 0 auto; */
+}
+
+.table-responsive::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 thead th {
   background: #ece9fc;
@@ -847,7 +858,7 @@ input {
 }
 .features select {
   width: 70%;
-  padding: 7px 12px;
+  padding: 9px 12px;
   font-size: 14px;
   border-radius: 7px;
   border: solid 1px lightgrey;
@@ -879,7 +890,7 @@ input {
 .btn-submit-features {
   color: white;
   background: #aa40e3;
-  width: 25%;
+  width: 90px;
   font-weight: 500;
 }
 .btn-submit-features:hover {
@@ -887,7 +898,20 @@ input {
 }
 .btn-reset-features {
   background: rgb(218, 218, 218);
-  width: 25%;
+  width: 90px;
   font-weight: 500;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .manage-staff-table {
+    grid-template-columns: 100%;
+    row-gap: 10px;
+    padding: 15px 0;
+    padding-left: 15px;
+  }
+  .table {
+    width: 834px;
+  }
 }
 </style>

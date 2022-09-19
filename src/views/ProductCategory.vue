@@ -57,12 +57,12 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.product-in-category {
   height: fit-content;
   position: relative;
   right: -8.1%;
   width: calc(100% - 336px);
-  top: 20px;
+  top: 2%;
 }
 .breadcrumb-item:hover {
   text-decoration: underline;
@@ -72,5 +72,49 @@ export default {
 .breadcrumb-item.active {
   color: rgb(174, 67, 255);
   font-weight: 500;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1440px) {
+  .product-in-category {
+    right: -3%;
+    width: calc(100% - 200px);
+  }
+}
+@media screen and (max-width: 1250px) {
+  .product-in-category {
+    right: -2.5%;
+    width: calc(100% - 145px);
+  }
+}
+@media screen and (max-width: 1200px) {
+  .product-in-category {
+    right: -1.5%;
+    width: calc(100% - 125px);
+  }
+}
+/* @media screen and (max-width: 786px) {
+  .product-in-category {
+    right: -1.5%;
+    width: calc(100% - 125px);
+  }
+} */
+@media screen and (max-width: 768px) {
+  .product-in-category {
+    grid-template-columns: 100%;
+    row-gap: 80px;
+    padding: 10px 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 5%;
+  }
+  h4 {
+    padding-left: 2%;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  /* .product-in-category {
+    margin-bottom: 28%;
+  } */
 }
 </style>

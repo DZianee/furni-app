@@ -200,6 +200,7 @@ export default {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             tooltip: {
               callbacks: {
@@ -267,7 +268,7 @@ export default {
 
 <style scoped>
 .summary-content {
-  padding-top: 2%;
+  padding: 2% 5%;
 }
 /* -- filter -- */
 .filter-features {
@@ -278,7 +279,7 @@ export default {
 .filter-features select {
   border: solid 1px silver;
   padding: 5px;
-  width: 10%;
+  width: 90px;
   border-radius: 7px;
   font-size: 15px;
 }
@@ -302,8 +303,19 @@ export default {
 
 /* -- table -- */
 .table-responsive {
-  height: 700px;
+  max-height: 700px;
   overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.table-responsive {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.table-responsive::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+.table {
+  width: 1296px;
 }
 thead tr th {
   font-weight: 500;
@@ -326,8 +338,48 @@ tbody tr td {
   display: grid;
   grid-template-columns: 1fr 0.5fr;
   column-gap: 20px;
+  height: 40%;
 }
 .line {
-  height: 95%;
+  height: 300px;
+  width: 700px;
+}
+.doughnut {
+  width: 400px;
+}
+@media screen and (max-width: 1400px) {
+  .chart-container {
+    width: 95%;
+  }
+}
+@media screen and (max-width: 1250px) {
+  .chart-container {
+    width: 100%;
+  }
+  line {
+    width: 600px;
+  }
+  .doughnut {
+    width: 300px;
+  }
+}
+@media screen and (max-width: 1050px) {
+  .line {
+    width: 500px;
+  }
+  .doughnut {
+    width: 200px;
+  }
+}
+@media screen and (max-width: 993px) {
+  .chart-container {
+    padding: 0 5%;
+    grid-template-columns: 100%;
+    width: 100%;
+  }
+  .line,
+  .doughnut {
+    width: 100%;
+  }
 }
 </style>

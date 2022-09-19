@@ -134,4 +134,42 @@ export default {
 .card .num-of-armchair {
   font-size: 45px;
 }
+
+/* -- Responsive --- */
+@media screen and (max-width: 1440px) {
+  .card {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 993px) {
+  .card p {
+    font-size: 15px;
+  }
+  .card {
+    width: 100%;
+  }
+  .card .num-of-chair,
+  .card .num-of-armchair {
+    font-size: 30px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .category-overview {
+    margin-top: 10px;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 100%;
+    column-gap: 30px;
+  }
+  .card p {
+    font-size: 15px;
+  }
+  .card {
+    width: 100%;
+  }
+  .card .num-of-chair,
+  .card .num-of-armchair {
+    font-size: 30px;
+  }
+}
 </style>

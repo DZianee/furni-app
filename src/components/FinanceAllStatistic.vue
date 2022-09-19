@@ -1,39 +1,37 @@
 <template>
-  <div>
-    <div class="content-container">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th style="text-align: center">Year</th>
-              <th style="text-align: center">Total Orders</th>
-              <th style="text-align: center">Revenue (VND)</th>
-              <th>Rate</th>
-              <th>Percent</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in finYearStatistic" :key="item.index">
-              <td style="font-weight: 600; text-align: center; color: #a65de7">
-                {{ item.year }}
-              </td>
-              <td style="text-align: center">
-                {{ item.totalOrders }}
-              </td>
-              <td style="text-align: center">{{ item.revenue }}</td>
-              <td>-</td>
-              <td>-</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="chart-content">
-        <div class="chart">
-          <canvas
-            id="yearStatisticBar"
-            aria-label="Summary each year's revenue"
-          ></canvas>
-        </div>
+  <div class="content-container">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="text-align: center">Year</th>
+            <th style="text-align: center">Total Orders</th>
+            <th style="text-align: center">Revenue (VND)</th>
+            <th>Rate</th>
+            <th>Percent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in finYearStatistic" :key="item.index">
+            <td style="font-weight: 600; text-align: center; color: #a65de7">
+              {{ item.year }}
+            </td>
+            <td style="text-align: center">
+              {{ item.totalOrders }}
+            </td>
+            <td style="text-align: center">{{ item.revenue }}</td>
+            <td>-</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="chart-content">
+      <div class="chart">
+        <canvas
+          id="yearRevenStatisticBar"
+          aria-label="Summary each year's revenue"
+        ></canvas>
       </div>
     </div>
   </div>
@@ -77,7 +75,7 @@ export default {
         labels.push(item.year);
         data.push(item.revenue);
       });
-      new Chart(document.getElementById("yearStatisticBar"), {
+      new Chart(document.getElementById("yearRevenStatisticBar"), {
         type: "bar",
         data: {
           labels,
@@ -92,9 +90,7 @@ export default {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: {
-              display: false,
-            },
+            legend: false,
             tooltip: {
               usePointStyle: true,
               callbacks: {
@@ -112,7 +108,6 @@ export default {
             },
           },
           indexAxis: "y",
-          legend: { display: false },
           title: {
             display: true,
           },
@@ -142,7 +137,7 @@ export default {
 
 <style scoped>
 .content-container {
-  padding-top: 3%;
+  padding: 3% 5%;
   display: grid;
   grid-template-columns: 1fr 0.6fr;
   column-gap: 70px;
@@ -150,8 +145,20 @@ export default {
 
 /* -- table --- */
 .table-responsive {
-  height: 600px;
+  max-height: 600px;
+  /* margin: auto; */
   overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.table-responsive {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.table-responsive::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+.table {
+  width: 687px;
 }
 thead tr th {
   font-weight: 500;
@@ -167,7 +174,23 @@ tbody tr td {
   /* text-align: center; */
 }
 /* -- chart -- */
+.chart-content {
+  margin-top: 2%;
+  height: 40%;
+  width: 100%;
+}
 .chart {
-  height: 70%;
+  height: 300px;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1200px) {
+  .content-container {
+    display: grid;
+    grid-template-columns: 100%;
+  }
+  /* .table {
+    width: ;
+  } */
 }
 </style>

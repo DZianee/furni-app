@@ -146,10 +146,21 @@ export default {
 }
 /* --- table --- */
 .table-responsive {
-  height: 390px;
+  max-height: 390px;
   border-top: 1px solid lightgrey;
   padding: 0 25px;
   overflow-y: auto;
+}
+.table-responsive {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  /* margin: 0 auto; */
+}
+.table-responsive::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+.table {
+  width: 716px;
 }
 .order-info {
   display: flex;
@@ -288,5 +299,12 @@ input {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .order-info {
+    align-items: flex-start;
+  }
 }
 </style>

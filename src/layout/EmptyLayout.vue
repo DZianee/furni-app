@@ -27,4 +27,10 @@ export default {
   cursor: pointer;
   font-size: 18px;
 }
+@media screen and (max-width: 1050px) {
+  .empty-layout {
+    background: url("https://images.pexels.com/photos/4667852/pexels-photo-4667852.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2");
+    height: 680px;
+  }
+}
 </style>

@@ -130,6 +130,7 @@ export default {
 .card {
   /* border: solid; */
   border-radius: 5px;
+  /* width: 358px; */
 }
 
 /* -- month-order -- */
@@ -177,5 +178,93 @@ export default {
   flex-flow: column;
   align-items: center;
   justify-content: center;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1250px) {
+  .current-month-order,
+  .today-order {
+    grid-template-columns: 100%;
+  }
+
+  /* -- common properties */
+  .order-annotate {
+    margin-top: 10%;
+  }
+}
+@media screen and (max-width: 993px) {
+  .card {
+    /* border: solid; */
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* width: 358px; */
+  }
+  .current-month-order,
+  .today-order {
+    grid-template-columns: 1fr 0.5fr;
+  }
+
+  /* -- common properties */
+  .order-annotate {
+    margin-top: 10%;
+  }
+  .order-circle-statistic {
+    /* border: solid pink; */
+    height: 200px;
+    width: 100%;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #b983ff;
+  }
+  .order-circle-statistic p {
+    border-radius: 100%;
+    width: 100%;
+    height: 74%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    font-size: 38px;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .card {
+    border-radius: 5px;
+    grid-template-columns: 100%;
+  }
+  .current-month-order,
+  .today-order {
+    grid-template-columns: 1fr 0.5fr;
+  }
+
+  /* -- common properties */
+  .order-annotate {
+    margin-top: 10%;
+  }
+  .order-circle-statistic {
+    /* border: solid pink; */
+    height: 200px;
+    width: 100%;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #b983ff;
+  }
+  .order-circle-statistic p {
+    border-radius: 100%;
+    width: 100%;
+    height: 74%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    font-size: 38px;
+  }
 }
 </style>

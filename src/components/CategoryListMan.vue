@@ -246,7 +246,7 @@ export default {
   font-weight: 500;
   font-size: 14px;
   padding: 5px;
-  width: 15%;
+  width: 150px;
   border: none;
 }
 
@@ -260,7 +260,7 @@ export default {
   color: rgb(125, 122, 122);
   font-style: italic;
 }
-
+/* -- category -- */
 .category-container {
   display: grid;
   column-gap: 10px;
@@ -271,7 +271,8 @@ export default {
   padding: 50px;
 }
 .card {
-  width: 70%;
+  width: 375px;
+  /* width: 70%; */
   display: grid;
   grid-template-columns: 0.7fr 0.3fr;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
@@ -345,5 +346,42 @@ export default {
   font-size: 17px;
   font-weight: 400;
   letter-spacing: 0.3px;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1200px) {
+  .category-container {
+    padding: 50px 20px;
+  }
+  .card {
+    width: 375px;
+  }
+}
+@media screen and (max-width: 993px) {
+  .category-container {
+    grid-template-columns: 100%;
+    row-gap: 80px;
+    padding: 50px;
+  }
+  .card {
+    margin-left: 18%;
+  }
+}
+@media screen and (max-width: 786px) {
+  .category-container {
+    grid-template-columns: 100%;
+    row-gap: 80px;
+    padding: 50px;
+  }
+  .card {
+    margin-left: 0;
+    width: 100%;
+  }
+  .create-category-btn {
+    align-items: center;
+    display: flex;
+    padding-right: 5%;
+    justify-content: flex-end;
+  }
 }
 </style>

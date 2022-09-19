@@ -132,7 +132,9 @@
                 <select
                   name="payStatus"
                   v-model="order.payment.payStatus"
-                  @change="getValue(order.payment.payStatus, order._id)"
+                  @change="
+                    getValue(order.payment.payStatus, order._id, order.process)
+                  "
                 >
                   <option
                     value="Paid"
@@ -339,10 +341,14 @@ export default {
         console.log(error);
       }
     },
-    async getValue(value, id) {
-      this.updateOrder.payStatus = value;
-      await this.getOrderDetails(id);
-      this.updateOrders(id);
+    async getValue(value, id, process) {
+      if (process === "Cancelled") {
+        return;
+      } else {
+        this.updateOrder.payStatus = value;
+        await this.getOrderDetails(id);
+        this.updateOrders(id);
+      }
     },
     openCheck(value) {
       this.showCheckProcess = value;
@@ -666,11 +672,11 @@ select {
 }
 /* --- table --- */
 .table-responsive {
-  margin-top: 20px;
-  /* height: 200px; */
+  margin: 20px;
+  padding: 10px;
 }
 table {
-  width: 100%;
+  width: 1290px;
 }
 thead tr th {
   font-weight: 500;
@@ -803,5 +809,34 @@ span select {
   font-size: 17px;
   font-weight: 400;
   letter-spacing: 0.3px;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .features {
+    padding: 30px 20px;
+  }
+  .features-bar {
+    display: flex;
+    flex-flow: column;
+    gap: 30px;
+    justify-content: unset;
+    align-items: flex-start;
+  }
+  .search-bar {
+    width: 100%;
+  }
+  .filter-sort {
+    width: 70%;
+  }
+  .btn-submit-features,
+  .btn-reset-features {
+    width: 20%;
+  }
+}
+@media screen and (max-width: 993px) {
+  .filter-sort {
+    width: 100%;
+  }
 }
 </style>

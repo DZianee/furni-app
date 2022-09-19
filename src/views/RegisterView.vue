@@ -4,15 +4,7 @@
       <div class="register-header">
         <h1>
           Make house becomes home with
-          <span
-            style="
-              font-size: 80px;
-              font-family: 'Dancing Script', cursive;
-              font-weight: 600;
-              color: #b767ff;
-            "
-            >TMCi</span
-          >
+          <span>TMCi</span>
         </h1>
         <p>Keep in touch with us by creating account now</p>
       </div>
@@ -102,8 +94,6 @@ export default {
 .register-view {
   display: grid;
   grid-template-columns: 1fr 0.7fr;
-  border: solid;
-  /* height: 900px; */
   font-family: "Roboto", sans-serif;
 }
 img {
@@ -113,6 +103,12 @@ img {
 .register-header h1 {
   font-weight: 500;
   /* color: #b767ff; */
+}
+.register-header span {
+  font-size: 70px;
+  font-family: "Dancing Script", cursive;
+  font-weight: 600;
+  color: #b767ff;
 }
 .register-header p {
   color: rgb(109, 108, 108);
@@ -171,5 +167,57 @@ input {
   border-radius: 7px;
   padding: 12px 0;
   margin-right: 20px;
+}
+/* --- Responsive --- */
+@media screen and (max-width: 1440px) {
+  .register-header h1 {
+    font-size: 30px;
+  }
+  .register-header span {
+    font-size: 50px;
+  }
+}
+@media screen and (max-width: 1050px) {
+  .register-header h1 {
+    font-size: 22px;
+  }
+  .register-header span {
+    font-size: 35px;
+  }
+  .register-view {
+    grid-template-columns: 100%;
+  }
+  .register-container {
+    padding: 20px;
+    margin: auto;
+    transform: translateY(24%);
+    background: white;
+    border-radius: 18px;
+  }
+  img {
+    display: none;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .register-header h1 {
+    font-size: 18px;
+  }
+  .register-header span {
+    font-size: 30px;
+  }
+  .register-container {
+    padding: 20px;
+    margin: auto;
+    transform: translateY(24%);
+    background: white;
+    border-radius: 18px;
+    width: 100%;
+  }
+  .register-content {
+    width: 90%;
+  }
+  .register-header p {
+    font-size: 14px;
+  }
 }
 </style>

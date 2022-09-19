@@ -130,12 +130,14 @@ export default {
 <style scoped>
 /* --- card content --- */
 .card-content {
+  margin-top: 2%;
   display: flex;
   justify-content: space-between;
 }
 .card-content .card {
-  width: 32%;
-  padding: 10px;
+  width: 30%;
+  height: 30%;
+  padding: 10px 0;
   border-bottom-right-radius: 15px;
   border-bottom-left-radius: 15px;
 }
@@ -144,15 +146,16 @@ export default {
 .card .icon-img {
   margin: auto;
   text-align: center;
-  margin-top: 5%;
+  /* margin-top: 5%; */
+  margin: auto;
   border: 2px solid;
   border-radius: 50px;
-  padding: 12px;
+  padding: 12px 0;
   width: 60px;
 }
 .card .label {
   text-align: center;
-  padding: 10px;
+  padding: 10px 0;
   margin-top: 4%;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -160,5 +163,35 @@ export default {
 }
 .card .counter {
   font-size: 30px;
+}
+/* --- Responsive --- */
+@media screen and (max-width: 1250px) {
+  .card-content .card {
+    width: 32%;
+    height: 32%;
+  }
+  .card .counter {
+    font-size: 1.5rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .card-content .card {
+    width: 32%;
+    height: 30%;
+  }
+  .card .icon-img {
+    margin: auto;
+    text-align: center;
+    margin: auto;
+    border: 2px solid;
+    border-radius: 50px;
+    padding: 8px 0;
+    width: 50px;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .card .label {
+    font-size: 13px;
+  }
 }
 </style>

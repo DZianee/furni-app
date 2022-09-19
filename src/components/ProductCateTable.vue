@@ -292,7 +292,7 @@ export default {
   font-weight: 500;
   font-size: 15px;
   padding: 5px;
-  width: 15%;
+  width: 150px;
   border: none;
   border-radius: 5px;
 }
@@ -363,6 +363,7 @@ export default {
 .sort {
   display: grid;
   grid-template-columns: 0.1fr 1fr;
+  column-gap: 7px;
 }
 .sort-container {
   display: flex;
@@ -378,6 +379,7 @@ export default {
 }
 .filter-features {
   display: grid;
+  column-gap: 7px;
   grid-template-columns: 0.1fr 1fr;
 }
 /* .filter-features div {
@@ -418,6 +420,9 @@ export default {
 .table-responsive {
   margin: 20px;
   padding: 10px;
+}
+.table {
+  width: 1290px;
 }
 thead th {
   padding: 10px;
@@ -462,5 +467,46 @@ tbody td {
   font-size: 17px;
   font-weight: 400;
   letter-spacing: 0.3px;
+}
+
+/* -- Responsive --- */
+@media screen and (max-width: 993px) {
+  .features {
+    padding: 30px 0;
+  }
+  .sort-container select,
+  .filter-features select {
+    width: 35%;
+    padding: 9px 12px;
+    font-size: 14px;
+    border-radius: 7px;
+    border: solid 1px lightgrey;
+  }
+  .search-feature {
+    width: 100%;
+  }
+  .btn-submit-features,
+  .btn-reset-features {
+    width: 20%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .features {
+    padding: 30px 20px;
+  }
+  .sort-container select,
+  .filter-features select {
+    width: 100%;
+  }
+  .sort-container {
+    gap: 40px;
+  }
+  .btn-submit-features,
+  .btn-reset-features {
+    width: 25%;
+  }
+  h4 {
+    padding-left: 2%;
+  }
 }
 </style>

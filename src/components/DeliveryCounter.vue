@@ -190,4 +190,44 @@ export default {
 .name-counter p {
   font-weight: 500;
 }
+
+/* --- Responsive --- */
+@media screen and (max-width: 1250px) {
+  .delivery-counter {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 50px;
+    padding: 10px;
+  }
+}
+@media screen and (max-width: 1025px) {
+  .delivery-counter {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 50px;
+    padding: 10px 0;
+  }
+  .counter {
+    font-size: 35px;
+  }
+  .name-counter h6 {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 993px) {
+  .delivery-counter {
+    column-gap: 30px;
+  }
+  .name-counter h6 {
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .delivery-counter {
+    display: grid;
+    grid-template-columns: 100%;
+    row-gap: 30px;
+    padding: 10px;
+  }
+}
 </style>

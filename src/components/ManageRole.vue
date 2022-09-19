@@ -247,6 +247,9 @@ export default {
 </script>
 
 <style scoped>
+.manage-role {
+  padding: 0 15px;
+}
 .table-title p {
   line-height: 30px;
   color: rgb(81, 75, 75);
@@ -267,13 +270,25 @@ export default {
   font-weight: 500;
   font-size: 15px;
   padding: 5px;
-  width: 16%;
+  width: 150px;
   border: none;
 }
 /* --- table --- */
-.table {
-  margin: auto;
-  width: 90%;
+.table-responsive {
+  padding: 25px 0;
+  /* padding-left: 10px; */
+  max-height: 400px;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+.table-responsive {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  /* margin: 0 auto; */
+}
+
+.table-responsive::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 .adjust {
   display: flex;
@@ -321,5 +336,20 @@ input {
 
 .modal-content {
   border: none;
+}
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .manage-staff-table {
+    grid-template-columns: 100%;
+    row-gap: 10px;
+    padding: 15px 0;
+    padding-left: 15px;
+  }
+  .table {
+    width: 834px;
+  }
+  .table-title {
+    padding: 0 4%;
+  }
 }
 </style>

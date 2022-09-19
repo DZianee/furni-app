@@ -19,6 +19,7 @@ import NotifiModal from "./components/Modal/ModalNotifi.vue";
 import CmtModal from "./components/Modal/ModalComment.vue";
 import Pagination from "./components/Pagination/PaginationBar.vue";
 import OrderCardSample from "./components/OrderCard/OrderCardSample.vue";
+import OrderTableSample from "./components/Table/OrderTable.vue";
 import "@/assets/css/main.css";
 // import Vue from "vue";
 import VueObserveVisibility from "vue-observe-visibility";
@@ -46,11 +47,11 @@ axios.interceptors.response.use(
         //   store.dispatch("logout");
         //   router.push({ name: "home" });
         // }
+        router.push({ name: "home" });
 
         break;
       }
       case 403:
-        console.log("403");
         try {
           const res = await axios.post(`api/User/refreshToken`);
           if (res.status == 200) {
@@ -65,6 +66,7 @@ axios.interceptors.response.use(
       case 500:
         break;
       default:
+        router.push({ name: "home" });
         break;
     }
     return Promise.reject(error);
@@ -86,4 +88,5 @@ app
   .component("notifi-modal", NotifiModal)
   .component("pagination-feature", Pagination)
   .component("order-card-list", OrderCardSample)
+  .component("order-table", OrderTableSample)
   .mount("#app");

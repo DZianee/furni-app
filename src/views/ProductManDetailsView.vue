@@ -335,7 +335,7 @@ export default {
   position: relative;
   right: -8.1%;
   width: calc(100% - 336px);
-  top: 20px;
+  top: 6%;
 }
 .breadcrumb-item:hover {
   text-decoration: underline;
@@ -350,7 +350,7 @@ export default {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   column-gap: 50px;
-  margin-top: 40px;
+  margin-top: 4%;
   padding: 20px;
   /* border-radius: 30px;
   border: solid lightblue; */
@@ -478,5 +478,55 @@ img {
   color: white;
   float: right;
   margin: 30px 40px 60px 0;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1440px) {
+  .product-manage-details-view {
+    right: -3%;
+    width: calc(100% - 200px);
+  }
+}
+@media screen and (max-width: 1250px) {
+  .product-manage-details-view {
+    right: -2.5%;
+    width: calc(100% - 145px);
+  }
+}
+@media screen and (max-width: 1200px) {
+  .product-manage-details-view {
+    right: -1.5%;
+    width: calc(100% - 125px);
+  }
+  .details-container {
+    display: grid;
+    grid-template-columns: 100%;
+    column-gap: 50px;
+    margin-top: 4%;
+    padding: 20px;
+  }
+  .checked-color,
+  .add-color {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .product-manage-details-view {
+    grid-template-columns: 100%;
+    row-gap: 80px;
+    padding: 10px 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 36%;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  /* .product-manage-details-view {
+    margin-bottom: 28%;
+  } */
+  .color-check label {
+    padding: 10px 0;
+  }
 }
 </style>

@@ -161,7 +161,6 @@ export default {
 ul {
   display: flex;
   justify-content: space-between;
-  /* gap: 40px; */
   border-bottom: 1px solid lightgrey;
 }
 .bar {
@@ -193,5 +192,30 @@ span {
   color: white;
   font-size: 12px;
   font-weight: 500;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1250px) {
+  .delivery-route-bar {
+    scroll-behavior: smooth;
+    overflow-x: auto;
+  }
+  .delivery-route-bar {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    /* margin: 0 auto; */
+  }
+  .delivery-route-bar::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  ul {
+    display: grid;
+    column-gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+  .bar {
+    text-align: center;
+    width: 185px;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="finance-view container">
     <div class="title">
-      <h3>Summary statistic finance</h3>
+      <h4>Summary statistic finance</h4>
     </div>
     <div class="year-option">
       <select name="year" v-model="yearSelected">
@@ -87,7 +87,6 @@ export default {
   width: calc(100% - 336px);
   top: 20px;
   letter-spacing: 0.3px;
-  /* border: solid; */
   font-family: "Roboto", sans-serif;
 }
 
@@ -164,5 +163,49 @@ tbody tr td {
   display: grid;
   grid-template-columns: 1fr 0.5fr;
   column-gap: 20px;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1440px) {
+  .finance-view {
+    right: -3%;
+    width: calc(100% - 200px);
+  }
+}
+@media screen and (max-width: 1250px) {
+  .finance-view {
+    right: -2.5%;
+    width: calc(100% - 145px);
+  }
+}
+@media screen and (max-width: 1200px) {
+  .finance-view {
+    right: -1.5%;
+    width: calc(100% - 125px);
+  }
+}
+/* @media screen and (max-width: 786px) {
+  .finance-view {
+    right: -1.5%;
+    width: calc(100% - 125px);
+  }
+} */
+@media screen and (max-width: 768px) {
+  .finance-view {
+    grid-template-columns: 100%;
+    row-gap: 80px;
+    padding: 10px 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 15%;
+  }
+  h4 {
+    padding-left: 2%;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  /* .finance-view {
+    margin-bottom: 28%;
+  } */
 }
 </style>

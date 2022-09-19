@@ -16,6 +16,10 @@
                 src="https://images.pexels.com/photos/7585250/pexels-photo-7585250.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
                 alt="img"
               />
+              <!-- <img
+                src="  https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
+                alt="img"
+              /> -->
             </div>
             <div class="login-container">
               <i
@@ -168,7 +172,7 @@ export default {
   font-family: "Roboto", sans-serif;
 }
 .modal-content {
-  border-radius: 10px;
+  border-radius: 12px;
 }
 img {
   width: 100%;
@@ -266,5 +270,25 @@ input {
   border: solid;
   border-radius: 50px;
   width: fit-content;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 993px) {
+  .modal-body {
+    grid-template-columns: 100%;
+    background: url("https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2");
+  }
+  .img-illustrate img {
+    display: none;
+  }
+  .login-container {
+    border-radius: 12px;
+    background: white;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .modal-body {
+    background: none;
+  }
 }
 </style>

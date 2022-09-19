@@ -282,9 +282,13 @@ export default {
   column-gap: 20px;
   border: solid;
 } */
+.customer-list-table {
+  padding: 15px 10px;
+}
 .features-icon {
   display: flex;
   justify-content: flex-end;
+  /* margin-right: 8%; */
 }
 .table-title p {
   line-height: 30px;
@@ -294,7 +298,21 @@ export default {
 .table-responsive {
   padding: 25px 0;
   padding-left: 10px;
+  overflow: auto;
+  scroll-behavior: smooth;
 }
+.table-responsive {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  /* margin: 0 auto; */
+}
+
+.table-responsive::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+/* .table {
+  width: 1220px;
+} */
 thead {
   background: #ece9fc;
   height: 50px;
@@ -387,6 +405,7 @@ td.cus-name h6 {
 .sort {
   display: grid;
   grid-template-columns: 0.1fr 1fr;
+  column-gap: 20px;
 }
 .sort-container {
   display: flex;
@@ -394,7 +413,7 @@ td.cus-name h6 {
 }
 .sort-container select,
 .filter-features select {
-  width: 25%;
+  width: 150px;
   padding: 9px 12px;
   font-size: 14px;
   border-radius: 7px;
@@ -403,6 +422,7 @@ td.cus-name h6 {
 .filter-features {
   display: grid;
   grid-template-columns: 0.1fr 1fr;
+  column-gap: 20px;
 }
 /* .filter-features div {
   display: grid;
@@ -418,7 +438,7 @@ td.cus-name h6 {
 .btn-submit-features {
   color: white;
   background: #aa40e3;
-  width: 10%;
+  width: 90px;
   font-weight: 500;
 }
 .btn-submit-features:hover {
@@ -426,7 +446,28 @@ td.cus-name h6 {
 }
 .btn-reset-features {
   background: rgb(218, 218, 218);
-  width: 10%;
+  width: 90px;
   font-weight: 500;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1250px) {
+  .table {
+    width: 950px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .search-feature {
+    width: 100%;
+    padding: 9px 12px;
+  }
+  .sort-container {
+    gap: 30px;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .sort-container {
+    flex-flow: column;
+  }
 }
 </style>

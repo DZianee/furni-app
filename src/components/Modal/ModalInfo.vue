@@ -83,4 +83,9 @@ export default {
 .modal-content {
   border: 1px solid white;
 }
+
+/* --- Responsive --- */
+.confirm-btn button {
+  width: 46%;
+}
 </style>

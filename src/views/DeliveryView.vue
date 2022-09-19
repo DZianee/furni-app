@@ -1,7 +1,7 @@
 <template>
   <div class="delivery-view container">
     <div class="title">
-      <h3>Delivery Order</h3>
+      <h4>Delivery Order</h4>
       <p>Gather and manage all the making orders over store in HCM city</p>
     </div>
     <DeliveryCounter :counterNewOrders="counterNewOrders" />
@@ -112,5 +112,49 @@ export default {
 .title p {
   color: rgb(116, 112, 112);
   font-size: 14px;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1440px) {
+  .delivery-view {
+    right: -3%;
+    width: calc(100% - 200px);
+  }
+}
+@media screen and (max-width: 1250px) {
+  .delivery-view {
+    right: -2.5%;
+    width: calc(100% - 145px);
+  }
+}
+@media screen and (max-width: 1200px) {
+  .delivery-view {
+    right: -1.5%;
+    width: calc(100% - 125px);
+  }
+}
+/* @media screen and (max-width: 786px) {
+  .delivery-view {
+    right: -1.5%;
+    width: calc(100% - 125px);
+  }
+} */
+@media screen and (max-width: 768px) {
+  .delivery-view {
+    grid-template-columns: 100%;
+    row-gap: 80px;
+    padding: 10px 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 20%;
+  }
+  .title {
+    padding-left: 2%;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  /* .delivery-view {
+    margin-bottom: 28%;
+  } */
 }
 </style>
