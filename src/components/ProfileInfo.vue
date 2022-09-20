@@ -103,6 +103,13 @@
           <button class="btn-update-pass" @click="updatePassForm">
             Change Password
           </button>
+          <button
+            class="btn-update-pass"
+            data-bs-target="#forgotPassForm"
+            data-bs-toggle="modal"
+          >
+            Forgot Password
+          </button>
         </div>
         <div v-if="displayChangePassword">
           <div class="password-edit">
@@ -456,7 +463,10 @@ button {
 }
 .password {
   display: flex;
-  justify-content: space-around;
+  /* justify-content: cent.er; */
+  align-content: center;
+  gap: 30px;
+  flex-flow: column;
 }
 
 .btn-update-pass {

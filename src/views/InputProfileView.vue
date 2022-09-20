@@ -207,10 +207,9 @@ input {
 }
 /* --- btn --- */
 .btn-submit {
-  border: solid;
   float: right;
   margin-right: 20%;
-  width: 10%;
+  width: 100px;
   background: #aa00ff;
   color: white;
   font-weight: 500;
@@ -220,5 +219,31 @@ input {
 }
 .btn-submit:hover {
   color: white;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 1050px) {
+  .input-profile-container {
+    padding: 18px 80px;
+    width: 70%;
+  }
+  .btn-submit {
+    margin-bottom: 5%;
+  }
+}
+@media screen and (max-width: 993px) {
+  .input-profile-container {
+    width: 90%;
+  }
+  .btn-submit {
+    margin-bottom: 5%;
+    margin-right: 10%;
+  }
+}
+@media screen and (max-width: 993px) {
+  .input-profile-container {
+    padding: 18px 20px;
+    width: 100%;
+  }
 }
 </style>

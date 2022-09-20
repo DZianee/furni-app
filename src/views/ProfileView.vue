@@ -18,7 +18,7 @@
     </div>
     <div class="none" style="color: white">hgfefdegfdegfd</div>
     <div class="user-overview-activities container">
-      <div class="route-profile-bar">
+      <div class="route-profile-bar" v-if="user === 'Default User'">
         <nav>
           <ul>
             <li
@@ -74,6 +74,11 @@ export default {
     },
     routeId() {
       return this.$route.params.id;
+    },
+    user() {
+      // this.$store.dispatch("getUser");
+      const role = JSON.parse(this.$store.state.user).role.name;
+      return role;
     },
   },
   async created() {

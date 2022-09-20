@@ -64,7 +64,7 @@ const router = [
     path: "/profile-input-view/:id",
     name: "inputProfileView",
     component: InputProfileView,
-    meta: { layout: "empty" },
+    meta: { layout: "none" },
   },
   {
     path: "/furniture-view/:id",

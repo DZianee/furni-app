@@ -1,9 +1,14 @@
 <template>
   <div class="user-comment">
     <div class="review-features">
-      <select name="comment">
+      <select
+        name="comment"
+        v-model="optionSort"
+        @change="getOptionValue(optionSort)"
+      >
+        <option value="dateCreated">All</option>
         <option value="like">Top highest likes</option>
-        <option value="createdAt">Newest comment</option>
+        <option value="-dateCreated">Newest comment</option>
       </select>
     </div>
     <div class="review-container">
@@ -164,8 +169,7 @@ export default {
       examineValue: [],
       commentId: "",
       test: [],
-      x: "",
-      matchUser: false,
+      optionSort: "-dateCreated",
     };
   },
   computed: {
@@ -181,6 +185,28 @@ export default {
     },
   },
   methods: {
+    async getOptionValue(value) {
+      let res;
+      try {
+        if (value === "like") {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(
+            `api/Product/${this.productId}/Review/topLike`
+          );
+        } else {
+          this.$store.dispatch("accessToken");
+          res = await this.$axios.get(
+            `api/Product/${this.productId}/Review/sortComment`,
+            {
+              params: { sortName: value },
+            }
+          );
+        }
+        this.reviewList = res.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     examineUserInReactIf() {
       let result;
       let finalResult;
@@ -374,21 +400,11 @@ export default {
         console.log(error);
       }
     },
-    // getReact(value) {
-    //   if (this.test == true) {
-    //     this.addReact(value);
-    //   } else if (this.test == false) {
-    //     this.removeReact(value);
-    //   }
-    // },
   },
   watch: {
     numOfReacts() {
       console.log(this.numOfReacts);
       this.colorReact = "red";
-    },
-    x() {
-      console.log(this.x);
     },
   },
   mounted() {

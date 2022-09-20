@@ -63,6 +63,10 @@ input {
   background: rgb(234, 234, 234);
   border: 1px rgb(213, 211, 211);
 }
+input[type="password"],
+input [type="text"] {
+  text-transform: lowercase;
+}
 label {
   font-size: 15px;
   font-weight: 500;

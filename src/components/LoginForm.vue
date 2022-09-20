@@ -55,7 +55,13 @@
                     />
                   </div>
                   <Password v-model:value="password" />
-                  <div class="forgot-pass">Forgot password</div>
+                  <div
+                    class="forgot-pass"
+                    data-bs-target="#forgotPassForm"
+                    data-bs-toggle="modal"
+                  >
+                    Forgot password
+                  </div>
                   <div class="error-message" v-if="errorMessage">
                     Wrong password or username. Please try again.
                   </div>
@@ -105,15 +111,18 @@
       </div>
     </div>
   </div>
+  <ForgotPassForm />
 </template>
 
 <script>
 // import $ from "jquery";
 import Password from "../components/PasswordInput.vue";
+import ForgotPassForm from "./ForgotPassForm.vue";
 export default {
   name: "LoginForm",
   components: {
     Password,
+    ForgotPassForm,
   },
   data() {
     return {
@@ -222,15 +231,22 @@ input {
   background: rgb(234, 234, 234);
   border: 1px rgb(213, 211, 211);
 }
+input[type="email"] {
+  text-transform: lowercase;
+}
 .forgot-pass {
   display: flex;
   justify-content: flex-end;
   margin-right: 10px;
   font-size: 15px;
   font-weight: 500;
-  /* padding: 10px; */
+  padding: 10px;
   cursor: pointer;
-  visibility: hidden;
+  color: grey;
+}
+.forgot-pass:hover {
+  color: black;
+  text-decoration: underline;
 }
 .error-message {
   font-size: 14px;

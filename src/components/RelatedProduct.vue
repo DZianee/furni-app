@@ -4,33 +4,16 @@
       <h3>Related Product</h3>
     </div>
     <div class="product-img-container">
-      <div class="product-item-related">
+      <div
+        class="product-item-related"
+        v-for="item in productList"
+        :key="item.index"
+      >
         <img
-          src="https://assets.pbimgs.com/pbimgs/ab/images/dp/wcm/202109/0682/cline-bistro-dining-chair-c.jpg"
+          :src="`http://localhost:2371/${item.productImg}`"
           alt="related-product-img"
         />
         <!-- <p class="product-related-name">testing product 0</p> -->
-      </div>
-      <div class="product-item-related">
-        <img
-          src="https://cordlessphoneworld.2dimg.com/1/1491745437_0773.jpg"
-          alt="related-product-img"
-        />
-        <!-- <p class="product-related-name">testing product 1</p> -->
-      </div>
-      <div class="product-item-related">
-        <img
-          src="https://www.ikea.com/qa/en/images/products/mammut-childrens-chair-in-outdoor-red__0727924_pe735940_s5.jpg?f=xs"
-          alt="related-product-img"
-        />
-        <!-- <p class="product-related-name">testing product 2</p> -->
-      </div>
-      <div class="product-item-related">
-        <img
-          src="https://www.ikea.com/qa/en/images/products/mammut-childrens-stool-in-outdoor-yellow__0727954_pe735970_s5.jpg?f=xl"
-          alt="related-product-img"
-        />
-        <!-- <p class="product-related-name">testing product 3</p> -->
       </div>
     </div>
   </div>
@@ -39,6 +22,25 @@
 <script>
 export default {
   name: "RelatedProduct",
+  data() {
+    return {
+      productList: [],
+    };
+  },
+  methods: {
+    async getProduct() {
+      try {
+        // this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(`api/Product/relatedProduct`);
+        this.productList = res.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  mounted() {
+    this.getProduct();
+  },
 };
 </script>
 

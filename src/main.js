@@ -8,6 +8,7 @@ import axios from "./plugins/axios";
 import DefaultLayout from "./layout/DefaultLayout.vue";
 import HomeHeaderLayout from "./layout/HomeHeaderLayout.vue";
 import EmptyLayout from "./layout/EmptyLayout.vue";
+import NoneLayout from "./layout/NoneLayout.vue";
 import WithoutFooter from "./layout/WithoutFooter.vue";
 import SidebarManage from "./layout/SidebarManage.vue";
 import CreateModal from "./components/Modal/Modal.vue";
@@ -47,7 +48,7 @@ axios.interceptors.response.use(
         //   store.dispatch("logout");
         //   router.push({ name: "home" });
         // }
-        router.push({ name: "home" });
+        // router.push({ name: "home" });
 
         break;
       }
@@ -66,7 +67,6 @@ axios.interceptors.response.use(
       case 500:
         break;
       default:
-        router.push({ name: "home" });
         break;
     }
     return Promise.reject(error);
@@ -78,6 +78,7 @@ app
   .component("home-header-layout", HomeHeaderLayout)
   .component("sidebar-manage-layout", SidebarManage)
   .component("empty-layout", EmptyLayout)
+  .component("none-layout", NoneLayout)
   .component("without-footer-layout", WithoutFooter)
   .component("create-modal", CreateModal)
   .component("info-modal", InfoModal)
