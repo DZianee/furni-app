@@ -54,11 +54,9 @@
           </div>
         </div>
 
-        <div class="cart-icon">
+        <div class="cart-icon" @click="Route('shoppingListView')">
           <i class="bx bx-cart bx-sm"></i>
-          <div class="num-item-cart" @click="Route('shoppingListView')">
-            ({{ totalProductsInCart }})
-          </div>
+          <div class="num-item-cart">({{ totalProductsInCart }})</div>
         </div>
       </div>
       <div class="menu-ham">
@@ -309,6 +307,7 @@ export default {
   display: none;
 }
 .cart-icon {
+  cursor: pointer;
   position: relative;
   display: flex;
   justify-content: flex-end;
@@ -322,10 +321,6 @@ export default {
   position: absolute;
   right: 12%;
   bottom: 0;
-}
-.cart-icon .num-item-cart:hover {
-  cursor: pointer;
-  bottom: 10px;
 }
 /* -- hamburger menu bar -- */
 .menu-ham {

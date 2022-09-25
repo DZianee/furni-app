@@ -240,7 +240,7 @@ input[type="email"] {
   margin-right: 10px;
   font-size: 15px;
   font-weight: 500;
-  padding: 10px;
+  padding: 8px;
   cursor: pointer;
   color: grey;
 }
@@ -251,7 +251,7 @@ input[type="email"] {
 .error-message {
   font-size: 14px;
   margin-top: -22px;
-  padding: 0px 10px;
+  padding: 18px 10px;
   padding-bottom: 15px;
   color: red;
   font-weight: 500;

@@ -5,7 +5,8 @@
         <h4>{{ productDetails.name }}</h4>
       </div>
       <div class="product-price">
-        {{ productDetails.price }} VND - {{ productDetails.status }}
+        {{ formatPrice(productDetails.price) }} VND -
+        {{ status }}
       </div>
       <div class="product-color">
         <label for="productColor">Color:</label>
@@ -25,14 +26,31 @@
           </div>
         </div>
       </div>
-      <!-- <div class="product-size">
-          <ul class="size-check">
-            <li>
-              <input type="checkbox" />
-              <span class="checkmark"></span>
-            </li>
-          </ul>
-        </div> -->
+      <div class="product-quantity">
+        <label for="quantity">Quanity: </label>
+        <div class="control-wrapper">
+          <button
+            class="decrease"
+            @click="decreaseQuantity(productDetails._id)"
+          >
+            -
+          </button>
+          <input
+            type="text"
+            name="quantity"
+            min="0"
+            :value="productTempQuantity"
+            readonly
+          />
+          <button
+            class="increase"
+            @click="increaseQuantity(productDetails._id)"
+            :disabled="status == 'OUT OF STOCK'"
+          >
+            +
+          </button>
+        </div>
+      </div>
       <div class="error-message" v-if="showOutStock">
         <p style="color: red">PRODUCT is not available now</p>
       </div>
@@ -69,12 +87,72 @@ export default {
       checkStatus: true,
       showError: false,
       showOutStock: false,
+      productId: this.$route.params.id,
+      productTempQuantity: 0,
+      status: "",
     };
   },
   props: {
     productDetails: Object,
   },
   methods: {
+    formatPrice(value) {
+      let val = (value / 1).toString();
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      // .slice(",", 2);
+    },
+    async getProductDetails() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Product/productDetails/${this.productId}`
+        );
+        this.status = res.data.data.status;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async decreaseQuantity(id) {
+      if (this.productTempQuantity == 0) {
+        this.productTempQuantity = 0;
+      } else {
+        this.productTempQuantity--;
+      }
+      if (this.productTempQuantity > 0) {
+        const exportQuantity = {
+          exportQuantity: 1,
+          type: "decrease",
+        };
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.put(
+          `api/Product/updateProductPrice/${id}`,
+          exportQuantity,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        const result = res.data.data.status;
+        if (result === "IN STOCK") {
+          this.status = "IN STOCK";
+        }
+      }
+    },
+    async increaseQuantity(id) {
+      const exportQuantity = {
+        exportQuantity: 1,
+        type: "increase",
+      };
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.put(
+        `api/Product/updateProductPrice/${id}`,
+        exportQuantity,
+        this.$axios.defaults.headers["Authorization"]
+      );
+      const result = res.data.data.status;
+      if (result === "OUT OF STOCK") {
+        this.status = "OUT OF STOCK";
+      } else {
+        this.productTempQuantity++;
+      }
+    },
     displayBtnCart() {
       if (this.productDetails.status === "OUT OF STOCK") {
         this.showOutStock = true;
@@ -103,43 +181,64 @@ export default {
       } else {
         this.$store.dispatch("getShoppingList");
         let storeShoppping = JSON.parse(this.$store.state.shoppingList);
-        const product = {
+        let product = {
           id: value._id,
           name: value.name,
           img: value.productImg,
           price: value.price,
           color: this.checkedColor,
-          quantityProduct: 1,
+          quantityProduct: this.productTempQuantity,
           product_id: "",
         };
-        if (storeShoppping == null) {
+        if (storeShoppping == null || storeShoppping == "") {
           this.tempShoppingList.push(product);
           this.tempShoppingList[0].product_id = "101";
           this.$store.dispatch("storeShoppingList", this.tempShoppingList);
         } else {
-          storeShoppping.push(product);
-          storeShoppping.forEach((item, index) => {
-            item.product_id = "1" + index;
+          let option;
+          storeShoppping.forEach((item) => {
+            if (item.color == product.color && item.id == product.id) {
+              option = 1;
+            }
           });
+          switch (option) {
+            case 1:
+              storeShoppping.forEach((item) => {
+                item.color == product.color && item.id == product.id;
+                item.quantityProduct =
+                  item.quantityProduct + product.quantityProduct;
+              });
+              break;
+            default:
+              storeShoppping.push(product);
+              storeShoppping.forEach((item, index) => {
+                item.product_id = "1" + index;
+              });
+              break;
+          }
           this.$store.dispatch("storeShoppingList", storeShoppping);
         }
-        const exportQuantity = {
-          exportQuantity: 1,
-          type: "increase",
-        };
-        this.$store.dispatch("accessToken");
-        await this.$axios.put(
-          `api/Product/updateProductPrice/${product.id}`,
-          exportQuantity,
-          this.$axios.defaults.headers["Authorization"]
-        );
+        // const exportQuantity = {
+        //   exportQuantity: this.productTempQuantity,
+        //   type: "increase",
+        // };
+        // this.$store.dispatch("accessToken");
+        // const res = await this.$axios.put(
+        //   `api/Product/updateProductPrice/${product.id}`,
+        //   exportQuantity,
+        //   this.$axios.defaults.headers["Authorization"]
+        // );
+        // console.log(res);
+        // if (res.data.data.status == "OUT OF STOCK") {
+        // }
         this.$emit("open-waiting-list", true);
+        this.productTempQuantity = 1;
       }
     },
   },
   watch: {},
   mounted() {
-    console.log(this.productDetails);
+    this.getProductDetails();
   },
 };
 </script>
@@ -165,7 +264,8 @@ export default {
   margin-bottom: 30px;
   margin-top: 2%;
 }
-.product-color label {
+.product-color label,
+.product-quantity label {
   font-size: 16px;
   font-weight: 500;
 }
@@ -232,12 +332,28 @@ export default {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+/* --- product quantity --- */
+.product-quantity {
+  margin-bottom: 4%;
+  display: flex;
+  gap: 20px;
+}
+.product-quantity button {
+  width: 30px;
+  border: solid 1px;
+}
+.product-quantity input {
+  width: 40px;
+  text-align: center;
+}
 .btn {
   background: #000;
   color: white;
+  padding: 9px 0;
   width: 80%;
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .btn_add-cart:hover {
   color: white;

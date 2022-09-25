@@ -81,6 +81,8 @@
             <th style="text-align: center">Export quantity</th>
             <th style="text-align: center">Image</th>
             <th>Date create</th>
+            <th>Is 3D</th>
+            <th>On-shelves</th>
             <th>Status</th>
             <th></th>
           </tr>
@@ -111,6 +113,30 @@
               View
             </td>
             <td>{{ item.createdAt }}</td>
+            <td style="font-weight: 500; color: red">
+              {{ item.is3D }}
+            </td>
+            <td class="on-shelves-status">
+              <!-- {{ item.statusOnShelves }} -->
+              <select
+                name="onShelves"
+                v-model="item.statusOnShelves"
+                @change="getValue(item.statusOnShelves, item._id), item.color"
+              >
+                <option
+                  value="Active"
+                  :selected="item.statusOnShelves == 'Active'"
+                >
+                  Active
+                </option>
+                <option
+                  value="Unactive"
+                  :selected="item.statusOnShelves == 'Unactive'"
+                >
+                  Unactive
+                </option>
+              </select>
+            </td>
             <td
               :style="[
                 status == item.status
@@ -141,6 +167,15 @@
     </div>
     <component :is="'remove-modal'" @delete-confirm="deleteConfirm">
     </component>
+    <component
+      :is="'notifi-modal'"
+      @close-modal="closeNotification"
+      :openModal="displayNotifi"
+    >
+      This product item is being used in
+      <span style="font-weight: 600">ORDER</span>. You are not allowed to remove
+      it
+    </component>
     <component :is="'img-modal'" :img="img"> </component>
     <ProductCateModal :cateId="cateId" :cateCode="cateCode" />
   </div>
@@ -153,7 +188,10 @@ export default {
   components: { ProductCateModal },
   data() {
     return {
+      displayNotifi: false,
       status: "IN STOCK",
+      statusOnShelves: "Active",
+      is3D: "Unavailable",
       currentPage: 1,
       totalPages: 0,
       displayPreBtn: false,
@@ -189,10 +227,10 @@ export default {
         this.$axios.defaults.headers["Authorization"]
       );
       this.productList = res.data.data;
+      console.log(res.data.data);
       this.productList.forEach((item) => this.convertDateTime(item));
       this.totalProducts = res.data.totalProducts;
       this.totalPages = res.data.pageTotals;
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -218,13 +256,11 @@ export default {
         this.productList.forEach((item) => this.convertDateTime(item));
         this.totalProducts = res.data.totalProducts;
         this.totalPages = res.data.pageTotals;
-        console.log(res);
       } catch (error) {
         console.log(error);
       }
     },
     convertDateTime(value) {
-      console.log(value.createdAt);
       const result = new Date(value.createdAt);
       var year = result.getFullYear();
       var month = ("0" + (result.getMonth() + 1)).slice(-2);
@@ -233,21 +269,47 @@ export default {
     },
     getImg(value) {
       this.img = value;
-      console.log(this.img);
+    },
+    async getValue(status, id, color) {
+      let update = {
+        statusOnShelves: status,
+        color: color,
+      };
+      try {
+        this.$store.dispatch("accessToken");
+        await this.$axios.put(
+          `api/Product/updateProduct/${id}`,
+          update,
+          this.$axios.defaults.headers["Authorization"]
+        );
+      } catch (error) {
+        console.log(error);
+      }
     },
     openRemoveModal(value) {
       this.removeId = value;
     },
+    closeNotification() {
+      this.displayNotifi = false;
+    },
     async deleteConfirm() {
       try {
         this.$store.dispatch("accessToken");
-        const res = await this.$axios.delete(
-          `api/Product/${this.removeId}`,
+
+        const res = await this.$axios.get(
+          `api/Order/checkProductInOrder/${this.removeId}`,
           this.$axios.defaults.headers["Authorization"]
         );
-        if (res.status == 200) {
-          this.getProduct();
-          console.log(res);
+        if (res.data.data == true) {
+          this.displayNotifi = true;
+        } else {
+          const resRemove = await this.$axios.delete(
+            `api/Product/${this.removeId}`,
+            this.$axios.defaults.headers["Authorization"]
+          );
+          if (resRemove.status == 200) {
+            this.getProduct();
+          }
         }
       } catch (error) {
         console.log(error);
@@ -422,7 +484,7 @@ export default {
   padding: 10px;
 }
 .table {
-  width: 1290px;
+  width: 1450px;
 }
 thead th {
   padding: 10px;
@@ -455,6 +517,11 @@ tbody td {
   color: rgb(107, 107, 255);
   cursor: pointer;
   font-weight: 500;
+}
+.on-shelves-status select {
+  border: none;
+  padding: 0 5px;
+  text-align: center;
 }
 .item_remove-bin i {
   color: red;

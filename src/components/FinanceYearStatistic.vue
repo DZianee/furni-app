@@ -34,7 +34,7 @@
           <label for="revenue"
             >Revenue:
             <span style="font-weight: 500; color: black; font-size: 17px">
-              VND {{ finOrderOverview.revenue }}</span
+              VND {{ formatPrice(finOrderOverview.revenue) }}</span
             >
           </label>
         </div>
@@ -68,7 +68,9 @@
               <td style="font-weight: 600; color: #a65de7">
                 {{ item.order_id }}
               </td>
-              <td style="text-align: center">{{ item.totalBill }}</td>
+              <td style="text-align: center">
+                {{ formatPrice(item.totalBill) }}
+              </td>
               <td :style="paymentColor(item.payment)">{{ item.payment }}</td>
               <td
                 style="
@@ -111,6 +113,10 @@ export default {
     document.title = "Finance";
   },
   methods: {
+    formatPrice(value) {
+      let val = (value / 1).toString();
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     paymentColor(value) {
       if (value === "ZALO") {
         return "color: #0091ea; text-align: center; font-weight: 500; letter-spacing: 0.3px";

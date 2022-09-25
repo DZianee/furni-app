@@ -17,9 +17,9 @@
               {{ item.year }}
             </td>
             <td style="text-align: center">
-              {{ item.totalOrders }}
+              {{ formatPrice(item.totalOrders) }}
             </td>
-            <td style="text-align: center">{{ item.revenue }}</td>
+            <td style="text-align: center">{{ formatPrice(item.revenue) }}</td>
             <td>-</td>
             <td>-</td>
           </tr>
@@ -52,6 +52,10 @@ export default {
     document.title = "Finance";
   },
   methods: {
+    formatPrice(value) {
+      let val = (value / 1).toString();
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     async getFinYearStatistic() {
       try {
         this.$store.dispatch("accessToken");

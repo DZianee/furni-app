@@ -90,7 +90,7 @@
               <p>{{ product.status }}</p>
             </div>
             <div class="item-price">
-              <p>{{ product.price }} VND</p>
+              <p>{{ convertCurrency(product.price) }} VND</p>
             </div>
           </div>
         </div>
@@ -194,7 +194,7 @@
               <p>{{ product.status }}</p>
             </div>
             <div class="item-price">
-              <p>{{ product.price }} VND</p>
+              <p>{{ convertCurrency(product.price) }} VND</p>
             </div>
           </div>
         </div>
@@ -215,7 +215,7 @@ export default {
       currentPage: 1,
       pageTotals: 0,
       cateProductList: [],
-      kindOf: "1",
+      kindOf: "-1",
       price: "all",
       sortName: "createdAt",
       search: "",
@@ -226,6 +226,11 @@ export default {
     cateId: String,
   },
   methods: {
+    convertCurrency(value) {
+      let currency;
+      currency = value.toLocaleString();
+      return currency;
+    },
     Route(value, cateId, id) {
       this.$router.push({ name: value, params: { cateType: cateId, id: id } });
     },

@@ -12,10 +12,15 @@
     </nav>
     <ShoppingWaitingList :open="choice" @close="closeWaitingList" />
     <div class="product-img">
-      <img
-        :src="`http://localhost:2371/${productDetails.productImg}`"
-        alt="product-img"
-      />
+      <figure
+        class="zoom"
+        :style="`background:url(http://localhost:2371/${productDetails.productImg})`"
+      >
+        <img
+          :src="`http://localhost:2371/${productDetails.productImg}`"
+          alt="product-img"
+        />
+      </figure>
     </div>
     <div class="product-details-info">
       <ProductDetailsInfo
@@ -86,6 +91,22 @@ export default {
         console.log(error);
       }
     },
+    // zoom(e) {
+    //   const imageContainer = document.querySelector(".zoom");
+    //   imageContainer.onmousemove = (event) => {
+    //     zoom(event);
+    //   };
+    //   let offsetX = 0;
+    //   let offsetY = 0;
+    //   let x = 0;
+    //   let y = 0;
+    //   var zoomer = e.currentTarget;
+    //   e.offsetX ? (offsetX = e.offsetX) : (offsetX = e.touches[0].pageX);
+    //   e.offsetY ? (offsetY = e.offsetY) : (offsetX = e.touches[0].pageX);
+    //   x = (offsetX / zoomer.offsetWidth) * 100;
+    //   y = (offsetY / zoomer.offsetHeight) * 100;
+    //   zoomer.style.backgroundPosition = x + "% " + y + "%";
+    // },
     openWaitingList(item) {
       this.choice = item;
     },
@@ -103,11 +124,46 @@ export default {
 
   mounted() {
     this.getProductDetails();
+    const imageContainer = document.querySelector(".zoom");
+    imageContainer.onmousemove = (event) => {
+      zoom(event);
+    };
+    let offsetX,
+      offsetY,
+      x,
+      y = 0;
+
+    const zoom = (e) => {
+      let imageZoom = e.currentTarget;
+      e.offsetX ? (offsetX = e.offsetX) : (offsetX = e.touches[0].pageX);
+      e.offsetY ? (offsetY = e.offsetY) : (offsetY = e.touches[0].pageY);
+      x = (offsetX / imageZoom.offsetWidth) * 100;
+      y = (offsetY / imageZoom.offsetHeight) * 100;
+      imageZoom.style.backgroundPosition = x + "% " + y + "%";
+    };
   },
 };
 </script>
 
 <style scoped>
+figure.zoom {
+  background-position: 40% 40%;
+  position: relative;
+  width: 70%;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+figure.zoom img:hover {
+  opacity: 0;
+}
+
+figure.zoom img {
+  transition: opacity 0.5s;
+  display: block;
+  width: 100%;
+}
+
 .breadcrumb-item:hover {
   text-decoration: underline;
   font-weight: 500;
@@ -122,11 +178,12 @@ export default {
   display: flex;
   justify-content: center;
 }
-.product-img img {
+/* .product-img img {
   width: 70%;
   padding-bottom: 3%;
-}
+} */
 .product-details-info {
+  margin-top: 2%;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
 }

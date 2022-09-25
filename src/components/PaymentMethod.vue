@@ -46,7 +46,9 @@
             </td>
             <td></td>
             <td class="bill-before">
-              <p style="text-align: center">{{ totalBeforeShipping() }} VND</p>
+              <p style="text-align: center">
+                {{ formatPrice(totalBeforeShipping()) }} VND
+              </p>
             </td>
           </tr>
           <tr class="shipping-fee">
@@ -56,7 +58,7 @@
             <td></td>
             <td class="fee">
               <p style="text-align: center; color: blue">
-                + {{ shippingFee() }} VND
+                + {{ formatPrice(shippingFee()) }} VND
               </p>
             </td>
           </tr>
@@ -151,6 +153,42 @@ export default {
     closeWarning() {
       this.displayWarning = false;
     },
+    formatPrice(value) {
+      let val = (value / 1).toString();
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      // .slice(",", 2);
+    },
+    totalPrice(value, quantity) {
+      let count = 0;
+      count = value * quantity;
+      return this.formatPrice(count);
+    },
+    totalBeforeShipping() {
+      let sum = 0;
+      let tempArr = [];
+      const shopList = JSON.parse(this.$store.state.shoppingList);
+      shopList.forEach((element) => {
+        let count = element.quantityProduct * element.price;
+        tempArr.push(count);
+      });
+      tempArr.forEach((item) => {
+        sum = sum + item;
+      });
+      return sum;
+    },
+    totalBill() {
+      let result = this.shippingFee() + this.totalBeforeShipping();
+      return this.formatPrice(result);
+    },
+    shippingFee() {
+      let fee = 0;
+      if (this.productInList.length < 1) {
+        return fee;
+      } else {
+        fee = 20000;
+        return fee;
+      }
+    },
     Route(value) {
       this.$router.push({ name: value });
     },
@@ -225,36 +263,6 @@ export default {
         } catch (error) {
           console.log(error);
         }
-      }
-    },
-    totalPrice(value, quantity) {
-      let count = 0;
-      count = value * quantity;
-      return count;
-    },
-    totalBeforeShipping() {
-      let sum = 0;
-      let tempArr = [];
-      const shopList = JSON.parse(this.$store.state.shoppingList);
-      shopList.forEach((element) => {
-        let count = element.quantityProduct * element.price;
-        tempArr.push(count);
-      });
-      tempArr.forEach((item) => {
-        sum = sum + item;
-      });
-      return sum;
-    },
-    totalBill() {
-      return this.shippingFee() + this.totalBeforeShipping();
-    },
-    shippingFee() {
-      let fee = 0;
-      if (this.productInList.length < 1) {
-        return fee;
-      } else {
-        fee = 200000;
-        return fee;
       }
     },
   },

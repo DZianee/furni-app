@@ -32,7 +32,7 @@ export default createStore({
     },
     storeCateId({ commit }, res) {
       commit("setCateId", res);
-      sessionStorage.setItem("CateId", res);
+      localStorage.setItem("CateId", res);
     },
 
     storeActivateCateDetails({ commit }, res) {
@@ -68,7 +68,7 @@ export default createStore({
       commit("setAuth", localStorage.getItem("Auth"));
     },
     getCateId({ commit }) {
-      commit("setCateId", sessionStorage.getItem("CateId"));
+      commit("setCateId", localStorage.getItem("CateId"));
     },
     getShoppingList({ commit }) {
       commit("setShoppingList", sessionStorage.getItem("shoppingList"));

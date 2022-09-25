@@ -15,7 +15,7 @@
           :endAmount="totalAllOrders"
           prefix=""
           suffix=""
-          separator=""
+          separator=","
           decimalSeparator="."
           :autoinit="true"
         />
@@ -33,10 +33,10 @@
         <vue3-autocounter
           ref="counter"
           :startAmount="0"
-          :endAmount="434343"
+          :endAmount="totalRevenue"
           prefix=""
           suffix=""
-          separator=""
+          separator=","
           decimalSeparator="."
           :autoinit="true"
         />
@@ -57,7 +57,7 @@
           :endAmount="totalAllCus"
           prefix=""
           suffix=""
-          separator=""
+          separator=","
           decimalSeparator="."
           :autoinit="true"
         />
@@ -79,6 +79,7 @@ export default {
       countNew: 0,
       totalAllOrders: 0,
       totalAllCus: 0,
+      totalRevenue: 0,
     };
   },
   methods: {
@@ -118,11 +119,29 @@ export default {
         console.log(error);
       }
     },
+    async getRevenue() {
+      let resArr = [];
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.get(
+          `api/Fin/`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        resArr = res.data.data;
+        this.totalRevenue = resArr.reduce(
+          (arr, currValue) => arr + currValue.revenue,
+          0
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {
     this.getNewOrders();
     this.getAllOrders();
     this.getCus();
+    this.getRevenue();
   },
 };
 </script>

@@ -57,6 +57,7 @@
               </button>
               <button
                 class="increase"
+                :disabled="status == 'OUT OF STOCK'"
                 @click="
                   increaseQuantity(
                     item.quantityProduct,
@@ -108,6 +109,7 @@ export default {
     return {
       removeId: null,
       updateQId: "",
+      status: "",
     };
   },
   props: {
@@ -133,51 +135,64 @@ export default {
     },
   },
   methods: {
+    formatPrice(value) {
+      let val = (value / 1).toString();
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      // .slice(",", 2);
+    },
     totalPrice(value, quantity) {
       let count = 0;
       count = value * quantity;
-      return count;
+      return this.formatPrice(count);
     },
     async increaseQuantity(value, id, _id) {
-      console.log(id);
-      value += 1;
       const shopList = JSON.parse(this.$store.state.shoppingList);
-      const product = shopList.find((item) => item.product_id == id);
-      product.quantityProduct = value;
-      this.$store.dispatch("storeShoppingList", shopList);
-
       const exportQuantity = {
         exportQuantity: 1,
         type: "increase",
       };
       this.$store.dispatch("accessToken");
-      await this.$axios.put(
+      const res = await this.$axios.put(
         `api/Product/updateProductPrice/${_id}`,
         exportQuantity,
         this.$axios.defaults.headers["Authorization"]
       );
+      const result = res.data.data.status;
+
+      if (result === "OUT OF STOCK") {
+        this.status = "OUT OF STOCK";
+      } else {
+        value += 1;
+        const product = shopList.find((item) => item.product_id == id);
+        product.quantityProduct = value;
+        this.$store.dispatch("storeShoppingList", shopList);
+      }
     },
     async decreaseQuantity(value, id, _id) {
-      if (value == 1) {
-        value = 1;
+      if (value == 0) {
+        value = 0;
       } else {
-        value -= 1;
+        value--;
       }
       const shopList = JSON.parse(this.$store.state.shoppingList);
       const product = shopList.find((item) => item.product_id == id);
       product.quantityProduct = value;
       this.$store.dispatch("storeShoppingList", shopList);
-      if (value > 1) {
+      if (value > 0) {
         const exportQuantity = {
           exportQuantity: 1,
           type: "decrease",
         };
         this.$store.dispatch("accessToken");
-        await this.$axios.put(
+        const res = await this.$axios.put(
           `api/Product/updateProductPrice/${_id}`,
           exportQuantity,
           this.$axios.defaults.headers["Authorization"]
         );
+        const result = res.data.data.status;
+        if (result === "IN STOCK") {
+          this.status = "IN STOCK";
+        }
       }
     },
     openRemoveModal(value, _id) {

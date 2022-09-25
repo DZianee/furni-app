@@ -18,6 +18,7 @@ router.beforeEach((to, from, next) => {
       case "productDetailsView":
       case "servicesView":
       case "companyView":
+      case "Three":
       case "profileView":
         next();
         break;

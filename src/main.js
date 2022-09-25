@@ -48,7 +48,7 @@ axios.interceptors.response.use(
         //   store.dispatch("logout");
         //   router.push({ name: "home" });
         // }
-        // router.push({ name: "home" });
+        router.push({ name: "home" });
 
         break;
       }

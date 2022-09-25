@@ -77,7 +77,8 @@
                   <td></td>
                   <td class="total-bill">
                     <p style="text-align: center; font-weight: 500">
-                      {{ orderDetails.totalBill }} VND (<span style="color: red"
+                      {{ formatPrice(orderDetails.totalBill) }} VND (<span
+                        style="color: red"
                         >*</span
                       >)
                     </p>
@@ -116,10 +117,14 @@ export default {
     },
   },
   methods: {
+    formatPrice(value) {
+      let val = (value / 1).toString();
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     totalPerProduct(quantity, value) {
       let count = 0;
       count = quantity * value;
-      return count;
+      return this.formatPrice(count);
     },
   },
 };

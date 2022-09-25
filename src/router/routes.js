@@ -16,6 +16,8 @@ import FinanceView from "../views/FinanceView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import InputProfileView from "../views/InputProfileView.vue";
 import ProfileView from "../views/ProfileView.vue";
+import ThreeD from "../views/Three.vue";
+
 /* children components */
 import ActivityAllOrders from "../components/OrderAll.vue";
 import ActivityNewOrders from "../components/OrderNew.vue";
@@ -133,6 +135,12 @@ const router = [
     name: "productManDetailsView",
     component: ProductManDetailsView,
     meta: { layout: "sidebar-manage" },
+  },
+  {
+    path: "/three",
+    name: "3D",
+    component: ThreeD,
+    meta: { layout: "none" },
   },
 ];
 

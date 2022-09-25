@@ -281,6 +281,7 @@ export default {
         );
         this.$store.dispatch("getCateId");
         this.cateId = this.$store.state.cateId;
+        console.log(this.cateId);
         this.$router.push({
           name: "productCategoryView",
           params: { id: this.cateId },
@@ -295,7 +296,6 @@ export default {
       this.$router.push({ name: value, params: { id: this.cateId } });
     },
     handleInput(value, caseOption) {
-      console.log(caseOption);
       if (caseOption == "1") {
         this.productDetails.description = value;
       } else if (caseOption == "2") {
@@ -478,6 +478,10 @@ img {
   color: white;
   float: right;
   margin: 30px 40px 60px 0;
+  font-weight: 500;
+}
+.btn:hover {
+  color: white;
 }
 
 /* --- Responsive --- */
