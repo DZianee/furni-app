@@ -59,15 +59,21 @@
                     ></span> </label
                   >)
                 </div>
-                <div class="item-quantity">x {{ product.quantity }}</div>
-                <div class="item-price">{{ product.amount }} VND</div>
+                <div class="item-quantity">
+                  x {{ formatPrice(product.quantity) }}
+                </div>
+                <div class="item-price" style="font-weight: 500">
+                  {{ formatPrice(product.amount) }} VND
+                </div>
               </div>
             </div>
           </div>
           <div class="item-total_price-cancel">
             <div class="item-total_price">
               Total bill:
-              <span style="color: red">{{ item.totalBill }} VND</span>
+              <span style="color: red; font-size: 18px"
+                >{{ formatPrice(item.totalBill) }} VND</span
+              >
             </div>
             <div class="cancel-order">
               <button
@@ -106,6 +112,10 @@ export default {
     orderUserList: Array,
   },
   methods: {
+    formatPrice(value) {
+      let val = (value / 1).toString();
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     hiddenBtn(value, dateCloseCancel) {
       let currentDate = new Date(Date.now());
       let dayCurrent = currentDate.getDate();
