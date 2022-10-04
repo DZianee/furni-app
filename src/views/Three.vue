@@ -69,6 +69,27 @@ export default {
       hemiLight.position.set(0.214, 45, -11.427);
       scene.add(hemiLight);
     },
+    createObj() {
+      loader.load(
+        "https://res.cloudinary.com/dlft5gnht/image/upload/v1664718877/3D_Storage/linnmon_table_ver1_nw7wmp.glb",
+        function (gltf) {
+          const model = gltf.scene;
+
+          model.position.y = 7;
+          scene.add(model);
+          console.log(model);
+          model.scale.set(0.4, 0.4, 0.4);
+          // model.userData.name = "test";
+          model.isDraggable = true;
+        },
+        function (xhr) {
+          console.log((xhr.loaded / xhr.total) * 100 + "% loadedd");
+        },
+        function (error) {
+          console.log("An error happened", error);
+        }
+      );
+    },
   },
   mounted() {
     const canvas = document.querySelector("#canvas");
@@ -91,22 +112,6 @@ export default {
     renderer.setSize(window.innerWidth, window.innerHeight);
     scene.add(axesHelper);
 
-    // Box
-    // const boxGeo = new THREE.BoxGeometry(100, 100, 100);
-    // const boxMat = new THREE.MeshLambertMaterial({
-    //   color: "pink",
-    // });
-    // const box = new THREE.Mesh(boxGeo, boxMat);
-    // box.position.set(0, 100, 180);
-    // box.castShadow = true;
-    // box.receiveShadow = false;
-    // box.userData.draggable = true;
-    // box.userData.name = "BOX";
-    // const cubGeo = new THREE.BoxGeometry(10, 10, 10);
-    // const cubMat = new THREE.MeshLambertMaterial({
-    //   color: "pink",
-    // });
-
     //Ambient light
     const ambientLight = new THREE.AmbientLight(0x2c3333, 1);
     scene.add(ambientLight);
@@ -123,6 +128,7 @@ export default {
     const moveMouse = new THREE.Vector2();
     let draggable = new THREE.Object3D();
     draggable = null;
+    let result;
 
     canvas.addEventListener("click", (event) => {
       if (draggable != null) {
@@ -136,8 +142,15 @@ export default {
 
       raycaster.setFromCamera(clickMouse, camera);
       const found = raycaster.intersectObjects(scene.children);
-      if (found.length > 0 && found[0].object.userData.draggable) {
+      if (found.length > 0) {
         draggable = found[0].object;
+        if (draggable.parent.parent != null) {
+          draggable = draggable.parent.parent;
+        }
+        console.log(draggable);
+        if (draggable.isDraggable) {
+          result = draggable;
+        }
       }
     });
 
@@ -145,17 +158,18 @@ export default {
       moveMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       moveMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     });
-
     function dragObject() {
       if (draggable != null) {
         raycaster.setFromCamera(moveMouse, camera);
         const found = raycaster.intersectObjects(scene.children);
-        if (found.length > 0 && found[0].object.userData.draggable) {
-          const selectObj = found.find(
-            (item) => item.object.userData.draggable == true
-          );
-          draggable.position.z = selectObj.point.z;
-          draggable.position.x = selectObj.point.x;
+        if (found.length > 0) {
+          for (let obj3d of found) {
+            if (!obj3d.object.isDraggable) {
+              result.position.x = obj3d.point.x;
+              result.position.z = obj3d.point.z;
+              break;
+            }
+          }
         }
       }
     }
@@ -163,14 +177,14 @@ export default {
       document
         .getElementById("rotateToLeftButton")
         .addEventListener("click", () => {
-          draggable.rotation.y += Math.PI / 2;
+          result.rotation.y += Math.PI / 2;
         });
     }
     function rotateToRight() {
       document
         .getElementById("rotateToRightButton")
         .addEventListener("click", () => {
-          draggable.rotation.y -= Math.PI / 2;
+          result.rotation.y -= Math.PI / 2;
         });
     }
     // Animation
@@ -184,6 +198,7 @@ export default {
     this.createHouseFloor();
     this.createHemLight();
     this.createDirLight();
+    this.createObj();
     animate();
   },
 };

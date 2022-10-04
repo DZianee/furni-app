@@ -1,6 +1,10 @@
 <template>
   <div class="product-detail-info">
     <div class="product-info">
+      <div class="product-view_3d" v-if="productDetails.is3D == 'Available'">
+        <i class="bx bx-aperture bx-sm bx-fw"></i>
+        View 3D product
+      </div>
       <div class="product-name">
         <h4>{{ productDetails.name }}</h4>
       </div>
@@ -8,6 +12,7 @@
         {{ formatPrice(productDetails.price) }} VND -
         {{ status }}
       </div>
+
       <div class="product-color">
         <label for="productColor">Color:</label>
         <div class="color-check">
@@ -246,6 +251,16 @@ export default {
 <style scoped>
 .product-info {
   padding: 2% 2%;
+}
+.product-view_3d {
+  font-size: 1.1rem;
+  padding: 12px 0;
+  color: #4d77ff;
+  cursor: pointer;
+  font-weight: 500;
+}
+.product-view_3d:hover {
+  color: #332fd0;
 }
 .product-name h4 {
   font-size: 1.3rem;

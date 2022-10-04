@@ -189,6 +189,22 @@
             />
             <input type="file" accept="image/*" @change="selectImg" />
           </div>
+          <div class="product_3d-img" v-if="user === 'Admin'">
+            <h5>Illustrate 3D image</h5>
+            <p v-if="productDetails.imgCloudinary != ''">
+              {{ productDetails.imgCloudinary }}
+            </p>
+            <input type="file" @change="select3DImg" multiple />
+            <div>
+              <button
+                @click="upload3DImg"
+                v-if="productDetails.imgCloudinary == ''"
+              >
+                Submit
+              </button>
+              <button @click="update3DImg" v-else>Update change</button>
+            </div>
+          </div>
         </div>
       </div>
       <button class="btn submit-btn" type="submit">Submit changes</button>
@@ -223,6 +239,7 @@ export default {
       productDetails: {},
       product: {
         img: "",
+        img_3d: "",
       },
       technicalInfo: {
         height: 0,
@@ -254,6 +271,12 @@ export default {
       console.log(error);
     }
   },
+  computed: {
+    user() {
+      const role = JSON.parse(this.$store.state.user).role.name;
+      return role;
+    },
+  },
   methods: {
     async updateProduct() {
       try {
@@ -273,6 +296,7 @@ export default {
         updateProduct.append("height", this.technicalInfo.height);
         updateProduct.append("length", this.technicalInfo.length);
         updateProduct.append("depth", this.technicalInfo.depth);
+        updateProduct.append("imgCloudinary", this.product.img_3d);
         this.$store.dispatch("accessToken");
         await this.$axios.put(
           `api/Product/updateProduct/${this.productId}`,
@@ -281,11 +305,40 @@ export default {
         );
         this.$store.dispatch("getCateId");
         this.cateId = this.$store.state.cateId;
-        console.log(this.cateId);
         this.$router.push({
           name: "productCategoryView",
           params: { id: this.cateId },
         });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async upload3DImg() {
+      try {
+        const upload3DImg = new FormData();
+        upload3DImg.append("imgCloudinary", this.product.img_3d);
+        this.$store.dispatch("accessToken");
+        await this.$axios.put(
+          `api/Product/productDetails/${this.productId}/uploadThreeDImg`,
+          upload3DImg,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.$router.go();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async update3DImg() {
+      try {
+        const update3DImg = new FormData();
+        update3DImg.append("imgCloudinary", this.product.img_3d);
+        this.$store.dispatch("accessToken");
+        await this.$axios.put(
+          `api/Product/productDetails/${this.productId}/updateThreeDImg`,
+          update3DImg,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.$router.go();
       } catch (error) {
         console.log(error);
       }
@@ -304,6 +357,11 @@ export default {
     },
     selectImg(e) {
       this.product.img = e.target.files[0];
+      console.log(this.product.img);
+    },
+    select3DImg(e) {
+      this.product.img_3d = e.target.files[0];
+      console.log(this.product.img_3d);
     },
     getColor(col) {
       const test = this.productDetails.color.filter((item) => item === col);
@@ -376,6 +434,23 @@ input {
 .technical-info,
 .product-details {
   margin-top: 30px;
+}
+.product_3d-img {
+  margin-top: 45px;
+}
+.product_3d-img p {
+  width: 70%;
+  word-break: break-all;
+}
+.product_3d-img div button {
+  margin: 15px;
+  padding: 7px;
+  width: 100%;
+  color: white;
+  background: #0096ff;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
 }
 .product_code-name,
 .product_price-quantity,

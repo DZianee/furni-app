@@ -113,15 +113,32 @@
               View
             </td>
             <td>{{ item.createdAt }}</td>
-            <td style="font-weight: 500; color: red">
-              {{ item.is3D }}
+            <td style="font-weight: 500; color: red" @click="edit3DMode">
+              <span>{{ item.is3D }}</span>
+              <select
+                style="border: none; margin-left: 5px"
+                v-if="edit3D"
+                name="is3D"
+                v-model="item.is3D"
+                @change="get3DValue(item.is3D, item._id, item.color)"
+              >
+                <option
+                  value="Unavailable"
+                  :selected="item.is3D == 'Unavailable'"
+                >
+                  Unavailable
+                </option>
+                <option value="Available" :selected="item.is3D == 'Available'">
+                  Available
+                </option>
+              </select>
             </td>
             <td class="on-shelves-status">
               <!-- {{ item.statusOnShelves }} -->
               <select
                 name="onShelves"
                 v-model="item.statusOnShelves"
-                @change="getValue(item.statusOnShelves, item._id), item.color"
+                @change="getValue(item.statusOnShelves, item._id, item.color)"
               >
                 <option
                   value="Active"
@@ -192,6 +209,7 @@ export default {
       status: "IN STOCK",
       statusOnShelves: "Active",
       is3D: "Unavailable",
+      edit3D: false,
       currentPage: 1,
       totalPages: 0,
       displayPreBtn: false,
@@ -235,6 +253,7 @@ export default {
       console.log(error);
     }
   },
+
   methods: {
     async getProduct() {
       try {
@@ -284,6 +303,29 @@ export default {
         );
       } catch (error) {
         console.log(error);
+      }
+    },
+    async get3DValue(status, id, color) {
+      let update = {
+        is3D: status,
+        color: color,
+      };
+      try {
+        this.$store.dispatch("accessToken");
+        await this.$axios.put(
+          `api/Product/productDetails/${id}/updateThreeDImg`,
+          update,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        this.$router.go();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    edit3DMode() {
+      const role = JSON.parse(this.$store.state.user).role.name;
+      if (role === "Admin") {
+        this.edit3D = true;
       }
     },
     openRemoveModal(value) {
