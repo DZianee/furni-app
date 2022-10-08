@@ -312,7 +312,7 @@ export default {
   width: 100%;
 }
 .btn-monitor {
-  width: 32%;
+  width: 40%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 30px;
@@ -368,5 +368,17 @@ export default {
 }
 .wrapper-list .product-3d-list .item img {
   width: 100%;
+}
+
+/* responsive */
+@media screen and (max-width: 993px) {
+  .btn-monitor {
+    width: 60%;
+  }
+}
+@media screen and (max-width: 480px) and (min-width: 320px) {
+  .btn-monitor {
+    width: 100%;
+  }
 }
 </style>
