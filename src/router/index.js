@@ -10,7 +10,6 @@ const router = createRouter({
 console.log("test");
 router.beforeEach((to, from, next) => {
   var user = JSON.parse(store.state.user);
-  console.log(user);
   if (user != null && user.role.name != "Admin") {
     switch (to.name) {
       case "home":

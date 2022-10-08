@@ -142,10 +142,9 @@ export default {
           this.displaySecondStep = true;
           this.errorMessage = false;
         }
-        console.log(res);
       } catch (error) {
         this.errorMessage = true;
-        console.log(error);
+        // console.log(error);
       }
     },
     async updatePass() {
@@ -160,10 +159,9 @@ export default {
           this.displayLastStep = true;
           this.errorFormat = false;
         }
-        console.log(res);
       } catch (error) {
         this.errorFormat = true;
-        console.log(error);
+        // console.log(error);
       }
     },
   },

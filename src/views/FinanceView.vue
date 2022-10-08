@@ -35,18 +35,6 @@ export default {
       yearSelected: "",
     };
   },
-  // async created() {
-  //   try {
-  //     this.$store.dispatch("accessToken");
-  //     const res = await this.$axios.get(
-  //       `api/Fin/detailsFinInYear/${value}`,
-  //       this.$axios.defaults.headers["Authorization"]
-  //     );
-  //     console.log(res);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
   methods: {
     async getFinYearList() {
       try {
@@ -56,22 +44,11 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.finYearsList = res.data.data;
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },
-  // watch: {
-  //   yearSelected() {
-  //     // if(this.yearSelected == ""){
-
-  //     // }
-  //     this.getFinRowList(this.yearSelected);
-  //     this.getRevenueChart(this.yearSelected);
-  //     this.getPaymentMethodChart(this.yearSelected);
-  //   },
-  // },
   mounted() {
     this.getFinYearList();
   },

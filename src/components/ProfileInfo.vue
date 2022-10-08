@@ -138,10 +138,16 @@
           <div class="password btn-form">
             <!-- <label for="password">Password</label>
           <input type="text" readonly value="5454354365" /> -->
-            <button class="btn-cancel" @click="cancelChangePass">Cancel</button>
-            <button class="btn-update-pass" @click="updateAccount">
-              Change Password
-            </button>
+            <div>
+              <button class="btn-cancel" @click="cancelChangePass">
+                Cancel
+              </button>
+            </div>
+            <div>
+              <button class="btn-update-pass" @click="updateAccount">
+                Change Password
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -212,9 +218,8 @@ export default {
         );
         this.userDetails = res.data.data;
         this.address = res.data.data.address;
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async updateInfo() {
@@ -227,7 +232,6 @@ export default {
           city: this.address.city,
           district: this.address.district,
         };
-        console.log(updateUser);
         this.$store.dispatch("accessToken");
         await this.$axios.put(
           `api/User/updateUser/${this.userDetails.id}`,
@@ -237,7 +241,7 @@ export default {
 
         this.$router.go();
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async updateAccount() {
@@ -251,7 +255,6 @@ export default {
             city: this.address.city,
             district: this.address.district,
           };
-          console.log(updateAccount);
           this.$store.dispatch("accessToken");
           await this.$axios.put(
             `api/User/updateUser/${this.userDetails.id}`,
@@ -261,7 +264,7 @@ export default {
           this.$router.go();
         } catch (error) {
           this.errorMessage.wrongPass = true;
-          console.log(error);
+          // console.log(error);
         }
       }
     },
@@ -464,14 +467,14 @@ button {
 .password {
   display: flex;
   /* justify-content: cent.er; */
-  align-content: center;
+  align-items: center;
   gap: 30px;
   flex-flow: column;
 }
 
 .btn-update-pass {
   background: #ff6d00;
-  width: 60%;
+  width: 70%;
   padding: 7px;
 }
 
@@ -542,6 +545,9 @@ button {
     display: flex;
     gap: 15px;
     justify-content: center;
+  }
+  .btn-update-pass {
+    width: 80%;
   }
 }
 </style>

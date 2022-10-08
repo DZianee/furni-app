@@ -249,7 +249,7 @@ export default {
             },
           });
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else if (this.price != "") {
         try {
@@ -264,7 +264,7 @@ export default {
             },
           });
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
       this.pageTotals = res.data.pageTotals;
@@ -285,7 +285,7 @@ export default {
             },
           });
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else if (this.price != "") {
         try {
@@ -300,7 +300,7 @@ export default {
             },
           });
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
       this.pageTotals = res.data.pageTotals;
@@ -323,7 +323,7 @@ export default {
             }
           );
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else if (this.price != "") {
         try {
@@ -340,7 +340,7 @@ export default {
             }
           );
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
       this.cateProductList = res.data.data;

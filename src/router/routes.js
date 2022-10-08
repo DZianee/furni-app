@@ -138,7 +138,7 @@ const router = [
   },
   {
     path: "/three",
-    name: "3D",
+    name: "Three",
     component: ThreeD,
     meta: { layout: "none" },
   },

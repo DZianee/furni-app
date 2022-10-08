@@ -198,7 +198,7 @@ export default {
       this.customerList.forEach((item) => this.convertDateTime(item));
       this.totalPages = res.data.pageTotals;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
   methods: {
@@ -225,7 +225,7 @@ export default {
           this.$router.go();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     editStatus() {
@@ -251,7 +251,7 @@ export default {
         this.customerList.forEach((item) => this.convertDateTime(item));
         this.totalPages = res.data.pageTotals;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     submitFeatures() {
@@ -264,7 +264,6 @@ export default {
     pageChange(current) {
       this.currentPage = current;
       this.getCus();
-      console.log(current);
     },
   },
 

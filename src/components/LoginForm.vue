@@ -167,7 +167,7 @@ export default {
       } catch (error) {
         this.loadingIcon = false;
         this.errorMessage = true;
-        console.log(error);
+        // console.log(error);
       }
     },
   },

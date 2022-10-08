@@ -1,17 +1,5 @@
 <template>
   <div class="home">
-    <!-- <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-    <!-- <video src=""></video> -->
-    <!-- <video autoplay loop>
-      <source
-        src="https://cdn.videvo.net/videvo_files/video/premium/video0194/large_watermarked/Young%20woman%20sitting%20on%20sofa%20reading%20book%20and%20smiling%20at%20camera_preview.mp4"
-      />
-      Your browser doesn't support HTML5 video tag.
-    </video>
-    <div class="hello-home">
-      <p>Make House becomes HOME</p>
-    </div> -->
     <div>
       <img
         src="https://img.freepik.com/free-photo/empty-living-room-with-blue-sofa-plants-table-empty-white-wall-background-3d-rendering_41470-1786.jpg?w=2000&t=st=1662472803~exp=1662473403~hmac=f7344e2c0afff8948b7ff411e2c74e43efcabfbf86dcbd25249055637f278abc"
@@ -19,11 +7,6 @@
       />
     </div>
     <div class="hello-home">
-      <!-- <p class="sub-large">
-        <span style="color: #f806cc">T</span>rending,
-        <span style="color: #ff4a4a">M</span>odern &
-        <span style="color: #3330e4">C</span>omfortable
-      </p> -->
       <p class="sub-large">
         <span>Inspiration</span> & <span>Simplicity</span>
       </p>

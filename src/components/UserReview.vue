@@ -116,7 +116,7 @@ export default {
             }
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
     },
@@ -128,7 +128,7 @@ export default {
         );
         this.userName = res.data.data;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     errorHandling() {
@@ -165,9 +165,7 @@ export default {
   //     this.displayErrorMissing = false;
   //   },
   // },
-  mounted() {
-    console.log(this.countReviews);
-  },
+  mounted() {},
 };
 </script>
 

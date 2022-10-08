@@ -306,23 +306,6 @@ export default {
     CustomerInfoModal,
     ShoppingListModal,
   },
-  // async created() {
-  //   try {
-  //     this.$store.dispatch("accessToken");
-  //     const res = await this.$axios.get(
-  //       `api/Order`,
-  //       { params: { page: this.currentPage } },
-  //       this.$axios.defaults.headers["Authorization"]
-  //     );
-  //     console.log(res);
-  //     this.orderList = res.data.data;
-  //     this.pageTotals = res.data.pageTotals;
-  //     this.totalOrders = res.data.totalOrders;
-  //     this.orderList.forEach((item) => this.convertDateTime(item));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
   methods: {
     async getAllOrders() {
       try {
@@ -332,13 +315,12 @@ export default {
           { params: { page: this.currentPage } },
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.orderList = res.data.data;
         this.pageTotals = res.data.pageTotals;
         this.totalOrders = res.data.totalOrders;
         this.orderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getValue(value, id, process) {
@@ -409,7 +391,7 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async newRowFin() {
@@ -434,7 +416,7 @@ export default {
           );
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async newRowFinOrder(value, item, process, payment) {
@@ -455,7 +437,7 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getOrderDetails(value) {
@@ -468,7 +450,7 @@ export default {
         this.updateOrder.transactionID = res.data.data.payment.transactionID;
         this.updateOrder.paymentMethod = res.data.data.payment.paymentMethod;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async openShoppingList(value) {
@@ -481,9 +463,8 @@ export default {
         );
         this.cartDetails = res.data.data.cart;
         this.orderDetails = res.data.data;
-        console.log(this.orderDetails);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async openUserInfo(value) {
@@ -497,9 +478,8 @@ export default {
         this.address.city = res.data.data.address.city;
         this.address.street = res.data.data.address.street;
         this.address.district = res.data.data.address.district;
-        console.log(this.userInfo);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     convertDateTime(value) {
@@ -528,7 +508,7 @@ export default {
             this.$axios.defaults.headers["Authorization"]
           );
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
       if (this.features.process != "") {
@@ -549,7 +529,7 @@ export default {
             this.$axios.defaults.headers["Authorization"]
           );
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
       this.orderList = res.data.data;
@@ -570,13 +550,12 @@ export default {
           this.getOrders();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     pageChange(current) {
       this.currentPage = current;
       this.getOrders();
-      console.log(current);
     },
     submitFeatures() {
       this.getOrders();
@@ -589,9 +568,6 @@ export default {
     totalOrders() {
       this.$emit("total-products", this.totalOrders);
     },
-    // payStatus() {
-    //   this.updateOrders();
-    // },
   },
   mounted() {
     this.getAllOrders();

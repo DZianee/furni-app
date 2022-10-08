@@ -100,7 +100,7 @@ export default {
         );
         this.countNew = res.data.totalOrders;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     convertDateTime(value) {
@@ -118,7 +118,6 @@ export default {
         (item) => item.dateCreate == currMonth
       );
       result = thisMonth.length;
-      console.log(result);
       return result;
     },
     async getAllOrders() {
@@ -132,7 +131,7 @@ export default {
         this.orderList = res.data.data;
         this.orderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

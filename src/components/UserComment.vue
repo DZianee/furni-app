@@ -204,7 +204,7 @@ export default {
         }
         this.reviewList = res.data.data;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     examineUserInReactIf() {
@@ -235,8 +235,6 @@ export default {
     },
     async getReviewDetailsForReact(value) {
       try {
-        console.log(value);
-
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
           `api/Product/productDetails/${this.productId}/Review/${value}`,
@@ -244,7 +242,7 @@ export default {
         );
         this.test = res.data.data.like;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
       //   console.log(value);
       //   // let likeArr = [];
@@ -316,7 +314,7 @@ export default {
           this.$router.go();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async deleteConfirm() {
@@ -330,7 +328,7 @@ export default {
           this.$router.go();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getProductDetails() {
@@ -340,10 +338,9 @@ export default {
           `api/Product/productDetails/${this.productId}`
         );
         this.reviewList = res.data.data.review;
-        console.log(this.reviewList);
         // this.getReviewDetailsForReact(this.reviewList);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
 
@@ -357,7 +354,7 @@ export default {
         this.detailsReview = res.data.data;
         this.examineValue = res.data.data.like;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
 
@@ -378,7 +375,7 @@ export default {
             this.commentId = value;
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else {
         this.displayWarning = true;
@@ -397,18 +394,16 @@ export default {
           this.getReviewDetails(value);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },
   watch: {
     numOfReacts() {
-      console.log(this.numOfReacts);
       this.colorReact = "red";
     },
   },
   mounted() {
-    console.log(this.reviewList);
     this.getProductDetails();
   },
 };

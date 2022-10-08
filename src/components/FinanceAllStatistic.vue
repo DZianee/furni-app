@@ -67,9 +67,8 @@ export default {
         if (res.status == 200) {
           this.initYearRevenueChart(res.data.data);
         }
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     initYearRevenueChart(res) {

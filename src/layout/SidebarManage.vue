@@ -106,11 +106,6 @@ export default {
       this.$store.dispatch("logout");
       this.$router.push({ name: "home" });
     },
-    // getUser() {
-    //   this.$store.dispatch("getUser");
-    //   const data = JSON.parse(this.$store.state.user);
-    //   this.user = data;
-    // },
     async getUserDetails() {
       try {
         this.$store.dispatch("accessToken");
@@ -120,9 +115,8 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.userDetails = res.data.data;
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

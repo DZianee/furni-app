@@ -42,7 +42,7 @@ export default {
       const res = await this.$axios.get(`api/Category/`);
       this.categoryList = res.data.data.content;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
   methods: {

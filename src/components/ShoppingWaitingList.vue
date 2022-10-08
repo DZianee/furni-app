@@ -46,7 +46,6 @@ export default {
   computed: {
     productInList() {
       const result = JSON.parse(this.$store.state.shoppingList);
-      console.log(result);
       return result;
     },
     countProductInList() {

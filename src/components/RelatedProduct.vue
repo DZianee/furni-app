@@ -1,7 +1,7 @@
 <template>
   <div class="related-product">
     <div class="title">
-      <h3>Related Product</h3>
+      <h3>New Product</h3>
     </div>
     <div class="product-img-container">
       <div
@@ -34,7 +34,7 @@ export default {
         const res = await this.$axios.get(`api/Product/relatedProduct`);
         this.productList = res.data.data;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

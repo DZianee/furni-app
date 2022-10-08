@@ -41,7 +41,7 @@ export default {
         this.totalList = this.userOrderList.length;
         this.userOrderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     loadPage() {

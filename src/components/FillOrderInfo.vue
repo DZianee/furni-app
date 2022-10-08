@@ -123,9 +123,8 @@ export default {
         this.address.district = res.data.data.address.district;
         this.address.street = res.data.data.address.street;
         this.address.city = res.data.data.address.city;
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     Route(value, id, name) {

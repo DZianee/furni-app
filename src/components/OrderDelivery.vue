@@ -34,13 +34,12 @@ export default {
           },
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.deliveryOrderUserList = res.data.data;
         this.deliveryOrderUserList.forEach((item) =>
           this.convertDateTime(item)
         );
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

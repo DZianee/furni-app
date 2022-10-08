@@ -69,7 +69,7 @@
             <td></td>
             <td class="total-bill">
               <p style="text-align: center; font-weight: 500">
-                {{ totalBill() }} VND
+                {{ formatPrice(totalBill()) }} VND
               </p>
             </td>
           </tr>
@@ -100,10 +100,27 @@
       >
       for the shopping online service.
     </p>
-    <div class="btn-complete">
-      <button type="submit" class="btn" @click="sendOrder">
+    <div class="btn-complete-view-3D">
+      <button class="btn btn-3d-view" @click="toThreeView">
+        Explore in 3D House <br />
+        <!-- <span
+          >Up to 2 items can be negatively experienced in 3D before
+          payment</span
+        > -->
+      </button>
+      <button type="submit" class="btn btn-order" @click="sendOrder">
         Complete the Order
       </button>
+    </div>
+    <div class="error-view-proceed" v-if="displayError3D" style="color: red">
+      <p>Only greater than a product can activate this feature</p>
+    </div>
+    <div
+      class="error-view-status"
+      v-if="displayErrorStatus3D"
+      style="color: red"
+    >
+      <p>Your cart has no AVAILABLE 3D product item to be used</p>
     </div>
   </div>
   <PaymentMethodModal
@@ -133,11 +150,14 @@ export default {
       displayPaymentLink: true,
       displayChosenPayment: false,
       displayWarning: false,
+      displayError3D: false,
+      displayErrorStatus3D: false,
     };
   },
   computed: {
     productInList() {
       const result = JSON.parse(this.$store.state.shoppingList);
+      console.log(result);
       return result;
     },
     transactionID() {
@@ -156,7 +176,6 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toString();
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      // .slice(",", 2);
     },
     totalPrice(value, quantity) {
       let count = 0;
@@ -178,7 +197,7 @@ export default {
     },
     totalBill() {
       let result = this.shippingFee() + this.totalBeforeShipping();
-      return this.formatPrice(result);
+      return result;
     },
     shippingFee() {
       let fee = 0;
@@ -210,6 +229,22 @@ export default {
       var month = ("0" + (result.getMonth() + 1)).slice(-2);
       var day = ("0" + result.getDate()).slice(-2);
       return month + day + year;
+    },
+    toThreeView() {
+      const shopList = JSON.parse(this.$store.state.shoppingList);
+      if (shopList.length > 0) {
+        const filterResult = shopList.filter(
+          (item) => item.is3D === "Available"
+        );
+        if (filterResult.length > 0) {
+          this.$router.push({ name: "Three" });
+          this.displayErrorStatus3D = false;
+        } else {
+          this.displayErrorStatus3D = true;
+        }
+      } else {
+        this.displayError3D = true;
+      }
     },
     async sendOrder() {
       if (this.paymentType == "") {
@@ -257,11 +292,10 @@ export default {
             this.$axios.defaults.headers["Authorization"]
           );
           if (res.status == 200) {
-            console.log(res);
             this.$router.push({ name: "successOrderView" });
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
     },
@@ -412,28 +446,48 @@ export default {
   transform: rotate(45deg);
 }
 
-.btn-complete {
-  display: flex;
-  justify-content: center;
+.btn-complete-view-3D {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 15px;
 }
 .btn {
-  background: #cc6bfd;
   color: white;
   font-weight: 500;
   font-size: 18px;
   border-radius: 7px;
-  width: 90%;
+  width: 100%;
   padding: 12px;
   margin: 30px 0;
+  height: auto;
+}
+.btn-order {
+  background: #cc6bfd;
+}
+.btn-3d-view {
+  background: #2192ff;
+}
+.btn-3d-view span {
+  font-size: 15px;
 }
 .btn:hover {
   color: white;
+  background: #0f3460;
 }
 
 /* --- Responsive --- */
 @media screen and (max-width: 1400px) {
   .bill-order {
     width: 60%;
+  }
+}
+@media screen and (max-width: 1025px) {
+  .btn-complete-view-3D {
+    grid-template-columns: 100%;
+    column-gap: 0;
+  }
+  .btn {
+    margin: 9px;
   }
 }
 @media screen and (max-width: 993px) {

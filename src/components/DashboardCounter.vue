@@ -92,7 +92,7 @@ export default {
         );
         this.countNew = res.data.totalOrders;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getAllOrders() {
@@ -104,7 +104,7 @@ export default {
         );
         this.totalAllOrders = res.data.totalOrders;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getCus() {
@@ -116,7 +116,7 @@ export default {
         );
         this.totalAllCus = res.data.totalCustomers;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getRevenue() {
@@ -133,7 +133,7 @@ export default {
           0
         );
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

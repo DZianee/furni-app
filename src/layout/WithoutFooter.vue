@@ -157,7 +157,8 @@ export default {
     },
     logout() {
       this.$store.dispatch("logout");
-      this.$router.go();
+      this.$router.push({ name: "home" });
+
       // this.logouts = true;
       // this.$store.dispatch("getAuth");
       // this.login = this.$store.state.authenticated;

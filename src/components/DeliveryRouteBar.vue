@@ -54,10 +54,9 @@ export default {
           `api/Order/newOrders`,
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.totalNewOrders = res.data.totalOrders;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getCheckedOrders() {
@@ -67,10 +66,9 @@ export default {
           `api/Order/checkedOrders`,
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.totalCheckedOrders = res.data.totalOrders;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getAllOrders() {
@@ -81,10 +79,9 @@ export default {
           { params: { page: this.currentPage } },
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.totalOrders = res.data.totalOrders;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getDeliveryOrders() {
@@ -95,10 +92,9 @@ export default {
           { params: { page: this.currentPage } },
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.totalDeliveryOrders = res.data.totalOrders;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getCancelledOrders() {
@@ -109,10 +105,9 @@ export default {
           { params: { page: this.currentPage } },
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.totalCancelledOrders = res.data.totalOrders;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

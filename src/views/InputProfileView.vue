@@ -124,7 +124,6 @@ export default {
       this.$router.push({ name: value });
     },
     async confirmInfo() {
-      console.log(this.input);
       this.$store.dispatch("accessToken");
       const res = await this.$axios.put(
         `api/User/updateUser/${this.userId}`,

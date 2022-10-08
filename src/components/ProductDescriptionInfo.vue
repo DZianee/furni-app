@@ -6,14 +6,7 @@
         <hr />
       </div>
       <div class="about-content">
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged.
-        </p>
+        <p v-html="productDetails.about"></p>
         <div class="technical-info">
           <p><b>Product Technical Infomation</b></p>
           <table class="table table-bordered details-info">
@@ -57,6 +50,7 @@ export default {
     productId: String,
     reviewList: Array,
     totalReviews: Number,
+    productDetails: Object,
   },
 };
 </script>

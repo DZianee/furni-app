@@ -65,4 +65,21 @@ p span:hover {
   cursor: pointer;
   color: red;
 }
+
+/* -- responsive */
+@media screen and (max-width: 1024px) {
+  .container {
+    width: 70%;
+  }
+}
+@media screen and (max-width: 903px) {
+  .container {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 480px) and (min-width: 320px) {
+  .container {
+    font-size: 14px;
+  }
+}
 </style>

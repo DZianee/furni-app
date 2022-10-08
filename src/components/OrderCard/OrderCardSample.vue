@@ -184,7 +184,7 @@ export default {
           this.$emit("load-page");
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

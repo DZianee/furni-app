@@ -44,7 +44,7 @@ export default {
         this.totalCheckedOrders = res.data.totalOrders;
         this.orderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     convertDateTime(value) {

@@ -43,9 +43,8 @@ export default {
       this.$store.dispatch("storeCateId", res.data.data.content._id);
       this.cateDetails = res.data.data.content;
       this.totalProduct = res.data.data.totalProduct;
-      console.log(res);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
   methods: {

@@ -91,9 +91,8 @@ export default {
       );
       this.userDetails = res.data.data;
       this.convertDateTime(this.userDetails.lastLogin);
-      console.log(res);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
   methods: {
@@ -107,10 +106,8 @@ export default {
       this.$router.push({
         path: `/profile-view/${this.routeId}/${name}`,
       });
-      console.log(name);
     },
     convertDateTime(value) {
-      console.log(value);
       let date = new Date(value);
       this.lastLogin = date.toLocaleString();
     },

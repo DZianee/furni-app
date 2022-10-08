@@ -45,7 +45,7 @@ export default {
         this.$emit("count-new-order", this.totalNewOrders);
         this.orderList.forEach((item) => this.convertDateTime(item));
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     convertDateTime(value) {

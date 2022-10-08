@@ -130,9 +130,8 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.roleList = res.data.data;
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
 
@@ -149,7 +148,7 @@ export default {
           this.$router.go();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async removeConfirm() {
@@ -165,7 +164,7 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async checkRole() {
@@ -175,13 +174,11 @@ export default {
         res = await this.$axios.get(`api/Role/checkRole/${this.removeId}`);
         if (res.status == 200) {
           this.checkedValue = true;
-          console.log(res);
         } else {
           this.checkedValue = false;
-          console.log(res);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     closeWarning() {
@@ -205,10 +202,9 @@ export default {
           this.newRole,
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.roleDetails = res.data.data;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     openCreateRole() {
@@ -217,8 +213,6 @@ export default {
       this.btnProperty.color = "white";
       this.btnProperty.backColor = "#aa40e3";
       this.headerPosition = "center";
-
-      console.log("test");
     },
     async createRoles() {
       try {
@@ -232,11 +226,9 @@ export default {
 
         if (res.status == 200) {
           this.getRole();
-          console.log(res);
         }
-        console.log("test");
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

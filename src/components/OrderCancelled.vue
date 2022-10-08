@@ -34,13 +34,12 @@ export default {
           },
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.cancelledOrderUserList = res.data.data;
         this.cancelledOrderUserList.forEach((item) =>
           this.convertDateTime(item)
         );
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

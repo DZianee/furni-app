@@ -135,9 +135,8 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.categoryList = res.data.data.content;
-        console.log(this.categoryList);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     Route(value, id) {
@@ -158,7 +157,7 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async checkProduct(value) {
@@ -170,13 +169,11 @@ export default {
         );
         if (res.status == 200) {
           this.checkedValue = true;
-          console.log(res);
         } else {
           this.checkedValue = false;
-          console.log(res);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     closeWarning() {
@@ -197,9 +194,8 @@ export default {
         if (res.status == 200) {
           this.$$router.go();
         }
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async openEditModal(value) {
@@ -216,15 +212,13 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         this.cateDetails = res.data.data.content;
-        console.log(this.cateDetails);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     openRemoveModal(value) {
       this.removeId = value;
       this.checkProduct(value);
-      console.log(this.removeId);
     },
   },
   mounted() {

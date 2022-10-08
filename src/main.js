@@ -18,6 +18,7 @@ import WarningModal from "./components/Modal/ModalWarning.vue";
 import ImgModal from "./components/Modal/ModalImg.vue";
 import NotifiModal from "./components/Modal/ModalNotifi.vue";
 import CmtModal from "./components/Modal/ModalComment.vue";
+import Modal3D from "./components/Modal/Modal3D.vue";
 import Pagination from "./components/Pagination/PaginationBar.vue";
 import OrderCardSample from "./components/OrderCard/OrderCardSample.vue";
 import OrderTableSample from "./components/Table/OrderTable.vue";
@@ -86,6 +87,7 @@ app
   .component("warning-modal", WarningModal)
   .component("img-modal", ImgModal)
   .component("comment-modal", CmtModal)
+  .component("3D-modal", Modal3D)
   .component("notifi-modal", NotifiModal)
   .component("pagination-feature", Pagination)
   .component("order-card-list", OrderCardSample)

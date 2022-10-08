@@ -34,9 +34,7 @@ export default {
     },
   },
   watch: {
-    test() {
-      console.log(this.test);
-    },
+    test() {},
   },
 };
 </script>

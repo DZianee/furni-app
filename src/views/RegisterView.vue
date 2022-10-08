@@ -78,10 +78,9 @@ export default {
               params: { id: res.data.data._id },
             });
           }
-          console.log(res);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

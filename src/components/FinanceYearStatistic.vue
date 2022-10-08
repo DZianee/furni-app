@@ -138,7 +138,7 @@ export default {
             this.$axios.defaults.headers["Authorization"]
           );
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else {
         try {
@@ -153,7 +153,7 @@ export default {
             this.$axios.defaults.headers["Authorization"]
           );
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
 
@@ -173,7 +173,7 @@ export default {
           this.initLineChart(res.data.month, res.data.revenues);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getPaymentMethodChart(value) {
@@ -187,7 +187,7 @@ export default {
           this.initDoughChart(res.data.data);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     initLineChart(labels, revenueData) {

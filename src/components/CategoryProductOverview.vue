@@ -1,10 +1,6 @@
 <template>
   <div class="category-product-overview">
     <div class="category-overview">
-      <!-- <img
-        src="https://images.pexels.com/photos/4857784/pexels-photo-4857784.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260&dpr=2"
-        alt="overview-cate-img"
-      /> -->
       <div class="content">
         <h6 class="cate-name">{{ cateDetails.name }}</h6>
         <div class="cate-info">
@@ -22,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="cate-item-overview">
+      <!-- <div class="cate-item-overview">
         <div
           class="card chairs"
           style="background: linear-gradient(to top, #be79df, #f5fbf1)"
@@ -59,19 +55,19 @@
             />
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import Vue3autocounter from "vue3-autocounter";
+// import Vue3autocounter from "vue3-autocounter";
 
 export default {
   name: "CateProductOverview",
-  components: {
-    "vue3-autocounter": Vue3autocounter,
-  },
+  // components: {
+  //   "vue3-autocounter": Vue3autocounter,
+  // },
   props: {
     cateDetails: Object,
     totalProduct: Number,
@@ -85,9 +81,9 @@ export default {
 .category-overview {
   margin-top: 10px;
   padding: 15px;
-  display: grid;
+  /* display: grid;
   grid-template-columns: 1.4fr 1fr;
-  column-gap: 30px;
+  column-gap: 30px; */
 }
 .category-overview img {
   width: 70%;
@@ -108,7 +104,7 @@ export default {
   padding: 4px 10px;
 }
 /* - - - overview Cate item- - - */
-.cate-item-overview {
+/* .cate-item-overview {
   display: flex;
   flex-flow: column;
   gap: 20px;
@@ -133,10 +129,10 @@ export default {
 .card .num-of-chair,
 .card .num-of-armchair {
   font-size: 45px;
-}
+} */
 
 /* -- Responsive --- */
-@media screen and (max-width: 1440px) {
+/* @media screen and (max-width: 1440px) {
   .card {
     width: 80%;
   }
@@ -171,5 +167,5 @@ export default {
   .card .num-of-armchair {
     font-size: 30px;
   }
-}
+} */
 </style>

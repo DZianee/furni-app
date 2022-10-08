@@ -80,7 +80,9 @@
             data-bs-toggle="modal"
             data-bs-target="#removeModal"
             class="icon icon_delete"
-            @click="openRemoveModal(item.product_id, item.id)"
+            @click="
+              openRemoveModal(item.product_id, item.id, item.quantityProduct)
+            "
           >
             <i class="bx bx-md bx-x"></i>
           </button>
@@ -109,6 +111,7 @@ export default {
     return {
       removeId: null,
       updateQId: "",
+      quantityAfterDelete: 0,
       status: "",
     };
   },
@@ -138,7 +141,6 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toString();
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      // .slice(",", 2);
     },
     totalPrice(value, quantity) {
       let count = 0;
@@ -195,9 +197,10 @@ export default {
         }
       }
     },
-    openRemoveModal(value, _id) {
+    openRemoveModal(value, _id, quantity) {
       this.removeId = value;
       this.updateQId = _id;
+      this.quantityAfterDelete = quantity;
     },
     async deleteConfirm() {
       const shoppingList = JSON.parse(this.$store.state.shoppingList);
@@ -207,7 +210,7 @@ export default {
       this.$store.dispatch("storeShoppingList", result);
 
       const exportQuantity = {
-        exportQuantity: 1,
+        exportQuantity: this.quantityAfterDelete,
         type: "decrease",
       };
       this.$store.dispatch("accessToken");

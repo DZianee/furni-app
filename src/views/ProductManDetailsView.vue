@@ -194,15 +194,12 @@
             <p v-if="productDetails.imgCloudinary != ''">
               {{ productDetails.imgCloudinary }}
             </p>
-            <input type="file" @change="select3DImg" multiple />
+            <input type="file" @change="select3DImg" />
             <div>
-              <button
-                @click="upload3DImg"
-                v-if="productDetails.imgCloudinary == ''"
-              >
-                Submit
+              <button @click="update3DImg" v-if="productDetails.imgCloudinary">
+                Update change
               </button>
-              <button @click="update3DImg" v-else>Update change</button>
+              <button @click="upload3DImg" v-else>Submit</button>
             </div>
           </div>
         </div>

@@ -169,7 +169,7 @@ export default {
         this.postList = res.data.data;
         this.productReview = res.data.arrProduct[0];
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getReviewDetails(value) {
@@ -181,7 +181,7 @@ export default {
         );
         this.detailsReview = res.data.data;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async updateChange() {
@@ -201,7 +201,7 @@ export default {
           this.getPosts();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async deleteConfirm() {
@@ -215,7 +215,7 @@ export default {
           this.getPosts();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

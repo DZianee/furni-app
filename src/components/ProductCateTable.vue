@@ -100,7 +100,7 @@
             </td>
             <td class="item-name">{{ item.name }}</td>
             <td class="item-type">{{ item.type }}</td>
-            <td class="item-price">{{ item.price }}</td>
+            <td class="item-price">{{ formatPrice(item.price) }}</td>
             <td class="item-quantity">{{ item.importQuantity }}</td>
             <td class="item-quantity">{{ item.exportQuantity }}</td>
             <td
@@ -113,11 +113,10 @@
               View
             </td>
             <td>{{ item.createdAt }}</td>
-            <td style="font-weight: 500; color: red" @click="edit3DMode">
-              <span>{{ item.is3D }}</span>
+            <td style="font-weight: 500; color: red">
               <select
                 style="border: none; margin-left: 5px"
-                v-if="edit3D"
+                v-if="edit3DMode"
                 name="is3D"
                 v-model="item.is3D"
                 @change="get3DValue(item.is3D, item._id, item.color)"
@@ -132,6 +131,7 @@
                   Available
                 </option>
               </select>
+              <span v-else>{{ item.is3D }}</span>
             </td>
             <td class="on-shelves-status">
               <!-- {{ item.statusOnShelves }} -->
@@ -209,7 +209,6 @@ export default {
       status: "IN STOCK",
       statusOnShelves: "Active",
       is3D: "Unavailable",
-      edit3D: false,
       currentPage: 1,
       totalPages: 0,
       displayPreBtn: false,
@@ -245,16 +244,20 @@ export default {
         this.$axios.defaults.headers["Authorization"]
       );
       this.productList = res.data.data;
-      console.log(res.data.data);
       this.productList.forEach((item) => this.convertDateTime(item));
       this.totalProducts = res.data.totalProducts;
       this.totalPages = res.data.pageTotals;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
 
   methods: {
+    formatPrice(value) {
+      let val = (value / 1).toString();
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      // .slice(",", 2);
+    },
     async getProduct() {
       try {
         this.$store.dispatch("accessToken");
@@ -276,7 +279,7 @@ export default {
         this.totalProducts = res.data.totalProducts;
         this.totalPages = res.data.pageTotals;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     convertDateTime(value) {
@@ -302,7 +305,7 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async get3DValue(status, id, color) {
@@ -313,13 +316,13 @@ export default {
       try {
         this.$store.dispatch("accessToken");
         await this.$axios.put(
-          `api/Product/productDetails/${id}/updateThreeDImg`,
+          `api/Product/updateProduct/${id}`,
           update,
           this.$axios.defaults.headers["Authorization"]
         );
         this.$router.go();
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     edit3DMode() {
@@ -354,12 +357,11 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     Route(value, id) {
       this.$router.push({ name: value, params: { id: id } });
-      console.log(this.cateId);
     },
     submitFeatures() {
       this.currentPage = 1;
@@ -371,7 +373,6 @@ export default {
     pageChange(current) {
       this.currentPage = current;
       this.getProduct();
-      console.log(current);
     },
   },
   mounted() {

@@ -30,14 +30,7 @@
       <div class="product-des">
         <h4>Descriptions</h4>
         <hr />
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged.
-        </p>
+        <p v-html="productDetails.description"></p>
       </div>
     </div>
     <ProductDescriptionInfo
@@ -45,6 +38,7 @@
       :productId="productId"
       :reviewList="reviewList"
       :totalReviews="totalReviews"
+      :productDetails="productDetails"
     />
     <RelatedProduct />
   </div>
@@ -88,25 +82,9 @@ export default {
         this.totalReviews = this.productDetails.countReviews;
         this.technicalInfo = this.productDetails.technicalInfo;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
-    // zoom(e) {
-    //   const imageContainer = document.querySelector(".zoom");
-    //   imageContainer.onmousemove = (event) => {
-    //     zoom(event);
-    //   };
-    //   let offsetX = 0;
-    //   let offsetY = 0;
-    //   let x = 0;
-    //   let y = 0;
-    //   var zoomer = e.currentTarget;
-    //   e.offsetX ? (offsetX = e.offsetX) : (offsetX = e.touches[0].pageX);
-    //   e.offsetY ? (offsetY = e.offsetY) : (offsetX = e.touches[0].pageX);
-    //   x = (offsetX / zoomer.offsetWidth) * 100;
-    //   y = (offsetY / zoomer.offsetHeight) * 100;
-    //   zoomer.style.backgroundPosition = x + "% " + y + "%";
-    // },
     openWaitingList(item) {
       this.choice = item;
     },
@@ -149,7 +127,7 @@ export default {
 figure.zoom {
   background-position: 40% 40%;
   position: relative;
-  width: 70%;
+  width: 50%;
   overflow: hidden;
   cursor: zoom-in;
 }
@@ -188,6 +166,7 @@ figure.zoom img {
   grid-template-columns: 1.2fr 1fr;
 }
 .product-des {
+  margin-top: 6%;
   letter-spacing: 0.3px;
   line-height: 32px;
   padding: 0 12px;

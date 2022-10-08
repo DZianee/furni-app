@@ -231,9 +231,7 @@ export default {
           break;
       }
     },
-    acceptCash() {
-      console.log("cash");
-    },
+    acceptCash() {},
   },
   mounted() {},
 };

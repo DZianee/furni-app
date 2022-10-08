@@ -220,13 +220,11 @@ export default {
     },
     selectImg(e) {
       this.newProduct.productImg = e.target.files[0];
-      console.log(this.newProduct.productImg);
     },
     getColor(col) {
       let color = col;
       this.newProduct.color.push(color);
       this.eliminateColor(color);
-      console.log(this.newProduct.color);
     },
     eliminateColor(value) {
       const test = this.newProduct.color.filter((item) => item === value);
@@ -234,14 +232,11 @@ export default {
         let tests;
         tests = this.newProduct.color.filter((item) => item != value);
         this.newProduct.color = tests;
-        console.log(this.newProduct.color);
-        console.log(typeof this.newProduct.color);
       }
     },
 
     async createProduct() {
       try {
-        console.log(this.newProduct);
         const result = new Date(Date.now());
         var year = result.getFullYear();
         var month = ("0" + (result.getMonth() + 1)).slice(-2);
@@ -278,11 +273,10 @@ export default {
         );
         console.log(res);
         if (res.status == 200) {
-          console.log(this.newProduct.color);
           this.$router.go();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

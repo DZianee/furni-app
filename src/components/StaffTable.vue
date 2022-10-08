@@ -452,9 +452,8 @@ export default {
         this.$axios.defaults.headers["Authorization"]
       );
       this.staff = res.data.data;
-      console.log(res);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
   methods: {
@@ -481,7 +480,7 @@ export default {
             this.$axios.defaults.headers["Authorization"]
           );
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
       if (this.features.role != "") {
@@ -507,7 +506,6 @@ export default {
       }
 
       this.staff = res.data.data;
-      console.log(res);
     },
     async getRole() {
       try {
@@ -516,11 +514,9 @@ export default {
           `api/Role/staffRolesList/62ac075d3a5d293c62b3b12b`,
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.roleList = res.data.data;
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     submitFeatures() {
@@ -553,11 +549,9 @@ export default {
         );
         if (res.status == 200) {
           this.getStaff();
-          console.log(res);
         }
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async updateInfo() {
@@ -581,10 +575,9 @@ export default {
         );
         if (res.status == 200) {
           this.$router.go();
-          console.log(res);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async deleteEmp() {
@@ -596,10 +589,9 @@ export default {
         );
         if (res.status == 200) {
           this.getStaff();
-          console.log(res);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     openRemoveModal(value) {
@@ -612,7 +604,6 @@ export default {
       this.close = !this.close;
 
       this.removeId = value;
-      console.log(value);
     },
     async openEditModal(value) {
       this.modalTitle = "Employee Information";
@@ -629,13 +620,11 @@ export default {
           `api/User/userDetails/All/${value}`,
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(res);
         this.staffDetails = res.data.data;
-        console.log(this.staffDetails);
         this.address = res.data.data.address;
         this.role = res.data.data.role;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     openCreateStaff() {

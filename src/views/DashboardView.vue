@@ -48,7 +48,6 @@ export default {
           `api/Fin/detailsFinInYear/chart/orderEachMonth/${currYear}`,
           this.$axios.defaults.headers["Authorization"]
         );
-        console.log(resOrders);
         if (resOrders.status == 200) {
           this.initMixChart(
             resOrders.data.month,
@@ -57,7 +56,7 @@ export default {
           );
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     initMixChart(labels, orderData, revenueData) {
@@ -197,13 +196,6 @@ export default {
     right: -2.5%;
     width: calc(100% - 145px);
   }
-  /* .chart-content {
-    height: 60%;
-    width: 100%;
-  }
-  .content {
-    grid-template-columns: 100%;
-  } */
 }
 @media screen and (max-width: 1200px) {
   .dashboard-view {

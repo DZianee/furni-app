@@ -308,7 +308,7 @@ export default {
         this.updateOrder.transactionID = res.data.data.payment.transactionID;
         this.updateOrder.paymentMethod = res.data.data.payment.paymentMethod;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async updateOrders(value) {
@@ -340,7 +340,7 @@ export default {
           this.$emit("load-orders-update");
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async openShoppingList(value) {
@@ -353,9 +353,8 @@ export default {
         );
         this.cartDetails = res.data.data.cart;
         this.orderDetails = res.data.data;
-        console.log(this.orderDetails);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async openUserInfo(value) {
@@ -369,9 +368,8 @@ export default {
         this.address.city = res.data.data.address.city;
         this.address.street = res.data.data.address.street;
         this.address.district = res.data.data.address.district;
-        console.log(this.userInfo);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
 
@@ -386,7 +384,7 @@ export default {
           this.$emit("load-orders");
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

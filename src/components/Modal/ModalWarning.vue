@@ -3,15 +3,6 @@
     <div class="Confirm-Modal" v-if="openModal">
       <span class="Confirm-Modal-backdrop" @click="close"></span>
       <div class="Confirm-Modal-container">
-        <!-- <div class="Confirm-Modal-close" @click="close">
-          <i
-            class="bi form-control-feedback bi-x-lg"
-            style="font-size: 22px"
-          ></i>
-        </div> -->
-        <!-- <header class="Confirm-Modal-header">
-          <p>{{ title }}</p>
-        </header> -->
         <div class="Confirm-Modal-body">
           <div style="display: flex; justify-content: center">
             <i class="bx bx-error bx-lg" style="color: #ffd600"></i>
@@ -23,26 +14,6 @@
             Close
           </button>
         </div>
-        <!-- <slot></slot> -->
-        <!-- <div class="remove-btns">
-            <button type="button" class="btn btn_cancel" @click="closeModal">
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn_remove btn-success"
-              v-if="confirmText"
-              :disabled="!activeConfirmButton"
-              @click="submitModal"
-            >
-              {{ confirmText }}
-            </button> -->
-        <!-- <button type="button" class="btn btn_remove btn-success" v-if="CommentRejectButton" @click="CommentSubmit(false)">
-              {{ CommentRejectButton }}
-            </button>
-            <button type="button" class="btn btn_remove btn-success" v-if="CommentConfirmButton" @click="CommentSubmit(true)">
-              {{ CommentConfirmButton }}
-            </button> -->
       </div>
     </div>
   </transition>

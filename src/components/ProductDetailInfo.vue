@@ -1,7 +1,13 @@
 <template>
   <div class="product-detail-info">
     <div class="product-info">
-      <div class="product-view_3d" v-if="productDetails.is3D == 'Available'">
+      <div
+        class="product-view_3d"
+        v-if="productDetails.is3D == 'Available'"
+        data-bs-target="#modalThree"
+        data-bs-toggle="modal"
+        @click="getImg(productDetails.imgCloudinary)"
+      >
         <i class="bx bx-aperture bx-sm bx-fw"></i>
         View 3D product
       </div>
@@ -79,6 +85,7 @@
   >
     Oops! Please Sign In to experience this</component
   >
+  <component :is="'3D-modal'" :img3D="img3D"> </component>
 </template>
 
 <script>
@@ -95,16 +102,19 @@ export default {
       productId: this.$route.params.id,
       productTempQuantity: 0,
       status: "",
+      img3D: "",
     };
   },
   props: {
     productDetails: Object,
   },
   methods: {
+    getImg(value) {
+      this.img3D = value;
+    },
     formatPrice(value) {
       let val = (value / 1).toString();
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      // .slice(",", 2);
     },
     async getProductDetails() {
       try {
@@ -114,19 +124,43 @@ export default {
         );
         this.status = res.data.data.status;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async decreaseQuantity(id) {
-      if (this.productTempQuantity == 0) {
-        this.productTempQuantity = 0;
+      if (this.$store.state.user == null) {
+        this.displayWarning = true;
       } else {
-        this.productTempQuantity--;
+        if (this.productTempQuantity == 0) {
+          this.productTempQuantity = 0;
+        } else {
+          this.productTempQuantity--;
+        }
+        if (this.productTempQuantity > 0) {
+          const exportQuantity = {
+            exportQuantity: 1,
+            type: "decrease",
+          };
+          this.$store.dispatch("accessToken");
+          const res = await this.$axios.put(
+            `api/Product/updateProductPrice/${id}`,
+            exportQuantity,
+            this.$axios.defaults.headers["Authorization"]
+          );
+          const result = res.data.data.status;
+          if (result === "IN STOCK") {
+            this.status = "IN STOCK";
+          }
+        }
       }
-      if (this.productTempQuantity > 0) {
+    },
+    async increaseQuantity(id) {
+      if (this.$store.state.user == null) {
+        this.displayWarning = true;
+      } else {
         const exportQuantity = {
           exportQuantity: 1,
-          type: "decrease",
+          type: "increase",
         };
         this.$store.dispatch("accessToken");
         const res = await this.$axios.put(
@@ -135,27 +169,11 @@ export default {
           this.$axios.defaults.headers["Authorization"]
         );
         const result = res.data.data.status;
-        if (result === "IN STOCK") {
-          this.status = "IN STOCK";
+        if (result === "OUT OF STOCK") {
+          this.status = "OUT OF STOCK";
+        } else {
+          this.productTempQuantity++;
         }
-      }
-    },
-    async increaseQuantity(id) {
-      const exportQuantity = {
-        exportQuantity: 1,
-        type: "increase",
-      };
-      this.$store.dispatch("accessToken");
-      const res = await this.$axios.put(
-        `api/Product/updateProductPrice/${id}`,
-        exportQuantity,
-        this.$axios.defaults.headers["Authorization"]
-      );
-      const result = res.data.data.status;
-      if (result === "OUT OF STOCK") {
-        this.status = "OUT OF STOCK";
-      } else {
-        this.productTempQuantity++;
       }
     },
     displayBtnCart() {
@@ -193,6 +211,8 @@ export default {
           price: value.price,
           color: this.checkedColor,
           quantityProduct: this.productTempQuantity,
+          img3D: value.imgCloudinary,
+          is3D: value.is3D,
           product_id: "",
         };
         if (storeShoppping == null || storeShoppping == "") {
@@ -209,9 +229,10 @@ export default {
           switch (option) {
             case 1:
               storeShoppping.forEach((item) => {
-                item.color == product.color && item.id == product.id;
-                item.quantityProduct =
-                  item.quantityProduct + product.quantityProduct;
+                if (item.color == product.color && item.id == product.id) {
+                  item.quantityProduct =
+                    item.quantityProduct + product.quantityProduct;
+                }
               });
               break;
             default:
@@ -308,9 +329,10 @@ export default {
   height: 25px;
   width: 25px;
   border-radius: 30px;
+  border: solid 1px;
 }
 .checkmark:hover {
-  border: solid 1px;
+  border: solid 2px;
 }
 
 /* On mouse-over, add a grey background color */

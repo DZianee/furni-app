@@ -23,25 +23,23 @@ export default {
       test: "",
     };
   },
-  watch: {
-    cateId() {
-      console.log(this.cateId);
-    },
-  },
+  // watch: {
+  //   cateId() {
+  //     console.log(this.cateId);
+  //   },
+  // },
   methods: {
     async getCateDetails() {
       try {
         if (this.$route.params.id != "all") {
-          console.log(this.$route.params.id);
           this.$store.dispatch("accessToken");
           const res = await this.$axios.get(
             `api/Category/cateDetails/${this.$route.params.id}`
           );
           this.test = res.data.data.content.name;
         }
-        // console.log(this.categoryDetails);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     getCateAll(value) {
