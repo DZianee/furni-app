@@ -3,7 +3,13 @@
     <nav>
       <ul>
         <li @click="openUserRoute('user')" class="bar active">Customers</li>
-        <li @click="openUserRoute('role')" class="bar">Role management</li>
+        <li
+          @click="openUserRoute('role')"
+          class="bar"
+          v-if="userRole == 'Admin'"
+        >
+          Role management
+        </li>
       </ul>
     </nav>
   </div>
@@ -12,6 +18,12 @@
 <script>
 export default {
   name: "NavForManagement",
+  computed: {
+    userRole() {
+      const result = JSON.parse(this.$store.state.user).role.name;
+      return result;
+    },
+  },
   methods: {
     openUserRoute(value) {
       this.$emit("open-users-tab", value);

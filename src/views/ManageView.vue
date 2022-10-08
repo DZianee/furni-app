@@ -38,6 +38,10 @@ export default {
     routeId() {
       return this.$route.params.id;
     },
+    userRole() {
+      const result = JSON.parse(this.$store.state.user).role.name;
+      return result;
+    },
   },
   methods: {
     openUserRoute(val) {

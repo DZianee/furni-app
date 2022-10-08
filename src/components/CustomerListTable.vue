@@ -67,7 +67,7 @@
             <th class="user-address">Address</th>
             <th class="user-login">Last login</th>
             <th class="user-status">Status</th>
-            <!-- <th></th> -->
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -121,14 +121,14 @@
                 </option>
               </select>
             </td>
-            <!-- <td class="adjust-remove">
+            <td class="adjust-remove">
               <i
                 class="bx bx-trash"
                 data-bs-target="#removeModal"
                 data-bs-toggle="modal"
-                @click="openRemoveModal()"
+                @click="openRemoveModal(cus._id)"
               ></i>
-            </td> -->
+            </td>
             <!-- <td class="adjust-edit">
               <i
                 class="bx bx-edit-alt bx-fw"
@@ -149,8 +149,8 @@
         :currentPage="currentPage"
       ></component>
     </div>
-    <!-- <component :is="'remove-modal'" @delete-confirm="removeConfirm">
-    </component> -->
+    <component :is="'remove-modal'" @delete-confirm="removeConfirm">
+    </component>
   </div>
 </template>
 
@@ -180,6 +180,7 @@ export default {
       currentPage: 1,
       displayPreBtn: false,
       hiddenEditStatus: true,
+      removeId: "",
     };
   },
   async created() {
@@ -202,7 +203,20 @@ export default {
     }
   },
   methods: {
-    removeConfim() {},
+    async removeConfim() {
+      try {
+        this.$store.dispatch("accessToken");
+        const res = await this.$axios.delete(
+          `api/User/removeStaff/${this.removeId}`,
+          this.$axios.defaults.headers["Authorization"]
+        );
+        if (res.status == 200) {
+          this.$router.go();
+        }
+      } catch (error) {
+        // console.log(error);
+      }
+    },
     convertDateTime(value) {
       let date = new Date(value.lastLogin);
       value.lastLogin = date.toLocaleString();
@@ -253,6 +267,9 @@ export default {
       } catch (error) {
         // console.log(error);
       }
+    },
+    openRemoveModal(value) {
+      this.removeId = value;
     },
     submitFeatures() {
       this.currentPage = 1;
@@ -447,6 +464,11 @@ td.cus-name h6 {
   background: rgb(218, 218, 218);
   width: 90px;
   font-weight: 500;
+}
+.adjust-remove {
+  padding-top: 2.7%;
+  color: red;
+  cursor: pointer;
 }
 
 /* --- Responsive --- */

@@ -4,7 +4,11 @@
       <i class="bx bx-md bx-x"></i>
     </div>
     <ul class="nav-items">
-      <li class="nav-item user" @click="manageRoute('manageView')">
+      <li
+        class="nav-item user"
+        @click="manageRoute('manageView')"
+        v-if="userRole == 'Admin' || userRole == 'Manager'"
+      >
         <i class="bx bx-user bx-sm bx-fw" />
         <span>Customers</span>
       </li>
@@ -25,6 +29,12 @@ export default {
   name: "MoreNav",
   props: {
     isDisplay: Boolean,
+  },
+  computed: {
+    userRole() {
+      const result = JSON.parse(this.$store.state.user).role.name;
+      return result;
+    },
   },
   methods: {
     Route(value, id) {
@@ -51,7 +61,7 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 28%;
+  height: 24%;
   z-index: 200;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
@@ -86,5 +96,10 @@ export default {
 @media screen and (max-width: 676px) {
 }
 @media screen and (min-width: 320px) and (max-width: 480px) {
+  .nav-item {
+    height: 50px;
+    margin: 0 6px;
+    line-height: 40px;
+  }
 }
 </style>

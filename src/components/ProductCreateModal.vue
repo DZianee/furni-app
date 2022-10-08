@@ -429,4 +429,24 @@ input {
   background: rgb(167, 160, 160);
   color: white;
 }
+
+/* responsive */
+@media screen and (max-width: 993px) {
+  .color-check {
+    margin-left: 10px;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .product-type {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 480px) and (min-width: 320px) {
+  .color-check {
+    margin-left: 10px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .product-type {
+    width: 100%;
+  }
+}
 </style>

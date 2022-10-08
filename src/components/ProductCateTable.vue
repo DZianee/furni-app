@@ -116,7 +116,7 @@
             <td style="font-weight: 500; color: red">
               <select
                 style="border: none; margin-left: 5px"
-                v-if="edit3DMode"
+                v-if="edit3DMode()"
                 name="is3D"
                 v-model="item.is3D"
                 @change="get3DValue(item.is3D, item._id, item.color)"

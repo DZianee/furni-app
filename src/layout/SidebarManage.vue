@@ -39,13 +39,21 @@
         <span>Order's delivery</span>
         <span class="tooltiptext">Order's delivery</span>
       </li>
-      <li class="nav-item" @click="Route('financeView')">
+      <li
+        class="nav-item"
+        @click="Route('financeView')"
+        v-if="userRole == 'Admin' || userRole == 'Manager'"
+      >
         <i class="bx bx-money-withdraw bx-sm bx-fw" />
         <i class="bx bx-money-withdraw bx-md" />
         <span>Finance</span>
         <span class="tooltiptext">Finance</span>
       </li>
-      <li class="nav-item user" @click="manageRoute('manageView')">
+      <li
+        class="nav-item user"
+        @click="manageRoute('manageView')"
+        v-if="userRole == 'Admin' || userRole == 'Manager'"
+      >
         <i class="bx bx-user bx-sm bx-fw" />
 
         <i class="bx bx-user bx-md" />
@@ -91,6 +99,12 @@ export default {
       user: {},
       userDetails: {},
     };
+  },
+  computed: {
+    userRole() {
+      const result = JSON.parse(this.$store.state.user).role.name;
+      return result;
+    },
   },
   methods: {
     closeNavMore() {
@@ -288,7 +302,7 @@ export default {
     width: 100%;
     bottom: 0;
     left: 0;
-    height: 12%;
+    height: 10%;
     padding: 0 1%;
     background: #a85cf9;
     border-top-left-radius: 20px;
@@ -309,8 +323,10 @@ export default {
     color: white;
   }
   .nav-items {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; */
+    display: flex;
+    justify-content: space-evenly;
     padding: 0 4px;
   }
   .bx-md {
@@ -331,18 +347,18 @@ export default {
 }
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .nav {
-    height: 10%;
+    height: 8%;
   }
   .nav-item span:not(.tooltiptext) {
     display: none;
   }
-  /* .bx-md {
+  .bx-md {
     display: none;
   }
   .bx-sm {
     display: block;
     color: white;
-  } */
+  }
 
   .nav-items {
     padding: 0;

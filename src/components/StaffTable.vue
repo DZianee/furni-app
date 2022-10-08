@@ -65,7 +65,7 @@
       </div>
     </div>
     <div class="staff-content-side">
-      <div class="create-staff-btn">
+      <div class="create-staff-btn" v-if="userRole == 'Admin'">
         <button
           type="button"
           data-bs-target="#createModal"
@@ -83,7 +83,7 @@
               <th class="staff-role">Role</th>
               <th class="staff-mobile">Mobile</th>
               <th class="staff-status">Status</th>
-              <th></th>
+              <th v-if="userRole == 'Admin'"></th>
             </tr>
           </thead>
           <tbody>
@@ -102,7 +102,7 @@
               >
                 {{ item.status }}
               </td>
-              <td class="adjust">
+              <td class="adjust" v-if="userRole == 'Admin'">
                 <i
                   class="bx bx-dots-horizontal-rounded test"
                   style="cursor: pointer"
@@ -455,6 +455,12 @@ export default {
     } catch (error) {
       // console.log(error);
     }
+  },
+  computed: {
+    userRole() {
+      const result = JSON.parse(this.$store.state.user).role.name;
+      return result;
+    },
   },
   methods: {
     async getStaff() {
