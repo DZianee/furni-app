@@ -468,7 +468,7 @@ export default {
       let res;
       if (this.features.role == "") {
         staffFeatures = {
-          kindOf: 1,
+          kindOf: this.features.kindOf,
           search: "",
           status: "Active",
         };
@@ -491,7 +491,7 @@ export default {
       }
       if (this.features.role != "") {
         staffFeatures = {
-          kindOf: 1,
+          kindOf: this.features.kindOf,
           search: "",
           status: "Active",
           role: this.features.role,

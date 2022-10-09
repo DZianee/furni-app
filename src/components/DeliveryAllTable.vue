@@ -50,7 +50,7 @@
                 <option value="" disabled>Select process</option>
                 <option value="New">New</option>
                 <option value="Checked">Checked</option>
-                <option value="Delivering">Delivering</option>
+                <option value="Delivery">Delivering</option>
                 <option value="Completed">Closed</option>
                 <option value="Cancel">Cancelled</option>
               </select>
@@ -328,6 +328,8 @@ export default {
         return;
       } else {
         this.updateOrder.payStatus = value;
+        this.updateOrder.process = process;
+
         await this.getOrderDetails(id);
         this.updateOrders(id);
       }
@@ -351,19 +353,13 @@ export default {
         return "color: #ff5252; text-shadow: 0 0 7px #ff867f";
       }
     },
-    async updateOrders(value, item, payment) {
+    async updateOrders(id, item, paymentMethod) {
       let order;
       this.$store.dispatch("accessToken");
-
       try {
         if (this.updateOrder.process === "Cancelled") {
           order = {
             status: "Unactive",
-            process: this.updateOrder.process,
-          };
-        } else if (this.updateOrder.process != "Cancelled") {
-          order = {
-            status: "Active",
             process: this.updateOrder.process,
           };
         } else if (this.updateOrder.payStatus == "") {
@@ -377,9 +373,8 @@ export default {
             paymentMethod: this.updateOrder.paymentMethod,
           };
         }
-
         const res = await this.$axios.put(
-          `api/Order/updateOrder/${value}`,
+          `api/Order/updateOrder/${id}`,
           order,
           this.$axios.defaults.headers["Authorization"]
         );
@@ -387,7 +382,12 @@ export default {
           this.getAllOrders();
           this.showCheckProcess = false;
           if (this.updateOrder.process === "Completed") {
-            this.newRowFinOrder(value, item, this.updateOrder.process, payment);
+            this.newRowFinOrder(
+              id,
+              item,
+              this.updateOrder.process,
+              paymentMethod
+            );
           }
         }
       } catch (error) {
@@ -421,7 +421,6 @@ export default {
     },
     async newRowFinOrder(value, item, process, payment) {
       try {
-        console.log(item);
         this.$store.dispatch("accessToken");
         let newFinOrder = {
           month: item.dateCreate,
@@ -454,7 +453,6 @@ export default {
       }
     },
     async openShoppingList(value) {
-      console.log(value);
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(

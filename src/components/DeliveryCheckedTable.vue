@@ -8,6 +8,7 @@
       :displayGroupFeatures="false"
       :displayBin="false"
       @sort-orders="sortTable"
+      @load-orders-update="loadOrdersUpdate"
       @load-orders="loadOrders"
     ></component>
   </div>
@@ -52,13 +53,16 @@ export default {
       var year = result.getFullYear();
       var month = ("0" + (result.getMonth() + 1)).slice(-2);
       var day = ("0" + result.getDate()).slice(-2);
-      value.dateCreate = day + "-" + month + "-" + year;
+      value.dateCreate = month + "-" + day + "-" + year;
     },
     sortTable(value) {
       this.kindOf = value;
     },
     loadOrders() {
       this.getCheckedOrders();
+    },
+    loadOrdersUpdate() {
+      this.$router.go();
     },
   },
   watch: {

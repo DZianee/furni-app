@@ -33,7 +33,7 @@
               class="sortName-features"
             >
               <option value="" disabled>Select</option>
-              <option value="name">Name</option>
+              <option value="firstname">Name</option>
             </select>
           </div>
         </div>

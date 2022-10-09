@@ -182,7 +182,13 @@
                   </div>
                   <div
                     class="btn btn-submit-check"
-                    @click="updateOrders(order._id)"
+                    @click="
+                      updateOrders(
+                        order._id,
+                        order,
+                        order.payment.paymentMethod
+                      )
+                    "
                   >
                     Save
                   </div>
@@ -311,7 +317,7 @@ export default {
         // console.log(error);
       }
     },
-    async updateOrders(value) {
+    async updateOrders(id, item, paymentMethod) {
       let order;
       try {
         if (this.updateOrder.process === "Cancelled") {
@@ -332,19 +338,26 @@ export default {
         }
         this.$store.dispatch("accessToken");
         const res = await this.$axios.put(
-          `api/Order/updateOrder/${value}`,
+          `api/Order/updateOrder/${id}`,
           order,
           this.$axios.defaults.headers["Authorization"]
         );
         if (res.status == 200) {
           this.$emit("load-orders-update");
+          if (this.updateOrder.process === "Completed") {
+            this.newRowFinOrder(
+              id,
+              item,
+              this.updateOrder.process,
+              paymentMethod
+            );
+          }
         }
       } catch (error) {
         // console.log(error);
       }
     },
     async openShoppingList(value) {
-      console.log(value);
       try {
         this.$store.dispatch("accessToken");
         const res = await this.$axios.get(
@@ -372,7 +385,26 @@ export default {
         // console.log(error);
       }
     },
-
+    async newRowFinOrder(value, item, process, payment) {
+      try {
+        this.$store.dispatch("accessToken");
+        let newFinOrder = {
+          month: item.dateCreate,
+          order: value,
+          process: process,
+          totalBill: item.totalBill,
+          order_id: item.orderId,
+          paymentMethod: payment,
+        };
+        await this.$axios.post(
+          `api/Fin/finOrder/newFinOrder`,
+          newFinOrder,
+          this.$axios.defaults.headers["Authorization"]
+        );
+      } catch (error) {
+        // console.log(error);
+      }
+    },
     async deleteConfirm() {
       try {
         this.$store.dispatch("accessToken");

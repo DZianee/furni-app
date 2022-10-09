@@ -104,7 +104,6 @@ export default {
       }
     },
     convertDateTime(value) {
-      console.log(value);
       const dateTime = new Date(value.dateCreate);
       let convertedResult = dateTime.getMonth() + 1;
       value.dateCreate = convertedResult;
@@ -113,7 +112,6 @@ export default {
       let result;
       const dateNow = new Date(Date.now());
       const currMonth = dateNow.getMonth() + 1;
-      console.log(this.orderList);
       const thisMonth = this.orderList.filter(
         (item) => item.dateCreate == currMonth
       );

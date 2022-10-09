@@ -77,7 +77,6 @@ export default {
   },
   methods: {
     countNewOrders(value) {
-      console.log(value);
       this.counterNewOrders = value;
     },
     openOrderRoute(value) {

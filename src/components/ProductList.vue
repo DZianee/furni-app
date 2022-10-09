@@ -6,8 +6,8 @@
           <input
             type="text"
             class="form-control form-input"
-            placeholder="Search name, status, price here..."
-            v-model="search"
+            placeholder="Search name, status here..."
+            v-model="searchAll"
           />
         </div>
         <div class="filter">
@@ -30,7 +30,7 @@
             >
               <div class="accordion-body">
                 <div class="sort-bar">
-                  <select class="form-select" v-model="kindOf" name="sort">
+                  <select class="form-select" v-model="kindOfAll" name="sort">
                     <option value="-1" style="font-weight: 600">
                       Descending
                     </option>
@@ -38,7 +38,7 @@
                   </select>
                   <select
                     class="form-select"
-                    v-model="sortName"
+                    v-model="sortNameAll"
                     name="sortName"
                   >
                     <option value="" disabled>Select type to sort</option>
@@ -48,7 +48,7 @@
                     </option>
                     <option value="name">Name</option>
                   </select>
-                  <select class="form-select" name="price" v-model="price">
+                  <select class="form-select" name="price" v-model="priceAll">
                     <option value="all">All</option>
                     <option value="1">Lower than 200.000</option>
                     <option value="2">200.000 - 1 Million</option>
@@ -219,6 +219,10 @@ export default {
       price: "all",
       sortName: "createdAt",
       search: "",
+      kindOfAll: "-1",
+      priceAll: "all",
+      sortNameAll: "createdAt",
+      searchAll: "",
       // page: 0,
     };
   },
@@ -243,9 +247,9 @@ export default {
           res = await this.$axios.get(`api/Product`, {
             params: {
               page: this.currentPage,
-              kindOf: this.kindOf,
-              sortName: this.sortName,
-              search: this.search,
+              kindOf: this.kindOfAll,
+              sortName: this.sortNameAll,
+              search: this.searchAll,
             },
           });
         } catch (error) {
@@ -257,10 +261,10 @@ export default {
           res = await this.$axios.get(`api/Product`, {
             params: {
               page: this.currentPage,
-              kindOf: this.kindOf,
-              price: this.price,
-              sortName: this.sortName,
-              search: this.search,
+              kindOf: this.kindOfAll,
+              price: this.priceAll,
+              sortName: this.sortNameAll,
+              search: this.searchAll,
             },
           });
         } catch (error) {
@@ -273,36 +277,37 @@ export default {
     // pagination for all products
     async getProductPagination() {
       let res;
-      if (this.price == "") {
+      if (this.priceAll == "") {
         try {
           this.$store.dispatch("accessToken");
           res = await this.$axios.get(`api/Product`, {
             params: {
               page: this.currentPage,
-              kindOf: this.kindOf,
-              sortName: this.sortName,
-              search: this.search,
+              kindOf: this.kindOfAll,
+              sortName: this.sortNameAll,
+              search: this.searchAll,
             },
           });
         } catch (error) {
           // console.log(error);
         }
-      } else if (this.price != "") {
+      } else if (this.priceAll != "") {
         try {
           this.$store.dispatch("accessToken");
           res = await this.$axios.get(`api/Product`, {
             params: {
               page: this.currentPage,
-              kindOf: this.kindOf,
-              price: this.price,
-              sortName: this.sortName,
-              search: this.search,
+              kindOf: this.kindOfAll,
+              price: this.priceAll,
+              sortName: this.sortNameAll,
+              search: this.searchAll,
             },
           });
         } catch (error) {
           // console.log(error);
         }
       }
+
       this.pageTotals = res.data.pageTotals;
       this.productList = this.productList.concat(res.data.data);
     },
@@ -378,20 +383,32 @@ export default {
       }
     },
     kindOf() {
-      this.getProduct();
       this.getCateDetails();
     },
     sortName() {
-      this.getProduct();
       this.getCateDetails();
     },
     price() {
-      this.getProduct();
       this.getCateDetails();
     },
     search() {
-      this.getProduct();
       this.getCateDetails();
+    },
+    kindOfAll() {
+      this.currentPage = 1;
+      this.getProduct();
+    },
+    sortNameAll() {
+      this.currentPage = 1;
+      this.getProduct();
+    },
+    priceAll() {
+      this.currentPage = 1;
+      this.getProduct();
+    },
+    searchAll() {
+      this.currentPage = 1;
+      this.getProduct();
     },
   },
   // mounted() {
