@@ -104,6 +104,9 @@ export default {
       showContact: false,
     };
   },
+  created() {
+    document.title = "Services";
+  },
 };
 </script>
 

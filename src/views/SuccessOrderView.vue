@@ -21,6 +21,9 @@ export default {
       user: {},
     };
   },
+  created() {
+    document.title = "Success Order";
+  },
   methods: {
     Route(value, id, name) {
       if (value == "profileView") {

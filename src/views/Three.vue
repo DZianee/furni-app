@@ -57,6 +57,9 @@ export default {
       tempArr: [],
     };
   },
+  created() {
+    document.title = "3D House";
+  },
   methods: {
     getShopList() {
       const result = JSON.parse(this.$store.state.shoppingList);

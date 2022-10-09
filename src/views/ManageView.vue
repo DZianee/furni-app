@@ -43,6 +43,9 @@ export default {
       return result;
     },
   },
+  created() {
+    document.title = "Management";
+  },
   methods: {
     openUserRoute(val) {
       this.choice = val;

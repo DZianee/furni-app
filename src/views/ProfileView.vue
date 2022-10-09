@@ -82,6 +82,7 @@ export default {
     },
   },
   async created() {
+    document.title = "Profile";
     try {
       this.$store.dispatch("accessToken");
       const user = JSON.parse(this.$store.state.user);

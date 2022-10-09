@@ -62,6 +62,9 @@ export default {
     };
   },
   components: { Password },
+  created() {
+    document.title = "Register";
+  },
   methods: {
     async register() {
       try {

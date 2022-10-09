@@ -32,6 +32,9 @@ export default {
       successInfo: false,
     };
   },
+  created() {
+    document.title = "Shopping List";
+  },
   methods: {
     // toNextStep(val1, val2, valColor) {
     //   this.showCartItem = val2;

@@ -7,7 +7,6 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-console.log("test");
 router.beforeEach((to, from, next) => {
   var user = JSON.parse(store.state.user);
   if (user != null && user.role.name != "Admin") {

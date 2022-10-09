@@ -28,6 +28,9 @@ export default {
   //     console.log(this.cateId);
   //   },
   // },
+  created() {
+    document.title = "Furniture";
+  },
   methods: {
     async getCateDetails() {
       try {

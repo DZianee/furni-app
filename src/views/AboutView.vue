@@ -70,6 +70,9 @@
 <script>
 export default {
   name: "AboutView",
+  created() {
+    document.title = "Company";
+  },
 };
 </script>
 

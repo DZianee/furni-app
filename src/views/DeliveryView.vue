@@ -72,6 +72,9 @@ export default {
       return this.$route.params.id;
     },
   },
+  created() {
+    document.title = "Order Delivery";
+  },
   methods: {
     countNewOrders(value) {
       console.log(value);

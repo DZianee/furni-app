@@ -69,6 +69,9 @@ export default {
     RelatedProduct,
     ShoppingWaitingList,
   },
+  created() {
+    document.title = "Product Details";
+  },
   methods: {
     async getProductDetails() {
       try {

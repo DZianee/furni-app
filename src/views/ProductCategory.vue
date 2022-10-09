@@ -34,6 +34,7 @@ export default {
     };
   },
   async created() {
+    document.title = "Category Details";
     try {
       this.$store.dispatch("accessToken");
       const res = await this.$axios.get(

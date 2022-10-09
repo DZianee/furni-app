@@ -247,6 +247,7 @@ export default {
     };
   },
   async created() {
+    document.title = "Product Management Details";
     try {
       this.$store.dispatch("accessToken");
       const res = await this.$axios.get(

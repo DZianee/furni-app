@@ -36,6 +36,9 @@ export default {
     HomeBenefits,
     HomeCooperate,
   },
+  created() {
+    document.title = "Home";
+  },
 };
 </script>
 <style scoped>

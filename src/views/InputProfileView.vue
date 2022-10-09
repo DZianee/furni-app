@@ -114,6 +114,9 @@ export default {
       },
     };
   },
+  created() {
+    document.title = "Customer Information";
+  },
   computed: {
     userId() {
       return this.$route.params.id;

@@ -35,6 +35,9 @@ export default {
       yearSelected: "",
     };
   },
+  created() {
+    document.title = "Finance";
+  },
   methods: {
     async getFinYearList() {
       try {

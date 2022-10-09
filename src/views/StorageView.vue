@@ -10,6 +10,9 @@ import CategoryListMan from "../components/CategoryListMan.vue";
 export default {
   name: "StorageView",
   components: { CategoryListMan },
+  created() {
+    document.title = "Storage";
+  },
 };
 </script>
 
