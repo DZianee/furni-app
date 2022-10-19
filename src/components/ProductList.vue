@@ -407,8 +407,13 @@ export default {
       this.getProduct();
     },
     searchAll() {
-      this.currentPage = 1;
-      this.getProduct();
+      if (this.searchAll == "") {
+        this.currentPage = 1;
+        this.getProduct();
+      } else {
+        this.currentPage = 1;
+        this.getProduct();
+      }
     },
   },
   // mounted() {

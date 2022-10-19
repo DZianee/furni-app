@@ -117,26 +117,28 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     hiddenBtn(value, dateCloseCancel) {
+      console.log(dateCloseCancel);
       let currentDate = new Date(Date.now());
       let dayCurrent = currentDate.getDate();
       let hourCurrent = currentDate.getHours();
-      let minCurrent = currentDate.getMinutes();
+      // let minCurrent = currentDate.getMinutes();
 
       let dateClose = new Date(dateCloseCancel);
       let dayClose = dateClose.getDate();
       let hourClose = dateClose.getHours();
-      let minClose = dateClose.getMinutes();
+      // let minClose = dateClose.getMinutes();
 
       const dayResult = dayClose - dayCurrent;
       const hourResult = hourClose - hourCurrent;
-      const minResult = minClose - minCurrent;
-      if (value === "New") {
-        return true;
-      } else if (
-        value != "New" ||
-        (dayResult == 0 && hourResult == 0 && minResult == 0)
+      // const minResult = minClose - minCurrent;
+
+      if (
+        (value === "New" && dayResult == 0 && hourResult == 0) ||
+        value != "New"
       ) {
         return false;
+      } else {
+        return true;
       }
     },
     orderStatusColor(value) {

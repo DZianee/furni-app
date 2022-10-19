@@ -197,9 +197,19 @@
             <input type="file" @change="select3DImg" />
             <div>
               <button @click="update3DImg" v-if="productDetails.imgCloudinary">
-                Update change
+                <i
+                  class="bx bx-loader bx-sm bx-fw bx-spin"
+                  v-if="loadingIcon"
+                ></i>
+                {{ loadingIcon ? "Updating..." : "Update change" }}
               </button>
-              <button @click="upload3DImg" v-else>Submit</button>
+              <button @click="upload3DImg" v-else>
+                <i
+                  class="bx bx-loader bx-sm bx-fw bx-spin"
+                  v-if="loadingIcon"
+                ></i>
+                {{ loadingIcon ? "Submitting..." : " Submit" }}
+              </button>
             </div>
           </div>
         </div>
@@ -244,6 +254,7 @@ export default {
         length: 0,
         depth: 0,
       },
+      loadingIcon: false,
     };
   },
   async created() {
@@ -266,7 +277,7 @@ export default {
       this.technicalInfo.length = res.data.data.technicalInfo.length;
       this.technicalInfo.height = res.data.data.technicalInfo.height;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
   computed: {
@@ -308,7 +319,7 @@ export default {
           params: { id: this.cateId },
         });
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async upload3DImg() {
@@ -321,9 +332,10 @@ export default {
           upload3DImg,
           this.$axios.defaults.headers["Authorization"]
         );
+        this.loadingIcon = true;
         this.$router.go();
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async update3DImg() {
@@ -336,9 +348,10 @@ export default {
           update3DImg,
           this.$axios.defaults.headers["Authorization"]
         );
+        this.loadingIcon = true;
         this.$router.go();
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     Route(value) {
@@ -355,11 +368,9 @@ export default {
     },
     selectImg(e) {
       this.product.img = e.target.files[0];
-      console.log(this.product.img);
     },
     select3DImg(e) {
       this.product.img_3d = e.target.files[0];
-      console.log(this.product.img_3d);
     },
     getColor(col) {
       const test = this.productDetails.color.filter((item) => item === col);

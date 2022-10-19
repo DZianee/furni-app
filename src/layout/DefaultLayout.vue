@@ -137,6 +137,7 @@ export default {
       showLogout: false,
       logouts: false,
       avatar: "",
+      shopList: [],
     };
   },
   created() {
@@ -181,12 +182,37 @@ export default {
     loginVerified(val) {
       this.login = val;
     },
-    getUser() {
+    async getUser() {
       this.$store.dispatch("getUser");
       const data = JSON.parse(this.$store.state.user);
       this.user = data;
+      this.$store.dispatch("accessToken");
+      const res = await this.$axios.get(
+        `api/User/userDetails/All/${data.id}`,
+        this.$axios.defaults.headers["Authorization"]
+      );
+      if (this.user != null) {
+        this.shopList = res.data.data.tempOrder;
+        if (this.shopList != null) {
+          this.$store.dispatch("storeShoppingList", this.shopList);
+        }
+      }
     },
-    logout() {
+    async logout() {
+      let tempOrder;
+      this.$store.dispatch("getShoppingList");
+      const shopList = JSON.parse(this.$store.state.shoppingList);
+      if (shopList != "" || shopList != null) {
+        tempOrder = {
+          tempOrder: shopList,
+        };
+      }
+      this.$store.dispatch("accessToken");
+      await this.$axios.put(
+        `api/User/addTempOrder/${this.user.id}`,
+        tempOrder,
+        this.$axios.defaults.headers["Authorization"]
+      );
       this.$store.dispatch("logout");
       this.$router.go();
     },

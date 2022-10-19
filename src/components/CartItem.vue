@@ -367,7 +367,7 @@ h6 {
   height: 25px;
   width: 25px;
   border-radius: 30px;
-  /* border: solid 1px grey; */
+  border: solid 1px black;
 }
 
 /* On mouse-over, add a grey background color */

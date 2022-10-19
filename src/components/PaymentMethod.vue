@@ -157,7 +157,6 @@ export default {
   computed: {
     productInList() {
       const result = JSON.parse(this.$store.state.shoppingList);
-      console.log(result);
       return result;
     },
     transactionID() {
@@ -408,7 +407,7 @@ export default {
   height: 20px;
   width: 20px;
   border-radius: 30px;
-  /* border: solid 1px grey; */
+  border: solid 1px black;
 }
 
 /* On mouse-over, add a grey background color */

@@ -160,6 +160,7 @@ export default {
             token: res.data.data.token,
             refreshToken: res.data.data.refreshToken,
             role: res.data.data.role,
+            tempOrder: res.data.data.tempOrder,
           };
           this.$store.dispatch("login", user);
           this.errorMessage = false;

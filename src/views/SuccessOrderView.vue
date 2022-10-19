@@ -32,12 +32,28 @@ export default {
         this.$router.push({ name: value });
       }
     },
+    async updateTempOrder() {
+      let tempOrder = {
+        tempOrder: null,
+      };
+      try {
+        this.$store.dispatch("accessToken");
+        await this.$axios.put(
+          `api/User/addTempOrder/${this.user.id}`,
+          tempOrder,
+          this.$axios.defaults.headers["Authorization"]
+        );
+      } catch (error) {
+        // console.log(error);
+      }
+    },
   },
   mounted() {
-    this.$store.dispatch("removeShoppingList", null);
+    this.$store.dispatch("removeShoppingList", []);
     this.$store.dispatch("getUser");
     const data = JSON.parse(this.$store.state.user);
     this.user = data;
+    this.updateTempOrder();
   },
 };
 </script>

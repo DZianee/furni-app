@@ -41,7 +41,7 @@ export default createStore({
     },
     storeShoppingList({ commit }, res) {
       commit("setShoppingList", res);
-      sessionStorage.setItem("shoppingList", JSON.stringify(res));
+      localStorage.setItem("shoppingList", JSON.stringify(res));
     },
     logout({ commit }) {
       commit("setAuth", false);
@@ -71,7 +71,7 @@ export default createStore({
       commit("setCateId", localStorage.getItem("CateId"));
     },
     getShoppingList({ commit }) {
-      commit("setShoppingList", sessionStorage.getItem("shoppingList"));
+      commit("setShoppingList", localStorage.getItem("shoppingList"));
     },
     getActivateCateDetails({ commit }) {
       commit(
@@ -81,7 +81,7 @@ export default createStore({
     },
     removeShoppingList({ commit }, res) {
       commit("setShoppingList", res);
-      sessionStorage.setItem("shoppingList", res);
+      localStorage.removeItem("shoppingList");
     },
   },
 });
