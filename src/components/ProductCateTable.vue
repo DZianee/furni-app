@@ -328,7 +328,6 @@ export default {
     },
     edit3DMode() {
       const role = JSON.parse(this.$store.state.user).role.name;
-      console.log(role);
       if (role === "Admin") {
         this.edit3D = false;
       }
