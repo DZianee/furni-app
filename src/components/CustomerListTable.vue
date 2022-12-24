@@ -124,6 +124,7 @@
             <td class="adjust-remove">
               <i
                 class="bx bx-trash"
+                v-if="user"
                 data-bs-target="#removeModal"
                 data-bs-toggle="modal"
                 @click="openRemoveModal(cus._id)"
@@ -181,6 +182,7 @@ export default {
       displayPreBtn: false,
       hiddenEditStatus: true,
       removeId: "",
+      userRole: true,
     };
   },
   async created() {
@@ -201,6 +203,19 @@ export default {
     } catch (error) {
       // console.log(error);
     }
+  },
+  computed: {
+    user() {
+      this.$store.dispatch("getUser");
+      let result = JSON.parse(this.$store.state.user);
+      let end = false;
+      if (result.role.name != "Admin") {
+        end = false;
+      } else {
+        end = true;
+      }
+      return end;
+    },
   },
   methods: {
     async removeConfim() {
@@ -243,7 +258,13 @@ export default {
       }
     },
     editStatus() {
-      this.hiddenEditStatus = false;
+      this.$store.dispatch("getUser");
+      let result = JSON.parse(this.$store.state.user);
+      if (result.role.name == "Admin") {
+        this.hiddenEditStatus = false;
+      } else {
+        this.hiddenEditStatus = true;
+      }
     },
     async getCus() {
       try {

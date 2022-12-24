@@ -125,6 +125,7 @@
             <input type="text" v-model="updatePass" />
           </div>
           <div class="error-message" style="color: red">
+            <p v-if="errorMessage.emptyError">Please do not let field empty</p>
             <p v-if="errorMessage.confirmError">
               Your confirm password is not correct
             </p>
@@ -135,19 +136,17 @@
               Oops! Your old password is wrong, please check it again
             </p>
           </div>
-          <div class="password btn-form">
+          <div class="btn-form">
             <!-- <label for="password">Password</label>
           <input type="text" readonly value="5454354365" /> -->
-            <div>
-              <button class="btn-cancel" @click="cancelChangePass">
-                Cancel
-              </button>
-            </div>
-            <div>
-              <button class="btn-update-pass" @click="updateAccount">
-                Change Password
-              </button>
-            </div>
+            <!-- <div> -->
+            <button class="btn-cancel" @click="cancelChangePass">Cancel</button>
+            <!-- </div> -->
+            <!-- <div> -->
+            <button class="btn-update-pass" @click="updateAccount">
+              Change
+            </button>
+            <!-- </div> -->
           </div>
         </div>
       </div>
@@ -179,6 +178,7 @@ export default {
         confirmError: false,
         lengthError: false,
         wrongPass: false,
+        emptyError: false,
       },
     };
   },
@@ -202,7 +202,13 @@ export default {
       this.displayBtnUpdatePass = true;
     },
     checkError() {
-      if (this.newPassword != this.updatePass) {
+      if (
+        this.newPassword == "" ||
+        this.oldPassword == "" ||
+        this.updatePass == ""
+      ) {
+        this.errorMessage.emptyError = true;
+      } else if (this.newPassword != this.updatePass) {
         this.errorMessage.confirmError = true;
       } else {
         this.errorMessage.confirmError = false;
@@ -246,7 +252,11 @@ export default {
     },
     async updateAccount() {
       this.checkError();
-      if (this.errorMessage.confirmError == false) {
+      console.log(this.errorMessage.emptyError);
+      if (
+        this.errorMessage.confirmError == false &&
+        this.errorMessage.emptyError == false
+      ) {
         try {
           const updateAccount = {
             oldPassword: this.oldPassword,

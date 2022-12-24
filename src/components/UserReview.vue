@@ -48,7 +48,9 @@
     :is="'notifi-modal'"
     @close-modal="closeWarning"
     :openModal="displayWarning"
-  ></component>
+  >
+    You need to login to post review
+  </component>
 </template>
 
 <script>

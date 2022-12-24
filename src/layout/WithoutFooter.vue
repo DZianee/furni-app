@@ -161,7 +161,9 @@ export default {
       );
       if (this.user != null) {
         this.shopList = res.data.data.tempOrder;
-        if (this.shopList != null) {
+        this.$store.dispatch("getShoppingList");
+        let result = JSON.parse(this.$store.state.shoppingList);
+        if (result == null) {
           this.$store.dispatch("storeShoppingList", this.shopList);
         }
       }
@@ -170,7 +172,7 @@ export default {
       let tempOrder;
       this.$store.dispatch("getShoppingList");
       const shopList = JSON.parse(this.$store.state.shoppingList);
-      if (shopList != "" || shopList != null) {
+      if (shopList != null) {
         tempOrder = {
           tempOrder: shopList,
         };

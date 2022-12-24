@@ -257,7 +257,6 @@ export default {
             (Math.floor(Math.random() * 99) + 10) +
             (Math.floor(Math.random() * 9) + 1);
           const user = JSON.parse(this.$store.state.user);
-
           const tempOrder = {
             totalBill: this.totalBill(),
             transactionID: this.transactionID,
@@ -291,6 +290,17 @@ export default {
             this.$axios.defaults.headers["Authorization"]
           );
           if (res.status == 200) {
+            this.$store.dispatch("accessToken");
+            this.$store.dispatch("getUser");
+            let tempOrder = {
+              tempOrder: null,
+            };
+            const data = JSON.parse(this.$store.state.user);
+            await this.$axios.put(
+              `api/User/updateTempOrder/${data.id}`,
+              tempOrder,
+              this.$axios.defaults.headers["Authorization"]
+            );
             this.$router.push({ name: "successOrderView" });
           }
         } catch (error) {

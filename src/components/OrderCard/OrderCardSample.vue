@@ -120,22 +120,20 @@ export default {
       console.log(dateCloseCancel);
       let currentDate = new Date(Date.now());
       let dayCurrent = currentDate.getDate();
-      let hourCurrent = currentDate.getHours();
+      // let hourCurrent = currentDate.getHours();
       // let minCurrent = currentDate.getMinutes();
 
       let dateClose = new Date(dateCloseCancel);
       let dayClose = dateClose.getDate();
-      let hourClose = dateClose.getHours();
+      // let hourClose = dateClose.getHours();
       // let minClose = dateClose.getMinutes();
 
       const dayResult = dayClose - dayCurrent;
-      const hourResult = hourClose - hourCurrent;
+      // const hourResult = hourClose - hourCurrent;
       // const minResult = minClose - minCurrent;
+      console.log(dayResult);
 
-      if (
-        (value === "New" && dayResult == 0 && hourResult == 0) ||
-        value != "New"
-      ) {
+      if ((value === "New" && dayResult <= 0) || value != "New") {
         return false;
       } else {
         return true;

@@ -153,7 +153,7 @@
             </td>
             <td class="process-order">
               <label
-                @click="openCheck(order._id)"
+                @click="openCheck(order._id, order.process)"
                 class="process-content"
                 :style="changeProcessColor(order.process)"
                 >{{ order.process }}</label
@@ -334,8 +334,10 @@ export default {
         this.updateOrders(id);
       }
     },
-    openCheck(value) {
-      this.showCheckProcess = value;
+    openCheck(value, processStatus) {
+      if (processStatus != "Completed" && processStatus != "Cancelled") {
+        this.showCheckProcess = value;
+      }
     },
     closeCheck() {
       this.showCheckProcess = false;

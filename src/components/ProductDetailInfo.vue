@@ -68,6 +68,9 @@
       <div class="error-message" v-if="showError">
         <p style="color: red">Please ensure the color has been chosen</p>
       </div>
+      <div class="error-message" v-if="showQuantityError">
+        <p style="color: red">Please choose the quantity</p>
+      </div>
       <div class="btn btn_add-cart" v-if="displayBtnCart()">Add to Cart</div>
       <div
         class="btn btn_add-cart"
@@ -85,6 +88,13 @@
   >
     Oops! Please Sign In to experience this</component
   >
+  <component
+    :is="'notifi-modal'"
+    @close-modal="closeRoleWarning"
+    :openModal="displayRoleWarning"
+  >
+    Please don't use the work account to experience</component
+  >
   <component :is="'3D-modal'" :img3D="img3D"> </component>
 </template>
 
@@ -94,10 +104,12 @@ export default {
   data() {
     return {
       displayWarning: false,
+      displayRoleWarning: false,
       tempShoppingList: [],
       checkedColor: "",
       checkStatus: true,
       showError: false,
+      showQuantityError: false,
       showOutStock: false,
       productId: this.$route.params.id,
       productTempQuantity: 0,
@@ -155,8 +167,16 @@ export default {
       }
     },
     async increaseQuantity(id) {
+      this.$store.dispatch("getUser");
+      let user = JSON.parse(this.$store.state.user);
+
       if (this.$store.state.user == null) {
         this.displayWarning = true;
+      } else if (
+        user.role.name != "Default User" &&
+        user.role.name != "Admin"
+      ) {
+        this.displayRoleWarning = true;
       } else {
         const exportQuantity = {
           exportQuantity: 1,
@@ -182,18 +202,22 @@ export default {
         return true;
       } else {
         this.showOutStock = false;
-        if (this.checkedColor == "") {
+        if (this.checkedColor == "" || this.productTempQuantity < 1) {
           this.showError = true;
+          this.showQuantityError = true;
           return true;
         } else {
           this.showError = false;
+          this.showQuantityError = false;
           return false;
         }
       }
     },
     closeWarning() {
       this.displayWarning = false;
-      // this.$router.go();
+    },
+    closeRoleWarning() {
+      this.displayRoleWarning = false;
     },
     getColor(value) {
       this.checkedColor = value;
