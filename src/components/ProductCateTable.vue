@@ -114,10 +114,11 @@
             </td>
             <td>{{ item.createdAt }}</td>
             <td style="font-weight: 500; color: red">
+              <span @click="edit3DMode" v-if="edit3D">{{ item.is3D }}</span>
               <select
                 style="border: none; margin-left: 5px"
-                v-if="edit3DMode()"
                 name="is3D"
+                v-else
                 v-model="item.is3D"
                 @change="get3DValue(item.is3D, item._id, item.color)"
               >
@@ -131,7 +132,6 @@
                   Available
                 </option>
               </select>
-              <span v-else>{{ item.is3D }}</span>
             </td>
             <td class="on-shelves-status">
               <!-- {{ item.statusOnShelves }} -->
@@ -230,6 +230,7 @@ export default {
         search: "",
         status: "IN STOCK",
       },
+      edit3D: true,
     };
   },
   props: {
@@ -327,8 +328,9 @@ export default {
     },
     edit3DMode() {
       const role = JSON.parse(this.$store.state.user).role.name;
+      console.log(role);
       if (role === "Admin") {
-        this.edit3D = true;
+        this.edit3D = false;
       }
     },
     openRemoveModal(value) {
