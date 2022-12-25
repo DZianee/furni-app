@@ -26,7 +26,7 @@
         <vue3-autocounter
           ref="counter"
           :startAmount="0"
-          :endAmount="128"
+          :endAmount="countNew"
           prefix=""
           suffix=""
           separator=""
